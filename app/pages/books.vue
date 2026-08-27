@@ -222,15 +222,19 @@
                     </button>
                 </div>
 
-                <div class="relative aspect-[2/2.5] w-full overflow-hidden bg-gray-100">
-                    <img v-if="book.imageUrl" :src="book.imageUrl" :alt="book.title" class="h-full w-full object-cover"
-                        @error="handleImageError" loading="lazy" />
+              <div class="relative aspect-[2/2.5] w-full overflow-hidden bg-white p-1.5">
+                    <div
+                        class="relative h-full w-full overflow-hidden rounded-lg border-[0.5px] border-gray-400 bg-white shadow-[0_1px_4px_rgba(15,23,42,0.3)]">
+                        <img v-if="book.imageUrl" :src="book.imageUrl" :alt="book.title"
+                            class="h-full w-full object-cover  brightness-[1] contrast-[0.8] saturate-[1]" @error="handleImageError" loading="lazy" />
 
-                    <div v-else class="flex h-full w-full items-center justify-center bg-gray-50 text-gray-300">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
-                        </svg>
+                        <div v-else class="flex h-full w-full items-center justify-center bg-gray-50 text-gray-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 0-1.5-5H20" />
+                            </svg>
+                        </div>
                     </div>
                 </div>
 

@@ -17,7 +17,7 @@
                         </div>
 
                         <span class="min-w-0 truncate text-[16px] font-bold tracking-tight text-gray-900 sm:text-lg">
-                            BookTracker
+                            LogBuku
                         </span>
                     </div>
 

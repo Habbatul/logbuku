@@ -74,9 +74,7 @@
                 <div class="group relative min-w-0 bg-white p-4 sm:p-5">
                     <div class="flex items-start justify-between gap-3">
                         <span class="min-w-0 truncate text-[13px] font-medium text-gray-500"> Total Koleksi </span>
-                        <button @click="isCategoryModalOpen = true"
-                            class="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-gray-400 bg-gray-50 transition-colors hover:bg-gray-50 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10"
-                            title="Detail Topik">
+                       <button @click="isCategoryModalOpen = true" class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-blue-500 bg-blue-500/90 text-white shadow-sm transition-all duration-200 hover:bg-blue-700 hover:border-blue-700 hover:shadow-md active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-500/30" title="Detail Topik" aria-label="Lihat detail topik">
                             <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round">
@@ -85,7 +83,7 @@
                             </svg>
                         </button>
                     </div>
-                    <div class="mt-3 flex items-baseline gap-1.5">
+                    <div class="mt-1 flex items-baseline gap-1.5">
                         <span class="text-2xl font-bold tracking-[-0.03em] text-gray-950 sm:text-3xl"> {{ totalBooks }}
                         </span>
                         <span class="text-xs font-medium text-gray-400"> Buku </span>
