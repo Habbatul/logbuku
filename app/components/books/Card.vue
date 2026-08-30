@@ -62,12 +62,9 @@
                 {{ book.title }}
             </h3>
 
-            <div v-if="book.author || book.publisher" class="mt-1.5 flex flex-col gap-0.5">
-                <span v-if="book.author" class="truncate text-xs sm:text-sm font-medium text-[#44403c]" :title="book.author">
+            <div v-if="book.author" class="mt-1 flex flex-col gap-0.5">
+                <span v-if="book.author" class="truncate text-xs font-medium text-[#44403c]" :title="book.author">
                     {{ book.author }}
-                </span>
-                <span v-if="book.publisher" class="truncate font-mono text-xs font-bold text-[#57534e] uppercase" :title="book.publisher">
-                    {{ book.publisher }}
                 </span>
             </div>
 

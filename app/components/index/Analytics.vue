@@ -1,11 +1,11 @@
 <template>
-    <section class="space-y-4">
+    <section class="space-y-3 sm:space-y-4">
         <div class="flex items-end justify-between gap-4">
             <div class="min-w-0">
-                <h2 class="text-lg sm:text-xl font-bold tracking-[-0.02em] text-[#0d0d0d] leading-snug uppercase">
+                <h2 class="text-lg sm:text-xl font-bold tracking-[-0.02em] text-[#0d0d0d] leading-snug uppercase break-words">
                     ANALITIK DETAIL
                 </h2>
-                <p class="mt-1 text-sm text-[#44403c]">
+                <p class="mt-1 text-xs sm:text-sm leading-relaxed text-[#44403c]">
                     Grafik tren aktivitas dan pengeluaran berdasarkan periode yang dipilih.
                 </p>
             </div>
@@ -13,13 +13,12 @@
 
         <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             <div
-                class="group flex min-w-0 flex-col overflow-visible rounded-lg border-2 border-[#0d0d0d] bg-white p-5 shadow-[3px_3px_0px_#0d0d0d] transition-all duration-150 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#0d0d0d]">
-                <div class="flex items-center justify-between gap-3">
-                    <span class="truncate font-mono text-xs font-bold uppercase tracking-wider text-[#44403c]">[BUKU
-                        SELESAI DIBACA]</span>
+                class="group flex min-w-0 flex-col overflow-visible rounded-lg border-2 border-[#0d0d0d] bg-white p-4 sm:p-5 shadow-[3px_3px_0px_#0d0d0d] transition-all duration-150 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#0d0d0d]">
+                <div class="flex flex-wrap items-center justify-between gap-2 sm:gap-3">
+                    <span class="font-mono text-xs font-bold uppercase tracking-wider text-[#44403c] break-words">[BUKU SELESAI DIBACA]</span>
 
                     <select v-model="filterCompleted"
-                        class="shrink-0 cursor-pointer rounded-[4px] border border-[#0d0d0d] bg-[#f3ede2] px-2.5 py-1.5 font-mono text-xs font-bold uppercase text-[#0d0d0d] shadow-[1px_1px_0px_#0d0d0d] outline-none transition-colors hover:bg-white focus:ring-2 focus:ring-[#0d0d0d]/15">
+                        class="shrink-0 cursor-pointer rounded-[4px] border border-[#0d0d0d] bg-[#f3ede2] px-2 py-1 sm:px-2.5 sm:py-1.5 font-mono text-xs font-bold uppercase text-[#0d0d0d] shadow-[1px_1px_0px_#0d0d0d] outline-none transition-colors hover:bg-white focus:ring-2 focus:ring-[#0d0d0d]/15">
                         <option value="1M">1 Bulan Terakhir</option>
                         <option value="6M">6 Bulan Terakhir</option>
                         <option value="1Y">Tahun Ini</option>
@@ -29,7 +28,7 @@
 
                 <div class="mt-2.5 flex items-baseline gap-2 flex-wrap">
                     <span
-                        class="text-2xl font-bold tracking-tight text-[#00875a] sm:text-[28px] tabular-nums break-words">
+                        class="text-xl sm:text-2xl lg:text-[28px] font-bold tracking-tight text-[#00875a] tabular-nums break-words">
                         {{ completedData.total }}
                     </span>
                     <span class="shrink-0 font-mono text-xs sm:text-sm font-bold uppercase text-[#57534e]">BUKU</span>
@@ -85,13 +84,12 @@
             </div>
 
             <div
-                class="group flex min-w-0 flex-col overflow-visible rounded-lg border-2 border-[#0d0d0d] bg-white p-5 shadow-[3px_3px_0px_#0d0d0d] transition-all duration-150 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#0d0d0d]">
-                <div class="flex items-center justify-between gap-3">
-                    <span class="truncate font-mono text-xs font-bold uppercase tracking-wider text-[#44403c]">[TOTAL
-                        HALAMAN DIBACA]</span>
+                class="group flex min-w-0 flex-col overflow-visible rounded-lg border-2 border-[#0d0d0d] bg-white p-4 sm:p-5 shadow-[3px_3px_0px_#0d0d0d] transition-all duration-150 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#0d0d0d]">
+                <div class="flex flex-wrap items-center justify-between gap-2 sm:gap-3">
+                    <span class="font-mono text-xs font-bold uppercase tracking-wider text-[#44403c] break-words">[TOTAL HALAMAN DIBACA]</span>
 
                     <select v-model="filterPages"
-                        class="shrink-0 cursor-pointer rounded-[4px] border border-[#0d0d0d] bg-[#f3ede2] px-2.5 py-1.5 font-mono text-xs font-bold uppercase text-[#0d0d0d] shadow-[1px_1px_0px_#0d0d0d] outline-none transition-colors hover:bg-white focus:ring-2 focus:ring-[#0d0d0d]/15">
+                        class="shrink-0 cursor-pointer rounded-[4px] border border-[#0d0d0d] bg-[#f3ede2] px-2 py-1 sm:px-2.5 sm:py-1.5 font-mono text-xs font-bold uppercase text-[#0d0d0d] shadow-[1px_1px_0px_#0d0d0d] outline-none transition-colors hover:bg-white focus:ring-2 focus:ring-[#0d0d0d]/15">
                         <option value="1D">Hari Ini</option>
                         <option value="1W">7 Hari Terakhir</option>
                     </select>
@@ -99,7 +97,7 @@
 
                 <div class="mt-2.5 flex items-baseline gap-2 flex-wrap">
                     <span
-                        class="text-2xl font-bold tracking-tight text-[#0d0d0d] sm:text-[28px] tabular-nums break-words">
+                        class="text-xl sm:text-2xl lg:text-[28px] font-bold tracking-tight text-[#0d0d0d] tabular-nums break-words">
                         {{ formatNumber(pagesData.total) }}
                     </span>
                     <span
@@ -155,13 +153,12 @@
             </div>
 
             <div
-                class="group flex min-w-0 flex-col overflow-visible rounded-lg border-2 border-[#0d0d0d] bg-white p-5 shadow-[3px_3px_0px_#0d0d0d] transition-all duration-150 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#0d0d0d] md:col-span-2 lg:col-span-1">
-                <div class="flex items-center justify-between gap-3">
-                    <span class="truncate font-mono text-xs font-bold uppercase tracking-wider text-[#44403c]">[UANG
-                        DIHABISKAN]</span>
+                class="group flex min-w-0 flex-col overflow-visible rounded-lg border-2 border-[#0d0d0d] bg-white p-4 sm:p-5 shadow-[3px_3px_0px_#0d0d0d] transition-all duration-150 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#0d0d0d] md:col-span-2 lg:col-span-1">
+                <div class="flex flex-wrap items-center justify-between gap-2 sm:gap-3">
+                    <span class="font-mono text-xs font-bold uppercase tracking-wider text-[#44403c] break-words">[UANG DIHABISKAN]</span>
 
                     <select v-model="filterFinance"
-                        class="shrink-0 cursor-pointer rounded-[4px] border border-[#0d0d0d] bg-[#f3ede2] px-2.5 py-1.5 font-mono text-xs font-bold uppercase text-[#0d0d0d] shadow-[1px_1px_0px_#0d0d0d] outline-none transition-colors hover:bg-white focus:ring-2 focus:ring-[#0d0d0d]/15">
+                        class="shrink-0 cursor-pointer rounded-[4px] border border-[#0d0d0d] bg-[#f3ede2] px-2 py-1 sm:px-2.5 sm:py-1.5 font-mono text-xs font-bold uppercase text-[#0d0d0d] shadow-[1px_1px_0px_#0d0d0d] outline-none transition-colors hover:bg-white focus:ring-2 focus:ring-[#0d0d0d]/15">
                         <option value="1D">Hari Ini</option>
                         <option value="1W">7 Hari Terakhir</option>
                         <option value="2W">14 Hari Terakhir</option>
@@ -175,7 +172,7 @@
 
                 <div class="mt-2.5 flex items-baseline gap-2 flex-wrap">
                     <span
-                        class="text-2xl font-bold tracking-tight text-[#0047ff] sm:text-[28px] tabular-nums break-words">
+                        class="text-xl sm:text-2xl lg:text-[28px] font-bold tracking-tight text-[#0047ff] tabular-nums break-words">
                         {{ formatCurrency(financeData.total) }}
                     </span>
                 </div>

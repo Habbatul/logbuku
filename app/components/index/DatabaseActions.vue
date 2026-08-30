@@ -1,20 +1,20 @@
 <template>
-    <section class="mt-10 border-t-2 border-[#0d0d0d] pt-8">
+    <section class="mt-8 sm:mt-10 border-t-2 border-[#0d0d0d] pt-6 sm:pt-8">
         <div
-            class="flex flex-col gap-6 rounded-lg border-2 border-[#0d0d0d] bg-white p-5 shadow-[3px_3px_0px_#0d0d0d] sm:flex-row sm:items-center sm:justify-between sm:p-6">
+            class="flex flex-col gap-5 sm:gap-6 rounded-lg border-2 border-[#0d0d0d] bg-white p-4 sm:p-6 shadow-[3px_3px_0px_#0d0d0d] sm:flex-row sm:items-center sm:justify-between">
             <div class="min-w-0">
-                <div class="flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="shrink-0 text-[#0d0d0d]">
+                <div class="flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="w-auto h-auto max-h-[30px] sm:max-h-[24px] shrink-0 text-[#0d0d0d]">
                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
                         <path d="m9 12 2 2 4-4" />
                     </svg>
-                    <h2 class="truncate text-lg sm:text-xl font-bold tracking-[-0.02em] text-[#0d0d0d] leading-snug uppercase">
-                        Cadangan & Pemulihan Data
-                    </h2>
+                    <h2
+                        class="text-lg sm:text-xl font-bold tracking-[-0.02em] text-[#0d0d0d] leading-snug uppercase break-words">
+                        Cadangan & Pemulihan Data</h2>
                 </div>
-                <p class="mt-1.5 max-w-[70ch] text-sm leading-relaxed text-[#44403c]">
+                <p class="mt-1.5 max-w-[70ch] text-xs sm:text-sm leading-relaxed text-[#44403c]">
                     Ekspor seluruh arsip buku fisik dan riwayat sesi membaca sebagai file JSON lokal, atau impor kembali kapan saja secara privat tanpa ketergantungan server.
                 </p>
 
@@ -26,9 +26,20 @@
                 </div>
             </div>
 
-            <div class="flex w-full shrink-0 flex-wrap gap-2.5 sm:w-auto sm:flex-nowrap">
+            <div class="flex w-full shrink-0 flex-col sm:flex-row gap-2.5 sm:w-auto">
+                <button @click="exportDatabase"
+                    class="inline-flex w-full sm:w-auto cursor-pointer items-center justify-center gap-2 rounded-[4px] border-2 border-[#0d0d0d] bg-[#0d0d0d] px-4 py-2.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-white shadow-[2px_2px_0px_#0d0d0d] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_#ff4800] hover:bg-[#262626] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0d0d0d]">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                    EKSPOR CADANGAN
+                </button>
+
                 <button @click="triggerImport"
-                    class="inline-flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-[4px] border-2 border-[#0d0d0d] bg-white px-4 py-2.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-[#0d0d0d] shadow-[2px_2px_0px_#0d0d0d] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_#0d0d0d] hover:bg-[#f3ede2] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0d0d0d] sm:flex-none">
+                    class="inline-flex w-full sm:w-auto cursor-pointer items-center justify-center gap-2 rounded-[4px] border-2 border-[#0d0d0d] bg-white px-4 py-2.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-[#0d0d0d] shadow-[2px_2px_0px_#0d0d0d] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_#0d0d0d] hover:bg-[#f3ede2] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0d0d0d]">
                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
@@ -38,17 +49,6 @@
                     IMPOR DATA
                 </button>
                 <input type="file" ref="fileInput" accept=".json" class="hidden" @change="importDatabase" />
-
-                <button @click="exportDatabase"
-                    class="inline-flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-[4px] border-2 border-[#0d0d0d] bg-[#0d0d0d] px-4 py-2.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-white shadow-[2px_2px_0px_#0d0d0d] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_#ff4800] hover:bg-[#262626] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0d0d0d] sm:flex-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                        <polyline points="7 10 12 15 17 10" />
-                        <line x1="12" y1="15" x2="12" y2="3" />
-                    </svg>
-                    EKSPOR CADANGAN
-                </button>
             </div>
         </div>
     </section>

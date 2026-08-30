@@ -2,10 +2,10 @@
     <div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <section
             class="relative flex min-w-0 flex-col overflow-visible rounded-lg border-2 border-[#0d0d0d] bg-white shadow-[3px_3px_0px_#0d0d0d] transition-all duration-150 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#0d0d0d]">
-            <div class="border-b-2 border-[#0d0d0d] px-5 py-4">
+            <div class="border-b-2 border-[#0d0d0d] px-4 py-3.5 sm:px-5 sm:py-4">
                 <div class="min-w-0">
                     <div class="flex items-center gap-2">
-                        <h3 class="truncate text-sm font-bold uppercase tracking-[-0.015em] text-[#0d0d0d] leading-snug">
+                        <h3 class="text-sm font-bold uppercase tracking-[-0.015em] text-[#0d0d0d] leading-snug break-words">
                             "Aktivitas Teratas"
                         </h3>
                         <div tabindex="0"
@@ -24,20 +24,20 @@
                             </div>
                         </div>
                     </div>
-                    <p class="mt-1 truncate font-mono text-xs font-bold text-[#57534e] uppercase">
+                    <p class="mt-1 font-mono text-xs font-bold text-[#57534e] uppercase break-words">
                         [7 HARI TERAKHIR]
                     </p>
                 </div>
             </div>
-            <div class="custom-scrollbar max-h-80 flex-1 overflow-y-auto px-5 divide-y divide-[#e5dfd3]">
+            <div class="custom-scrollbar max-h-80 flex-1 overflow-y-auto px-4 sm:px-5 divide-y divide-[#e5dfd3]">
                 <div v-if="mostReadBooksInsight.length === 0"
                     class="flex min-h-40 items-center justify-center py-6 text-center font-mono text-xs sm:text-sm font-bold uppercase text-[#57534e]">
                     [BELUM ADA AKTIVITAS MEMBACA]
                 </div>
                 <div v-for="(insight, idx) in mostReadBooksInsight" :key="'act-' + idx"
-                    class="flex gap-3.5 py-4">
+                    class="flex gap-3 sm:gap-3.5 py-3.5 sm:py-4">
                     <div
-                        class="h-[72px] w-[50px] shrink-0 overflow-hidden rounded-[3px] border border-[#0d0d0d] bg-[#f3ede2] shadow-[1px_1px_0px_#0d0d0d]">
+                        class="h-[68px] w-[46px] sm:h-[72px] sm:w-[50px] shrink-0 overflow-hidden rounded-[3px] border border-[#0d0d0d] bg-[#f3ede2] shadow-[1px_1px_0px_#0d0d0d]">
                         <img v-if="insight.book.imageUrl" :src="insight.book.imageUrl"
                             class="h-full w-full object-cover" loading="lazy" />
                         <div v-else class="flex h-full w-full items-center justify-center bg-[#f3ede2] text-[#57534e]">
@@ -48,17 +48,17 @@
                         </div>
                     </div>
                     <div class="min-w-0 flex-1">
-                        <h4 class="line-clamp-2 text-sm font-bold font-mono leading-snug text-[#0d0d0d]">
+                        <h4 class="line-clamp-2 text-xs sm:text-sm font-bold font-mono leading-snug text-[#0d0d0d] break-words">
                             {{ insight.book.title }}
                         </h4>
-                        <div class="mt-2 space-y-1 font-mono text-xs text-[#44403c]">
+                        <div class="mt-1.5 sm:mt-2 space-y-1 font-mono text-xs text-[#44403c]">
                             <div class="flex min-w-0 items-center gap-1.5">
                                 <span class="h-2 w-2 shrink-0 rounded-full border border-[#0d0d0d] bg-[#ff4800]"></span>
-                                <span class="truncate"><strong class="font-bold tabular-nums text-[#0d0d0d]">{{ insight.sessions }}</strong> SESI BACA</span>
+                                <span class="break-words"><strong class="font-bold tabular-nums text-[#0d0d0d]">{{ insight.sessions }}</strong> SESI BACA</span>
                             </div>
                             <div class="flex min-w-0 items-center gap-1.5">
                                 <span class="h-2 w-2 shrink-0 rounded-full border border-[#0d0d0d] bg-[#0d0d0d]"></span>
-                                <span class="truncate"><strong class="font-bold tabular-nums text-[#0d0d0d]">{{ insight.pagesAdded }}</strong> HAL DIBACA</span>
+                                <span class="break-words"><strong class="font-bold tabular-nums text-[#0d0d0d]">{{ insight.pagesAdded }}</strong> HAL DIBACA</span>
                             </div>
                         </div>
                     </div>
@@ -68,19 +68,19 @@
 
         <section
             class="flex min-w-0 flex-col overflow-hidden rounded-lg border-2 border-[#0d0d0d] bg-white shadow-[3px_3px_0px_#0d0d0d] transition-all duration-150 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#0d0d0d]">
-            <div class="flex items-center justify-between gap-3 border-b-2 border-[#0d0d0d] px-5 py-4">
-                <h3 class="truncate text-sm font-bold uppercase tracking-[-0.015em] text-[#0d0d0d] leading-snug"> "Sedang Dibaca" </h3>
+            <div class="flex items-center justify-between gap-2.5 sm:gap-3 border-b-2 border-[#0d0d0d] px-4 py-3.5 sm:px-5 sm:py-4">
+                <h3 class="text-sm font-bold uppercase tracking-[-0.015em] text-[#0d0d0d] leading-snug break-words"> "Sedang Dibaca" </h3>
                 <span
-                    class="shrink-0 rounded-[4px] border border-[#0d0d0d] bg-[#f3ede2] px-2.5 py-0.5 font-mono text-xs font-bold uppercase tracking-wider text-[#0047ff] shadow-[1px_1px_0px_#0d0d0d]">
+                    class="shrink-0 rounded-[4px] border border-[#0d0d0d] bg-[#f3ede2] px-2 py-0.5 sm:px-2.5 font-mono text-xs font-bold uppercase tracking-wider text-[#0047ff] shadow-[1px_1px_0px_#0d0d0d]">
                     TOP 3 </span>
             </div>
-            <div class="custom-scrollbar max-h-80 flex-1 overflow-y-auto px-5 divide-y divide-[#e5dfd3]">
+            <div class="custom-scrollbar max-h-80 flex-1 overflow-y-auto px-4 sm:px-5 divide-y divide-[#e5dfd3]">
                 <div v-if="currentlyReadingList.length === 0"
                     class="flex min-h-40 items-center justify-center py-6 text-center font-mono text-xs sm:text-sm font-bold uppercase text-[#57534e]">
                     [TIDAK ADA BUKU YANG SEDANG DIBACA]
                 </div>
                 <div v-for="book in currentlyReadingList" :key="book.id"
-                    class="flex gap-3.5 py-4">
+                    class="flex gap-3 sm:gap-3.5 py-3.5 sm:py-4">
                     <div class="h-16 w-12 shrink-0 overflow-hidden rounded-[3px] border border-[#0d0d0d] bg-[#f3ede2] shadow-[1px_1px_0px_#0d0d0d]">
                         <img v-if="book.imageUrl" :src="book.imageUrl" class="h-full w-full object-cover"
                             loading="lazy" />
@@ -92,9 +92,9 @@
                         </div>
                     </div>
                     <div class="min-w-0 flex-1">
-                        <h4 class="truncate text-sm font-bold text-[#0d0d0d] font-mono"> {{ book.title }} </h4>
-                        <div class="mt-2 flex items-center justify-between gap-3 font-mono text-xs sm:text-sm">
-                            <span class="truncate font-bold text-[#44403c]">
+                        <h4 class="line-clamp-2 text-xs sm:text-sm font-bold text-[#0d0d0d] font-mono leading-snug break-words"> {{ book.title }} </h4>
+                        <div class="mt-2 flex flex-wrap items-center justify-between gap-1.5 font-mono text-xs sm:text-sm">
+                            <span class="font-bold text-[#44403c] min-w-0">
                                 <span class="tabular-nums font-bold text-[#0d0d0d]">{{ book.pagesRead }}</span> / <span class="tabular-nums text-[#0d0d0d]">{{ book.totalPages }}</span> HAL
                             </span>
                             <span class="shrink-0 font-bold tabular-nums text-[#0d0d0d]">
@@ -114,9 +114,9 @@
 
         <section
             class="relative flex min-w-0 flex-col overflow-visible rounded-lg border-2 border-[#0d0d0d] bg-white shadow-[3px_3px_0px_#0d0d0d] transition-all duration-150 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#0d0d0d]">
-            <div class="border-b-2 border-[#0d0d0d] px-5 py-4">
+            <div class="border-b-2 border-[#0d0d0d] px-4 py-3.5 sm:px-5 sm:py-4">
                 <div class="flex min-w-0 items-center gap-2">
-                    <h3 class="truncate text-sm font-bold uppercase tracking-[-0.015em] text-[#0d0d0d] leading-snug"> "Topik Dominan" </h3>
+                    <h3 class="text-sm font-bold uppercase tracking-[-0.015em] text-[#0d0d0d] leading-snug break-words"> "Topik Dominan" </h3>
                     <div tabindex="0"
                         class="group static sm:relative flex shrink-0 cursor-help items-center outline-none">
                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
@@ -134,16 +134,16 @@
                     </div>
                 </div>
             </div>
-            <div class="p-5 overflow-y-auto max-h-80 space-y-4 custom-scrollbar">
+            <div class="p-4 sm:p-5 overflow-y-auto max-h-80 space-y-3.5 sm:space-y-4 custom-scrollbar">
                 <div v-if="topicScores.length === 0" class="text-center font-mono text-xs sm:text-sm font-bold uppercase text-[#57534e] py-4">
                     [BELUM ADA TOPIK BUKU]
                 </div>
                 <div v-for="cat in topicScores" :key="cat.name" class="space-y-1.5">
-                    <div class="flex items-center justify-between gap-3 ">
-                        <span class="min-w-0 truncate text-sm font-bold text-[#0d0d0d] font-mono"> {{ cat.name }}
+                    <div class="flex items-center justify-between gap-2 sm:gap-3">
+                        <span class="min-w-0 text-xs sm:text-sm font-bold text-[#0d0d0d] font-mono break-words line-clamp-1"> {{ cat.name }}
                         </span>
-                        <span class="shrink-0 font-mono text-xs sm:text-sm font-bold tabular-nums text-[#0d0d0d] font-mono">
-                            {{ cat.score }} <span class="font-mono font-bold text-[#57534e]">PTS</span>
+                        <span class="shrink-0 font-mono text-xs sm:text-sm font-bold tabular-nums text-[#0d0d0d]">
+                            {{ cat.score }} <span class="font-bold text-[#57534e]">PTS</span>
                         </span>
                     </div>
                     <div class="h-2.5 w-full border border-[#0d0d0d] bg-[#f3ede2] rounded-[2px] p-[1px]">

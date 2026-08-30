@@ -20,7 +20,7 @@
                 <h1 class="text-2xl font-extrabold uppercase tracking-tight text-[#0d0d0d] sm:text-3xl mt-5">
                     Manajemen Penerbit
                 </h1>
-                <p class="mt-1 text-sm text-[#44403c]">
+                <p class="mt-1.5 max-w-3xl text-[0.8rem] leading-relaxed text-[#44403c]">
                     Kelola daftar penerbit dan relasi buku yang diterbitkan dalam arsip koleksi Anda.
                 </p>
             </div>
@@ -143,7 +143,7 @@
 
                         <div class="min-w-0">
                             <div class="flex items-center gap-2 flex-wrap mb-2 md:mb-1">
-                                <h3 class="truncate text-base font-bold text-[#0d0d0d]">
+                                <h3 class="truncate text-sm font-bold text-[#0d0d0d]">
                                     {{ pub.name }}
                                 </h3>
                                 <span class="rounded-[3px] border border-[#0d0d0d] bg-[#f3ede2] px-2.5 py-0.5 font-mono text-xs font-bold tabular-nums text-[#0d0d0d] shrink-0">

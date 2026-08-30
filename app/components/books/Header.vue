@@ -12,7 +12,7 @@
                 Koleksi Buku
             </h1>
 
-            <p class="mt-2 text-sm text-[#44403c]">
+            <p class="mt-1.5 max-w-xl text-[0.8rem] leading-relaxed text-[#44403c]">
                 Kelola inventaris arsip buku fisik, status koleksi, dan progres membaca.
             </p>
         </div>
