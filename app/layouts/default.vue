@@ -23,14 +23,14 @@
 
                     <div class="flex shrink-0 items-center gap-0.5 sm:gap-1.5">
                         <NuxtLink to="/"
-                            class="rounded-md px-2.5 py-2 text-[13px] font-semibold transition-colors sm:px-4 sm:text-sm"
+                            class="cursor-pointer rounded-md px-2.5 py-2 text-[13px] font-semibold transition-colors sm:px-4 sm:text-sm"
                             active-class="bg-gray-900 text-white"
                             inactive-class="text-gray-600 hover:bg-gray-100 hover:text-gray-900">
                             Dashboard
                         </NuxtLink>
 
                         <NuxtLink to="/books"
-                            class="rounded-md px-2.5 py-2 text-[13px] font-semibold transition-colors sm:px-4 sm:text-sm"
+                            class="cursor-pointer rounded-md px-2.5 py-2 text-[13px] font-semibold transition-colors sm:px-4 sm:text-sm"
                             active-class="bg-gray-900 text-white"
                             inactive-class="text-gray-600 hover:bg-gray-100 hover:text-gray-900">
                             Koleksi
@@ -49,7 +49,7 @@
             leave-active-class="transition duration-100 ease-in" leave-from-class="translate-y-0 scale-100 opacity-100"
             leave-to-class="translate-y-2 scale-90 opacity-0">
             <button v-if="showFloatingNav" type="button" @click="navigationOpen = true" aria-label="Buka navigasi"
-                class="fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] right-4 z-50 flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-700 shadow-[0_4px_16px_rgba(15,23,42,0.12)] transition-colors hover:border-gray-300 hover:bg-gray-50 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 sm:bottom-5 sm:right-5">
+                class="fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] right-4 z-50 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-gray-200 bg-white text-gray-700 shadow-[0_4px_16px_rgba(15,23,42,0.12)] transition-colors hover:border-gray-300 hover:bg-gray-50 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 sm:bottom-5 sm:right-5">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M4 6h16" />
@@ -73,7 +73,7 @@
                         </span>
 
                         <button type="button" @click="navigationOpen = false" aria-label="Tutup navigasi"
-                            class="flex h-7 w-7 items-center justify-center rounded-md text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-900/10">
+                            class="flex h-7 w-7 cursor-pointer items-center justify-center rounded-md text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-900/10">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round">
@@ -85,7 +85,7 @@
 
                     <div class="space-y-1">
                         <NuxtLink to="/" @click="navigationOpen = false"
-                            class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors"
+                            class="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors"
                             :class="route.path === '/'
                                     ? 'bg-gray-900 text-white'
                                     : 'text-gray-700 hover:bg-gray-50'
@@ -107,7 +107,7 @@
                         </NuxtLink>
 
                         <NuxtLink to="/books" @click="navigationOpen = false"
-                            class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors"
+                            class="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors"
                             :class="route.path === '/books'
                                     ? 'bg-gray-900 text-white'
                                     : 'text-gray-700 hover:bg-gray-50'

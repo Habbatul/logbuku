@@ -39,6 +39,8 @@ export const useBooks = () => {
           } else if (!b.topic) {
             b.topic = []
           }
+          b.author = b.author ? String(b.author).trim() : ''
+          b.publisher = b.publisher ? String(b.publisher).trim() : ''
         })
         
         const sevenDaysAgo = new Date()
@@ -79,6 +81,8 @@ export const useBooks = () => {
       const now = new Date().toISOString()
       
       const cleanData = JSON.parse(JSON.stringify(bookData))
+      cleanData.author = cleanData.author ? String(cleanData.author).trim() : ''
+      cleanData.publisher = cleanData.publisher ? String(cleanData.publisher).trim() : ''
       
       if (cleanData.id) {
         cleanData.updatedAt = now
@@ -98,6 +102,27 @@ export const useBooks = () => {
     }
   }
 
+  const saveBooks = async (booksList: any[]) => {
+    try {
+      const db = await initDB()
+      const tx = db.transaction(STORE_NAME, 'readwrite')
+      const store = tx.objectStore(STORE_NAME)
+      const now = new Date().toISOString()
+
+      booksList.forEach((b: any) => {
+        const cleanData = JSON.parse(JSON.stringify(b))
+        cleanData.author = cleanData.author ? String(cleanData.author).trim() : ''
+        cleanData.publisher = cleanData.publisher ? String(cleanData.publisher).trim() : ''
+        cleanData.updatedAt = now
+        store.put(cleanData)
+      })
+
+      tx.oncomplete = () => loadBooks()
+    } catch (error) {
+      console.error("Gagal menyimpan daftar buku:", error)
+    }
+  }
+
   const deleteBook = async (id: number) => {
     try {
       const db = await initDB()
@@ -105,41 +130,42 @@ export const useBooks = () => {
       const store = tx.objectStore(STORE_NAME)
       store.delete(id)
       
-        tx.oncomplete = () => loadBooks()
-      } catch (error) {
-        console.error("Gagal menghapus buku:", error)
-      }
+      tx.oncomplete = () => loadBooks()
+    } catch (error) {
+      console.error("Gagal menghapus buku:", error)
     }
+  }
 
-    const updateTargets = async (selectedIds: number[]) => {
-      try {
-        const db = await initDB()
-        const tx = db.transaction(STORE_NAME, 'readwrite')
-        const store = tx.objectStore(STORE_NAME)
-        const request = store.getAll()
-        
-        request.onsuccess = () => {
-          const loadedBooks = request.result || []
-          loadedBooks.forEach((b: any) => {
-            const isSelected = selectedIds.includes(b.id)
-            if (!!b.isTarget !== isSelected) {
-              b.isTarget = isSelected
-              store.put(b)
-            }
-          })
-        }
-        
-        tx.oncomplete = () => loadBooks()
-      } catch (error) {
-        console.error("Gagal update target:", error)
+  const updateTargets = async (selectedIds: number[]) => {
+    try {
+      const db = await initDB()
+      const tx = db.transaction(STORE_NAME, 'readwrite')
+      const store = tx.objectStore(STORE_NAME)
+      const request = store.getAll()
+      
+      request.onsuccess = () => {
+        const loadedBooks = request.result || []
+        loadedBooks.forEach((b: any) => {
+          const isSelected = selectedIds.includes(b.id)
+          if (!!b.isTarget !== isSelected) {
+            b.isTarget = isSelected
+            store.put(b)
+          }
+        })
       }
+      
+      tx.oncomplete = () => loadBooks()
+    } catch (error) {
+      console.error("Gagal update target:", error)
     }
+  }
 
-    return {
-      books,
-      loadBooks,
-      saveBook,
-      deleteBook,
-      updateTargets
-    }
+  return {
+    books,
+    loadBooks,
+    saveBook,
+    saveBooks,
+    deleteBook,
+    updateTargets
+  }
 }
