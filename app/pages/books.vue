@@ -1,6 +1,6 @@
 <template>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-in fade-in duration-300">
-        <div class="mb-10">
+        <div class="mb-6">
             <BooksHeader @add-book="openCreateModal" />
 
             <BooksFilterBar v-model:search-query="searchQuery" v-model:selected-topic="selectedTopic"
@@ -16,9 +16,15 @@
 
         <BooksEmptyState v-if="filteredBooks.length === 0" />
 
-        <div v-else class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-            <BooksCard v-for="book in filteredBooks" :key="book.id" :book="book" :hide-action-buttons="hideActionButtons"
-                @toggle-pin="handleTogglePin" @edit="openEditModal" @open-progress="openProgressModal" />
+        <div v-else>
+            <div class="mb-4 flex items-center justify-between font-mono text-[11px] font-bold text-[#57534e]">
+                <span>[MENAMPILKAN {{ filteredBooks.length }} DARI {{ books.length }} ARSIP BUKU]</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                <BooksCard v-for="book in filteredBooks" :key="book.id" :book="book" :hide-action-buttons="hideActionButtons"
+                    @toggle-pin="handleTogglePin" @edit="openEditModal" @open-progress="openProgressModal" />
+            </div>
         </div>
 
         <BooksProgressModal :is-open="isProgressModalOpen" :book="selectedProgressBook"
@@ -121,14 +127,27 @@ const handleImportJson = async (newBooks: Partial<Book>[]) => {
     isFormModalOpen.value = false
 }
 
-const handleSaveProgress = async ({ book, newPages }: { book: Book; newPages: number }) => {
+const handleSaveProgress = async ({ book, newPages, date }: { book: Book; newPages: number; date?: string }) => {
     const oldPages = book.pagesRead || 0
     const pagesAdded = newPages - oldPages
     const updatedBook = { ...book, pagesRead: newPages }
 
     if (pagesAdded > 0) {
         updatedBook.readHistory = updatedBook.readHistory || []
-        const now = new Date()
+        
+        let sessionDate: Date
+        if (date) {
+            const todayStr = new Date().toISOString().split('T')[0]
+            if (date === todayStr) {
+                sessionDate = new Date()
+            } else {
+                const [y, m, d] = date.split('-').map(Number)
+                sessionDate = new Date(y, m - 1, d, 12, 0, 0)
+            }
+        } else {
+            sessionDate = new Date()
+        }
+
         const oneHour = 60 * 60 * 1000
         const lastSessionIndex = updatedBook.readHistory.length - 1
         let isMerged = false
@@ -136,8 +155,11 @@ const handleSaveProgress = async ({ book, newPages }: { book: Book; newPages: nu
         if (lastSessionIndex >= 0) {
             const lastSession = updatedBook.readHistory[lastSessionIndex]
             const lastSessionTime = new Date(lastSession.date).getTime()
-            if (now.getTime() - lastSessionTime <= oneHour) {
-                updatedBook.readHistory[lastSessionIndex].date = now.toISOString()
+            const lastSessionDateStr = new Date(lastSession.date).toISOString().split('T')[0]
+            const sessionDateStr = sessionDate.toISOString().split('T')[0]
+
+            if (lastSessionDateStr === sessionDateStr && Math.abs(sessionDate.getTime() - lastSessionTime) <= oneHour) {
+                updatedBook.readHistory[lastSessionIndex].date = sessionDate.toISOString()
                 updatedBook.readHistory[lastSessionIndex].pagesAdded += pagesAdded
                 updatedBook.readHistory[lastSessionIndex].endPage = newPages
                 isMerged = true
@@ -145,7 +167,7 @@ const handleSaveProgress = async ({ book, newPages }: { book: Book; newPages: nu
         }
         if (!isMerged) {
             updatedBook.readHistory.push({
-                date: now.toISOString(),
+                date: sessionDate.toISOString(),
                 pagesAdded: pagesAdded,
                 startPage: oldPages,
                 endPage: newPages

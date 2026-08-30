@@ -2,63 +2,63 @@
     <section class="space-y-4">
         <div class="flex items-center justify-between">
             <div>
-                <h2 class="text-base font-semibold tracking-tight text-gray-950"> Overview Koleksi </h2>
-                <p class="mt-1 text-sm text-gray-500"> Ringkasan koleksi buku dan aktivitas membaca. </p>
+                <h2 class="text-lg sm:text-xl font-bold tracking-[-0.02em] text-[#0d0d0d] leading-snug uppercase"> OVERVIEW KOLEKSI </h2>
+                <p class="mt-1 text-sm text-[#44403c]"> Ringkasan inventaris buku fisik dan aktivitas membaca arsip. </p>
             </div>
         </div>
         <div
-            class="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-gray-200/80 bg-gray-200/80 md:grid-cols-4">
+            class="grid grid-cols-2 gap-px overflow-hidden rounded-lg border-2 border-[#0d0d0d] bg-[#0d0d0d] shadow-[3px_3px_0px_#0d0d0d] md:grid-cols-4">
             <div class="group relative min-w-0 bg-white p-4 sm:p-5">
                 <div class="flex items-start justify-between gap-3">
-                    <span class="min-w-0 truncate text-[13px] font-medium text-gray-500"> Total Koleksi </span>
+                    <span class="min-w-0 truncate font-mono text-xs font-bold uppercase tracking-wider text-[#44403c]"> [TOTAL KOLEKSI] </span>
                     <button @click="$emit('openCategoryModal')"
-                        class="flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-blue-500 bg-blue-500/90 text-white shadow-sm transition-all duration-200 hover:bg-blue-700 hover:border-blue-700 hover:shadow-md active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+                        class="flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-[4px] border border-[#0d0d0d] bg-[#f3ede2] text-[#0d0d0d] shadow-[1px_1px_0px_#0d0d0d] transition-all duration-100 hover:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0d0d0d] active:translate-x-0.5 active:translate-y-0.5"
                         title="Detail Topik" aria-label="Lihat detail topik">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
                             stroke-linejoin="round">
                             <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />
                             <path d="M22 12A10 10 0 0 0 12 2v10z" />
                         </svg>
                     </button>
                 </div>
-                <div class="mt-1 flex items-baseline gap-1.5">
-                    <span class="text-2xl font-bold tracking-[-0.03em] text-gray-950 sm:text-3xl"> {{ totalBooks }}
+                <div class="mt-2 flex items-baseline gap-2">
+                    <span class="text-2xl font-bold tracking-tight tabular-nums text-[#0d0d0d] sm:text-[28px]"> {{ totalBooks }}
                     </span>
-                    <span class="text-xs font-medium text-gray-400"> Buku </span>
+                    <span class="font-mono text-xs sm:text-sm font-bold uppercase text-[#57534e]"> BUKU </span>
                 </div>
             </div>
             <div class="min-w-0 bg-white p-4 sm:p-5">
                 <div class="flex items-start justify-between">
-                    <span class="text-[13px] font-medium text-gray-500"> Sedang Dibaca </span>
-                    <span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-500"></span>
+                    <span class="font-mono text-xs font-bold uppercase tracking-wider text-[#44403c]"> [SEDANG DIBACA] </span>
+                    <span class="mt-1 h-2 w-2 shrink-0 rounded-full bg-[#0047ff] border border-[#0d0d0d]"></span>
                 </div>
-                <div class="mt-3 flex items-baseline gap-1.5">
-                    <span class="text-2xl font-bold tracking-[-0.03em] text-blue-600 sm:text-3xl"> {{
+                <div class="mt-2 flex items-baseline gap-2">
+                    <span class="text-2xl font-bold tracking-tight tabular-nums text-[#0d0d0d] sm:text-[28px]"> {{
                         readingBooksCount }} </span>
-                    <span class="text-xs font-medium text-blue-400"> Buku </span>
+                    <span class="font-mono text-xs sm:text-sm font-bold uppercase text-[#57534e]"> BUKU </span>
                 </div>
             </div>
             <div class="min-w-0 bg-white p-4 sm:p-5">
                 <div class="flex items-start justify-between">
-                    <span class="text-[13px] font-medium text-gray-500"> Belum Dibaca </span>
-                    <span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-gray-300"></span>
+                    <span class="font-mono text-xs font-bold uppercase tracking-wider text-[#44403c]"> [BELUM DIBACA] </span>
+                    <span class="mt-1 h-2 w-2 shrink-0 rounded-full bg-[#e5dfd3] border border-[#0d0d0d]"></span>
                 </div>
-                <div class="mt-3 flex items-baseline gap-1.5">
-                    <span class="text-2xl font-bold tracking-[-0.03em] text-gray-500 sm:text-3xl"> {{
+                <div class="mt-2 flex items-baseline gap-2">
+                    <span class="text-2xl font-bold tracking-tight tabular-nums text-[#0d0d0d] sm:text-[28px]"> {{
                         unreadBooksCount }} </span>
-                    <span class="text-xs font-medium text-gray-400"> Buku </span>
+                    <span class="font-mono text-xs sm:text-sm font-bold uppercase text-[#57534e]"> BUKU </span>
                 </div>
             </div>
             <div class="min-w-0 bg-white p-4 sm:p-5">
                 <div class="flex items-start justify-between">
-                    <span class="min-w-0 truncate text-[13px] font-medium text-gray-500"> Rata-rata 7 Hari </span>
-                    <span class="ml-2 mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500"></span>
+                    <span class="min-w-0 truncate font-mono text-xs font-bold uppercase tracking-wider text-[#44403c]"> [RATA-RATA 7 HARI] </span>
+                    <span class="ml-2 mt-1 h-2 w-2 shrink-0 rounded-full bg-[#00875a] border border-[#0d0d0d]"></span>
                 </div>
-                <div class="mt-3 flex items-baseline gap-1.5">
-                    <span class="text-2xl font-bold tracking-[-0.03em] text-gray-950 sm:text-3xl"> {{ avgPagesPerDay
+                <div class="mt-2 flex items-baseline gap-2">
+                    <span class="text-2xl font-bold tracking-tight tabular-nums text-[#0d0d0d] sm:text-[28px]"> {{ avgPagesPerDay
                         }} </span>
-                    <span class="text-xs font-medium text-gray-400"> hal/hari </span>
+                    <span class="font-mono text-xs sm:text-sm font-bold uppercase text-[#57534e]"> HAL/HARI </span>
                 </div>
             </div>
         </div>

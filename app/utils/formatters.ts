@@ -7,11 +7,8 @@ export const formatNumber = (val: number): string => {
 }
 
 export const getProgressColor = (read: number, total: number): string => {
-    if (!total) return 'bg-gray-200'
+    if (!total || read <= 0) return 'bg-gray-200'
     const pct = (read / total) * 100
-    if (pct >= 100) return 'bg-green-600'
-    if (pct >= 75) return 'bg-purple-500'
-    if (pct >= 50) return 'bg-blue-500'
-    if (pct >= 25) return 'bg-orange-500'
-    return 'bg-red-500'
+    if (pct >= 100) return 'bg-emerald-600'
+    return 'bg-gray-900'
 }

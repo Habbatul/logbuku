@@ -1,13 +1,13 @@
 <template>
     <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <section
-            class="flex min-w-0 flex-col overflow-hidden rounded-xl border border-gray-200/80 bg-white transition-shadow duration-200 hover:shadow-[0_8px_30px_rgba(15,23,42,0.06)]">
-            <div class="flex items-center justify-between border-b border-gray-100 px-5 py-4">
+            class="flex min-w-0 flex-col overflow-hidden rounded-lg border-2 border-[#0d0d0d] bg-white shadow-[3px_3px_0px_#0d0d0d] transition-all duration-150 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#0d0d0d]">
+            <div class="flex items-center justify-between border-b-2 border-[#0d0d0d] px-5 py-4">
                 <div class="min-w-0">
                     <div class="flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="shrink-0 text-gray-600">
+                            class="shrink-0 text-[#0d0d0d]">
                             <rect width="16" height="20" x="4" y="2" rx="2" ry="2" />
                             <path d="M9 22v-4h6v4" />
                             <path d="M8 6h.01" />
@@ -20,21 +20,21 @@
                             <path d="M8 10h.01" />
                             <path d="M8 14h.01" />
                         </svg>
-                        <h3 class="truncate text-sm font-semibold tracking-tight text-gray-950">
-                            Top 5 Penerbit Terbanyak
+                        <h3 class="truncate text-sm sm:text-base font-bold uppercase tracking-[-0.015em] text-[#0d0d0d] leading-snug">
+                            "Top 5 Penerbit"
                         </h3>
                     </div>
-                    <p class="mt-1 text-[13px] text-gray-500">
-                        Penerbit dengan jumlah koleksi terbanyak.
+                    <p class="mt-1 text-xs sm:text-sm text-[#44403c] mr-4">
+                        Penerbit dengan jumlah arsip koleksi terbanyak.
                     </p>
                 </div>
 
                 <NuxtLink to="/publishers"
-                    class="inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-gray-200 bg-gray-50/80 px-2.5 py-1.5 text-xs font-semibold text-gray-700 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:text-gray-950 focus:outline-none focus:ring-2 focus:ring-gray-900/10"
+                    class="inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-[4px] border border-[#0d0d0d] bg-[#f3ede2] px-3 py-1 font-mono text-xs font-bold uppercase tracking-wider text-[#0d0d0d] shadow-[1px_1px_0px_#0d0d0d] transition-all hover:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0d0d0d] active:translate-x-0.5 active:translate-y-0.5"
                     title="Buka Manajemen Penerbit">
-                    <span>Penerbit</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <span>[PENERBIT]</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
                         <polyline points="15 3 21 3 21 9" />
                         <line x1="10" y1="14" x2="21" y2="3" />
@@ -42,28 +42,28 @@
                 </NuxtLink>
             </div>
 
-            <div class="space-y-4 p-5">
-                <div v-if="top5Publishers.length === 0" class="py-8 text-center text-sm text-gray-400">
-                    Belum ada data penerbit.
+            <div class="space-y-3.5 p-5">
+                <div v-if="top5Publishers.length === 0" class="py-8 text-center font-mono text-xs sm:text-sm font-bold uppercase text-[#57534e]">
+                    [BELUM ADA DATA PENERBIT]
                 </div>
-                <div v-for="(item, idx) in top5Publishers" :key="item.name" class="space-y-2">
+                <div v-for="(item, idx) in top5Publishers" :key="item.name" class="space-y-1.5">
                     <div class="flex items-center justify-between gap-3">
                         <div class="flex min-w-0 items-center gap-2">
-                            <span class="w-4 shrink-0 text-xs font-bold tabular-nums text-gray-400">
-                                {{ idx + 1 }}.
+                            <span class="w-6 shrink-0 font-mono text-xs sm:text-sm font-bold tabular-nums text-[#57534e]">
+                                #{{ idx + 1 }}
                             </span>
-                            <span class="truncate text-[13px] font-semibold text-gray-800"
-                                :class="item.name === 'Penerbit Lainnya' ? 'italic text-gray-500' : ''">
+                            <span class="truncate text-sm font-bold text-[#0d0d0d]"
+                                :class="item.name === 'Penerbit Lainnya' ? 'italic text-[#57534e]' : ''">
                                 {{ item.name }}
                             </span>
                         </div>
-                        <span class="shrink-0 text-xs font-bold tabular-nums text-gray-900">
-                            {{ item.count }} <span class="font-normal text-gray-400 text-[11px]">buku</span>
+                        <span class="shrink-0 font-mono text-xs sm:text-sm font-bold tabular-nums text-[#0d0d0d]">
+                            {{ item.count }} <span class="font-bold text-[#57534e]">BUKU</span>
                         </span>
                     </div>
-                    <div class="h-1.5 w-full overflow-hidden rounded-full bg-gray-100">
-                        <div class="h-full rounded-full transition-all duration-500"
-                            :class="item.name === 'Penerbit Lainnya' ? 'bg-gray-400' : 'bg-blue-600'"
+                    <div class="h-2.5 w-full border border-[#0d0d0d] bg-[#f3ede2] rounded-[2px] p-[1px]">
+                        <div class="h-full transition-all duration-500"
+                            :class="item.name === 'Penerbit Lainnya' ? 'bg-[#e5dfd3]' : 'bg-[#0d0d0d]'"
                             :style="{ width: `${(item.count / maxPublisherCount) * 100}%` }">
                         </div>
                     </div>
@@ -72,31 +72,31 @@
         </section>
 
         <section
-            class="flex min-w-0 flex-col overflow-hidden rounded-xl border border-gray-200/80 bg-white transition-shadow duration-200 hover:shadow-[0_8px_30px_rgba(15,23,42,0.06)]">
-            <div class="flex items-center justify-between border-b border-gray-100 px-5 py-4">
+            class="flex min-w-0 flex-col overflow-hidden rounded-lg border-2 border-[#0d0d0d] bg-white shadow-[3px_3px_0px_#0d0d0d] transition-all duration-150 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#0d0d0d]">
+            <div class="flex items-center justify-between border-b-2 border-[#0d0d0d] px-5 py-4">
                 <div class="min-w-0">
                     <div class="flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="shrink-0 text-gray-600">
+                            class="shrink-0 text-[#0d0d0d]">
                             <path d="M12 20h9" />
                             <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
                         </svg>
-                        <h3 class="truncate text-sm font-semibold tracking-tight text-gray-950">
-                            Top 5 Penulis Terbanyak
+                        <h3 class="truncate text-sm sm:text-base font-bold uppercase tracking-[-0.015em] text-[#0d0d0d] leading-snug">
+                            "Top 5 Penulis"
                         </h3>
                     </div>
-                    <p class="mt-1 text-[13px] text-gray-500">
-                        Penulis dengan jumlah karya terbanyak di koleksimu.
+                    <p class="mt-1 text-xs sm:text-sm text-[#44403c] mr-4">
+                        Penulis dengan karya terbanyak di katalog arsip.
                     </p>
                 </div>
 
                 <NuxtLink to="/authors"
-                    class="inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-gray-200 bg-gray-50/80 px-2.5 py-1.5 text-xs font-semibold text-gray-700 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:text-gray-950 focus:outline-none focus:ring-2 focus:ring-gray-900/10"
+                    class="inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-[4px] border border-[#0d0d0d] bg-[#f3ede2] px-3 py-1 font-mono text-xs font-bold uppercase tracking-wider text-[#0d0d0d] shadow-[1px_1px_0px_#0d0d0d] transition-all hover:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0d0d0d] active:translate-x-0.5 active:translate-y-0.5"
                     title="Buka Manajemen Penulis">
-                    <span>Penulis</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <span>[PENULIS]</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
                         <polyline points="15 3 21 3 21 9" />
                         <line x1="10" y1="14" x2="21" y2="3" />
@@ -104,26 +104,26 @@
                 </NuxtLink>
             </div>
 
-            <div class="space-y-4 p-5">
-                <div v-if="top5Authors.length === 0" class="py-8 text-center text-sm text-gray-400">
-                    Belum ada data penulis.
+            <div class="space-y-3.5 p-5">
+                <div v-if="top5Authors.length === 0" class="py-8 text-center font-mono text-xs sm:text-sm font-bold uppercase text-[#57534e]">
+                    [BELUM ADA DATA PENULIS]
                 </div>
-                <div v-for="(item, idx) in top5Authors" :key="item.name" class="space-y-2">
+                <div v-for="(item, idx) in top5Authors" :key="item.name" class="space-y-1.5">
                     <div class="flex items-center justify-between gap-3">
                         <div class="flex min-w-0 items-center gap-2">
-                            <span class="w-4 shrink-0 text-xs font-bold tabular-nums text-gray-400">
-                                {{ idx + 1 }}.
+                            <span class="w-6 shrink-0 font-mono text-xs sm:text-sm font-bold tabular-nums text-[#57534e]">
+                                #{{ idx + 1 }}
                             </span>
-                            <span class="truncate text-[13px] font-semibold text-gray-800">
+                            <span class="truncate text-sm font-bold text-[#0d0d0d]">
                                 {{ item.name }}
                             </span>
                         </div>
-                        <span class="shrink-0 text-xs font-bold tabular-nums text-gray-900">
-                            {{ item.count }} <span class="font-normal text-gray-400 text-[11px]">buku</span>
+                        <span class="shrink-0 font-mono text-xs sm:text-sm font-bold tabular-nums text-[#0d0d0d]">
+                            {{ item.count }} <span class="font-bold text-[#57534e]">BUKU</span>
                         </span>
                     </div>
-                    <div class="h-1.5 w-full overflow-hidden rounded-full bg-gray-100">
-                        <div class="h-full rounded-full bg-emerald-600 transition-all duration-500"
+                    <div class="h-2.5 w-full border border-[#0d0d0d] bg-[#f3ede2] rounded-[2px] p-[1px]">
+                        <div class="h-full bg-[#0d0d0d] transition-all duration-500"
                             :style="{ width: `${(item.count / maxAuthorCount) * 100}%` }">
                         </div>
                     </div>

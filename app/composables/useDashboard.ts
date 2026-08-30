@@ -128,7 +128,6 @@ export const useDashboard = (books: Ref<any[]>) => {
 
         const result = Array.from(chartMap.values())
 
-        // Mode Kumulatif (Running Total) untuk Data Total pada opsi agregat jangka panjang (ALL atau 1Y)
         const isCumulative = isTotalMetric && ['ALL', '1Y'].includes(filter)
         if (isCumulative) {
             let running = 0
@@ -138,9 +137,6 @@ export const useDashboard = (books: Ref<any[]>) => {
             }
         }
 
-        // Normalisasi Y-Axis: (item.value / maxValue) * 100.
-        // Jika maxValue === 0 atau semua bernilai 0, default-kan percent = 0.
-        // Nilai percent harus selalu angka terdefinisi (bukan NaN, null, atau undefined).
         const maxValue = Math.max(...result.map(d => d.value), 0)
 
         return result.map(d => {

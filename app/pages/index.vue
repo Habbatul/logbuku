@@ -1,5 +1,5 @@
 <template>
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-in fade-in duration-300 space-y-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-in fade-in duration-300 space-y-8">
         <IndexHeader :reading-streak="readingStreak" />
 
         <IndexOverview
@@ -62,13 +62,17 @@
             @close="isTargetModalOpen = false"
             @save="saveTargetSelection"
         />
-    </main>
+    </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 
 const { books, loadBooks, updateTargets } = useBooks()
+
+useHead({
+    title: 'Dashboard Analitik',
+})
 
 const {
     filterCompleted,

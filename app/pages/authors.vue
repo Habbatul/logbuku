@@ -1,124 +1,173 @@
 <template>
-    <div class="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8 animate-in fade-in duration-300 space-y-6">
-        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-gray-200/80 pb-6">
+    <div class="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8 space-y-6">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b-2 border-[#0d0d0d] pb-6">
             <div class="min-w-0">
                 <div class="mb-2 flex items-center gap-2">
-                    <NuxtLink to="/" class="inline-flex cursor-pointer items-center gap-1 text-xs font-semibold text-gray-500 hover:text-gray-900 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <NuxtLink to="/" class="inline-flex cursor-pointer items-center gap-1.5 font-mono text-xs font-bold text-[#0d0d0d] hover:text-[#0047ff] transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="15 18 9 12 15 6" />
                         </svg>
-                        Dashboard
+                        [DASHBOARD]
                     </NuxtLink>
-                    <span class="text-gray-300">/</span>
-                    <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">Penulis</span>
+                    <span class="font-mono text-xs font-bold text-[#57534e]">/</span>
+                    <span class="inline-flex items-center gap-1.5 rounded-[3px] border border-[#0d0d0d] bg-[#f3ede2] px-2 py-0.5 font-mono text-xs font-bold uppercase tracking-wider text-[#0d0d0d]">
+                        <span class="h-1.5 w-1.5 rounded-full bg-[#ff4800]"></span>
+                        PENULIS
+                    </span>
                 </div>
 
-                <h1 class="text-2xl font-bold tracking-tight text-gray-950 sm:text-3xl">
+                <h1 class="text-2xl font-extrabold uppercase tracking-tight text-[#0d0d0d] sm:text-3xl mt-5">
                     Manajemen Penulis
                 </h1>
-                <p class="mt-1 text-sm text-gray-500">
-                    Kelola daftar penulis dan relasi karya buku Anda.
+                <p class="mt-1 text-sm text-[#44403c]">
+                    Kelola daftar penulis dan relasi karya buku fisik dalam arsip koleksi Anda.
                 </p>
             </div>
 
             <div class="flex shrink-0 items-center gap-2.5">
                 <button type="button" @click="openAddAuthorModal"
-                    class="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-gray-900 px-4 py-2.5 text-xs font-semibold text-white transition-colors hover:bg-black focus:outline-none focus:ring-2 focus:ring-gray-900/15">
+                    class="inline-flex cursor-pointer items-center gap-2 rounded-[4px] border-2 border-[#0d0d0d] bg-[#0d0d0d] px-4 py-2.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-white shadow-[3px_3px_0px_#0d0d0d] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_#ff4800] hover:bg-[#262626] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0d0d0d] active:translate-x-0 active:translate-y-0">
                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M5 12h14" />
                         <path d="M12 5v14" />
                     </svg>
-                    Tambah Penulis
+                    TAMBAH PENULIS
                 </button>
             </div>
         </div>
 
         <div class="grid grid-cols-2 gap-3 sm:grid-cols-3">
-            <div class="rounded-xl border border-gray-200/80 bg-white p-4">
-                <span class="text-xs font-medium text-gray-500">Total Penulis</span>
-                <p class="mt-1 text-2xl font-bold text-gray-950">{{ allAuthorsList.length }}</p>
+            <div class="rounded-lg border-2 border-[#0d0d0d] bg-white p-4 sm:p-5 shadow-[3px_3px_0px_#0d0d0d]">
+                <div class="flex items-center justify-between">
+                    <span class="font-mono text-xs font-bold uppercase tracking-wider text-[#44403c]">[TOTAL PENULIS]</span>
+                    <span class="h-2 w-2 rounded-full border border-[#0d0d0d] bg-[#0d0d0d]"></span>
+                </div>
+                <div class="mt-2 flex items-baseline gap-2">
+                    <span class="text-2xl sm:text-[28px] font-bold tracking-tight tabular-nums text-[#0d0d0d]">
+                        {{ allAuthorsList.length }}
+                    </span>
+                    <span class="font-mono text-xs sm:text-sm font-bold uppercase text-[#57534e]">PENULIS</span>
+                </div>
             </div>
-            <div class="rounded-xl border border-gray-200/80 bg-white p-4">
-                <span class="text-xs font-medium text-gray-500">Buku Terhubung</span>
-                <p class="mt-1 text-2xl font-bold text-emerald-600">{{ booksWithAuthorCount }}</p>
+
+            <div class="rounded-lg border-2 border-[#0d0d0d] bg-white p-4 sm:p-5 shadow-[3px_3px_0px_#0d0d0d]">
+                <div class="flex items-center justify-between">
+                    <span class="font-mono text-xs font-bold uppercase tracking-wider text-[#44403c]">[BUKU TERHUBUNG]</span>
+                    <span class="h-2 w-2 rounded-full border border-[#0d0d0d] bg-[#00875a]"></span>
+                </div>
+                <div class="mt-2 flex items-baseline gap-2">
+                    <span class="text-2xl sm:text-[28px] font-bold tracking-tight tabular-nums text-[#00875a]">
+                        {{ booksWithAuthorCount }}
+                    </span>
+                    <span class="font-mono text-xs sm:text-sm font-bold uppercase text-[#57534e]">BUKU</span>
+                </div>
             </div>
-            <div class="col-span-2 sm:col-span-1 rounded-xl border border-gray-200/80 bg-white p-4">
-                <span class="text-xs font-medium text-gray-500">Buku Tanpa Penulis</span>
-                <p class="mt-1 text-2xl font-bold text-gray-400">{{ booksWithoutAuthorCount }}</p>
+
+            <div class="col-span-2 sm:col-span-1 rounded-lg border-2 border-[#0d0d0d] bg-white p-4 sm:p-5 shadow-[3px_3px_0px_#0d0d0d]">
+                <div class="flex items-center justify-between">
+                    <span class="font-mono text-xs font-bold uppercase tracking-wider text-[#44403c]">[TANPA PENULIS]</span>
+                    <span class="h-2 w-2 rounded-full border border-[#0d0d0d] bg-[#ff4800]"></span>
+                </div>
+                <div class="mt-2 flex items-baseline gap-2">
+                    <span class="text-2xl sm:text-[28px] font-bold tracking-tight tabular-nums text-[#57534e]">
+                        {{ booksWithoutAuthorCount }}
+                    </span>
+                    <span class="font-mono text-xs sm:text-sm font-bold uppercase text-[#57534e]">BUKU</span>
+                </div>
             </div>
         </div>
 
-        <div class="relative">
-            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
-                <svg class="text-gray-400" xmlns="http://www.w3.org/2000/svg" width="15" height="15"
-                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round">
-                    <circle cx="11" cy="11" r="8" />
-                    <path d="m21 21-4.3-4.3" />
-                </svg>
+        <div class="space-y-2">
+            <div class="relative">
+                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
+                    <svg class="text-[#57534e]" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8" />
+                        <path d="m21 21-4.3-4.3" />
+                    </svg>
+                </div>
+                <input v-model="searchQuery" type="text" placeholder="CARI NAMA PENULIS..."
+                    class="w-full rounded-[4px] border-2 border-[#0d0d0d] bg-white py-2.5 pl-10 pr-4 font-mono text-xs sm:text-sm font-bold text-[#0d0d0d] outline-none shadow-[2px_2px_0px_#0d0d0d] placeholder:text-[#57534e] focus:border-[#0047ff] transition-all" />
             </div>
-            <input v-model="searchQuery" type="text" placeholder="Cari nama penulis..."
-                class="w-full rounded-xl border border-gray-200 bg-white py-2.5 pl-10 pr-4 text-sm font-medium text-gray-900 outline-none transition-colors placeholder:text-gray-400 hover:border-gray-300 focus:border-gray-400 focus:ring-2 focus:ring-gray-900/5 shadow-xs" />
+
+            <div v-if="searchQuery" class="flex items-center justify-between px-1">
+                <span class="font-mono text-xs font-bold uppercase text-[#44403c]">
+                    [MENAMPILKAN {{ filteredAuthors.length }} DARI {{ allAuthorsList.length }} PENULIS]
+                </span>
+                <button type="button" @click="searchQuery = ''"
+                    class="font-mono text-xs font-bold uppercase text-[#ff4800] hover:underline">
+                    RESET PENCARIAN
+                </button>
+            </div>
         </div>
 
         <div v-if="filteredAuthors.length === 0"
-            class="rounded-xl border border-dashed border-gray-300 bg-white p-12 text-center">
-            <svg class="mx-auto text-gray-400" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="1.5">
-                <path d="M12 20h9" />
-                <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
-            </svg>
-            <h3 class="mt-3 text-sm font-semibold text-gray-900">Belum ada penulis</h3>
-            <p class="mt-1 text-xs text-gray-500">
-                Tambahkan nama penulis atau tentukan penulis pada form buku.
+            class="rounded-lg border-2 border-dashed border-[#0d0d0d]/40 bg-[#f3ede2] p-10 sm:p-12 text-center">
+            <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-[4px] border border-[#0d0d0d] bg-white text-[#0d0d0d] shadow-[2px_2px_0px_#0d0d0d]">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 20h9" />
+                    <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
+                </svg>
+            </div>
+            <h3 class="mt-3 text-base font-bold uppercase tracking-tight text-[#0d0d0d]">
+                {{ searchQuery ? 'Penulis Tidak Ditemukan' : 'Belum Ada Penulis Terdaftar' }}
+            </h3>
+            <p class="mt-1 text-sm text-[#44403c]">
+                {{ searchQuery ? 'Tidak ada penulis yang sesuai dengan kata kunci pencarian Anda.' : 'Tambahkan nama penulis baru atau tentukan nama penulis pada form penambahan buku.' }}
             </p>
-            <button type="button" @click="openAddAuthorModal"
-                class="mt-4 inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-gray-900 px-3 py-1.5 text-xs font-semibold text-white hover:bg-black">
-                Tambah Penulis Pertama
+            <button v-if="!searchQuery" type="button" @click="openAddAuthorModal"
+                class="mt-4 inline-flex cursor-pointer items-center gap-1.5 rounded-[4px] border-2 border-[#0d0d0d] bg-[#0d0d0d] px-4 py-2 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-white shadow-[2px_2px_0px_#0d0d0d] hover:bg-[#262626] hover:shadow-[3px_3px_0px_#ff4800] transition-all">
+                + TAMBAH PENULIS PERTAMA
+            </button>
+            <button v-else type="button" @click="searchQuery = ''"
+                class="mt-4 inline-flex cursor-pointer items-center gap-1.5 rounded-[4px] border-2 border-[#0d0d0d] bg-white px-4 py-2 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-[#0d0d0d] shadow-[2px_2px_0px_#0d0d0d] hover:bg-[#f3ede2] transition-all">
+                BERSIHKAN PENCARIAN
             </button>
         </div>
 
         <div v-else class="space-y-3">
             <div v-for="author in filteredAuthors" :key="author.name"
-                class="overflow-hidden rounded-xl border border-gray-200/80 bg-white shadow-xs transition-shadow duration-200 hover:shadow-sm">
+                class="overflow-hidden rounded-lg border-2 border-[#0d0d0d] bg-white shadow-[3px_3px_0px_#0d0d0d] transition-all duration-150 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#0d0d0d]">
                 <div class="flex cursor-pointer select-none items-center justify-between gap-3 p-4 sm:p-5"
                     @click="toggleAccordion(author.name)">
-                    <div class="flex min-w-0 items-center gap-3">
-                        <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700 font-bold text-sm">
+                    <div class="flex min-w-0 items-center gap-3.5">
+                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-[4px] border border-[#0d0d0d] bg-[#f3ede2] text-[#0d0d0d] font-mono font-bold text-base shadow-[1px_1px_0px_#0d0d0d]">
                             {{ author.name.charAt(0).toUpperCase() }}
                         </div>
 
                         <div class="min-w-0">
-                            <div class="flex items-center gap-2">
-                                <h3 class="truncate text-sm font-bold text-gray-900 sm:text-base">
+                            <div class="flex items-center gap-2 flex-wrap  mb-2 md:mb-1">
+                                <h3 class="truncate text-base font-bold text-[#0d0d0d]">
                                     {{ author.name }}
                                 </h3>
-                                <span class="rounded-full bg-gray-100 px-2 py-0.5 text-[11px] font-semibold text-gray-600 shrink-0">
-                                    {{ author.books.length }} buku
+                                <span class="rounded-[3px] border border-[#0d0d0d] bg-[#f3ede2] px-2.5 py-0.5 font-mono text-xs font-bold tabular-nums text-[#0d0d0d] shrink-0">
+                                    {{ author.books.length }} <span class="text-[#57534e]">BUKU</span>
                                 </span>
                             </div>
-                            <p class="mt-0.5 text-xs text-gray-400 truncate">
+                            <p class="mt-0.5 text-xs text-[#44403c] truncate font-medium">
                                 {{ author.books.length > 0 ? author.books.map(b => b.title).join(', ') : 'Belum ada buku terhubung' }}
                             </p>
                         </div>
                     </div>
 
                     <div class="flex shrink-0 items-center gap-2">
-                        <div class="flex items-center gap-1" @click.stop>
+                        <div class="flex items-center gap-1.5" @click.stop>
                             <button type="button" @click="openRenameModal(author.name)" title="Ubah Nama Penulis"
-                                class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-[4px] border border-[#0d0d0d] bg-white text-[#0d0d0d] shadow-[1px_1px_0px_#0d0d0d] transition-all hover:bg-[#f3ede2] active:translate-x-0.5 active:translate-y-0.5 focus:outline-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
                                     <path d="m15 5 4 4" />
                                 </svg>
                             </button>
                             <button type="button" @click="confirmDeleteAuthor(author.name)" title="Hapus Penulis"
-                                class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md text-gray-400 transition-colors hover:bg-red-50 hover:text-red-600">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-[4px] border border-[#0d0d0d] bg-[#fff0eb] text-[#ff4800] shadow-[1px_1px_0px_#0d0d0d] transition-all hover:bg-[#ff4800] hover:text-white active:translate-x-0.5 active:translate-y-0.5 focus:outline-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M3 6h18" />
                                     <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
                                     <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
@@ -126,11 +175,12 @@
                             </button>
                         </div>
 
-                        <button type="button" aria-label="Toggle accordion"
-                            class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md text-gray-400 transition-transform duration-200"
-                            :class="expandedAuthors.includes(author.name) ? 'rotate-180 text-gray-900' : ''">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <button type="button" aria-label="Buka tutup daftar buku"
+                            class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-[4px] border border-[#0d0d0d] bg-[#f3ede2] text-[#0d0d0d] shadow-[1px_1px_0px_#0d0d0d] transition-all hover:bg-white active:translate-x-0.5 active:translate-y-0.5 focus:outline-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                                class="transition-transform duration-200"
+                                :class="expandedAuthors.includes(author.name) ? 'rotate-180' : ''">
                                 <polyline points="6 9 12 15 18 9" />
                             </svg>
                         </button>
@@ -138,63 +188,63 @@
                 </div>
 
                 <div v-show="expandedAuthors.includes(author.name)"
-                    class="border-t border-gray-100 bg-gray-50/50 p-4 sm:p-5">
+                    class="border-t-2 border-[#0d0d0d] bg-[#faf8f5] p-4 sm:p-5">
                     <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
-                        <span class="text-xs font-semibold uppercase tracking-wider text-gray-500">
-                            Daftar Karya Buku ({{ author.books.length }})
+                        <span class="font-mono text-xs font-bold uppercase tracking-wider text-[#44403c]">
+                            [KARYA BUKU TERHUBUNG: {{ author.books.length }}]
                         </span>
 
                         <button type="button" @click="openAssignModal(author.name)"
-                            class="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-800 shadow-2xs transition-colors hover:border-gray-400 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-900/10">
+                            class="inline-flex cursor-pointer items-center gap-1.5 rounded-[4px] border-2 border-[#0d0d0d] bg-white px-3 py-1.5 font-mono text-xs font-bold uppercase tracking-wider text-[#0d0d0d] shadow-[2px_2px_0px_#0d0d0d] transition-all hover:bg-[#f3ede2] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_#0d0d0d] active:translate-x-0 active:translate-y-0 focus:outline-none">
                             <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M5 12h14" />
                                 <path d="M12 5v14" />
                             </svg>
-                            Hubungkan Buku Lain
+                            HUBUNGKAN BUKU LAIN
                         </button>
                     </div>
 
                     <div v-if="author.books.length === 0"
-                        class="rounded-lg border border-dashed border-gray-200 bg-white p-6 text-center text-xs text-gray-400">
-                        Belum ada buku yang terhubung dengan penulis ini.
+                        class="rounded-[4px] border-2 border-dashed border-[#0d0d0d]/30 bg-[#f3ede2] p-6 text-center font-mono text-xs sm:text-sm font-bold text-[#44403c]">
+                        [BELUM ADA BUKU YANG TERHUBUNG DENGAN PENULIS INI]
                         <button type="button" @click="openAssignModal(author.name)"
-                            class="block mx-auto mt-2 cursor-pointer font-semibold text-emerald-600 hover:text-emerald-800">
-                            + Pilih buku untuk dihubungkan
+                            class="block mx-auto mt-2 cursor-pointer font-bold text-[#0047ff] hover:underline uppercase">
+                            + PILIH BUKU UNTUK DIHUBUNGKAN
                         </button>
                     </div>
 
-                    <div v-else class="grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
+                    <div v-else class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
                         <div v-for="book in author.books" :key="book.id"
-                            class="group relative flex items-center gap-3 rounded-lg border border-gray-200/80 bg-white p-3 shadow-2xs transition-all hover:border-gray-300 hover:shadow-xs">
-                            <div class="h-14 w-10 shrink-0 overflow-hidden rounded bg-gray-100 border border-gray-200/70">
-                                <img v-if="book.imageUrl" :src="book.imageUrl" class="h-full w-full object-cover" />
-                                <div v-else class="flex h-full w-full items-center justify-center text-gray-400">
+                            class="group relative flex items-center gap-3 rounded-[4px] border-2 border-[#0d0d0d] bg-white p-3 shadow-[2px_2px_0px_#0d0d0d] transition-all hover:shadow-[3px_3px_0px_#0d0d0d]">
+                            <div class="h-14 w-10 shrink-0 overflow-hidden rounded-[2px] border border-[#0d0d0d] bg-[#f3ede2] shadow-[1px_1px_0px_#0d0d0d]">
+                                <img v-if="book.imageUrl" :src="book.imageUrl" class="h-full w-full object-cover" loading="lazy" />
+                                <div v-else class="flex h-full w-full items-center justify-center text-[#57534e]">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                        stroke="currentColor" stroke-width="1.8">
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 0-2.5-2.5A2.5 2.5 0 0 1 6.5 17H20" />
                                     </svg>
                                 </div>
                             </div>
 
                             <div class="min-w-0 flex-1">
-                                <h4 class="truncate text-xs font-bold text-gray-900" :title="book.title">
+                                <h4 class="truncate text-xs sm:text-sm font-bold text-[#0d0d0d]" :title="book.title">
                                     {{ book.title }}
                                 </h4>
-                                <p v-if="book.publisher" class="truncate text-[11px] text-gray-500">
+                                <p v-if="book.publisher" class="truncate font-mono text-xs text-[#44403c]">
                                     {{ book.publisher }}
                                 </p>
-                                <div class="mt-1 flex items-center gap-2 text-[10px] text-gray-400">
-                                    <span>{{ book.totalPages }} hal</span>
+                                <div class="mt-1 flex items-center gap-2 font-mono text-xs text-[#57534e]">
+                                    <span class="tabular-nums font-bold text-[#0d0d0d]">{{ book.totalPages }}</span> hal
                                     <span>•</span>
-                                    <span>{{ formatCurrency(book.price) }}</span>
+                                    <span class="font-bold tabular-nums text-[#0047ff]">{{ formatCurrency(book.price) }}</span>
                                 </div>
                             </div>
 
                             <button type="button" @click="unassignBook(book)" title="Lepas buku dari penulis ini"
-                                class="shrink-0 cursor-pointer rounded p-1.5 text-gray-400 opacity-80 transition-all hover:bg-red-50 hover:text-red-600 focus:opacity-100 group-hover:opacity-100">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                class="shrink-0 flex h-7 w-7 cursor-pointer items-center justify-center rounded-[3px] border border-[#0d0d0d] bg-[#f3ede2] text-[#0d0d0d] shadow-[1px_1px_0px_#0d0d0d] transition-all hover:bg-[#ff4800] hover:text-white active:translate-x-0.5 active:translate-y-0.5 focus:outline-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                     <line x1="18" y1="6" x2="6" y2="18" />
                                     <line x1="6" y1="6" x2="18" y2="18" />
                                 </svg>
@@ -206,23 +256,23 @@
         </div>
 
         <div v-if="isAddModalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <div class="absolute inset-0 bg-gray-950/40 backdrop-blur-[2px]" @click="isAddModalOpen = false"></div>
-            <div class="relative w-full max-w-sm rounded-xl border border-gray-200 bg-white p-5 shadow-xl animate-in zoom-in-95">
-                <h3 class="text-sm font-bold text-gray-900">Tambah Penulis Baru</h3>
-                <p class="mt-1 text-xs text-gray-500">Masukkan nama penulis yang ingin ditambahkan.</p>
+            <div class="absolute inset-0 bg-[#0d0d0d]/60 backdrop-blur-[2px]" @click="isAddModalOpen = false"></div>
+            <div class="relative w-full max-w-sm rounded-lg border-2 border-[#0d0d0d] bg-white p-6 shadow-[8px_8px_0px_#0d0d0d] animate-in zoom-in-95">
+                <h3 class="text-base font-bold uppercase tracking-tight text-[#0d0d0d]">Tambah Penulis Baru</h3>
+                <p class="mt-1 font-mono text-xs text-[#44403c]">Masukkan nama penulis yang ingin ditambahkan ke sistem.</p>
 
                 <form @submit.prevent="saveNewAuthor" class="mt-4 space-y-4">
-                    <input v-model="newAuthorName" type="text" required placeholder="Nama penulis..."
-                        class="w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-900/5" />
+                    <input v-model="newAuthorName" type="text" required placeholder="NAMA PENULIS..."
+                        class="w-full rounded-[4px] border-2 border-[#0d0d0d] bg-white px-3.5 py-2.5 font-mono text-sm font-bold text-[#0d0d0d] outline-none shadow-[2px_2px_0px_#0d0d0d] placeholder:text-[#57534e] focus:border-[#0047ff]" />
 
-                    <div class="flex justify-end gap-2">
+                    <div class="flex justify-end gap-2.5">
                         <button type="button" @click="isAddModalOpen = false"
-                            class="cursor-pointer rounded-md border border-gray-200 px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50">
-                            Batal
+                            class="cursor-pointer rounded-[4px] border-2 border-[#0d0d0d] bg-white px-4 py-2 font-mono text-xs font-bold uppercase tracking-wider text-[#0d0d0d] shadow-[2px_2px_0px_#0d0d0d] transition-all hover:bg-[#f3ede2]">
+                            BATAL
                         </button>
                         <button type="submit"
-                            class="cursor-pointer rounded-md bg-gray-900 px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-black">
-                            Simpan
+                            class="cursor-pointer rounded-[4px] border-2 border-[#0d0d0d] bg-[#0d0d0d] px-4 py-2 font-mono text-xs font-bold uppercase tracking-wider text-white shadow-[2px_2px_0px_#0d0d0d] transition-all hover:bg-[#262626] hover:shadow-[3px_3px_0px_#ff4800]">
+                            SIMPAN
                         </button>
                     </div>
                 </form>
@@ -230,23 +280,23 @@
         </div>
 
         <div v-if="isRenameModalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <div class="absolute inset-0 bg-gray-950/40 backdrop-blur-[2px]" @click="isRenameModalOpen = false"></div>
-            <div class="relative w-full max-w-sm rounded-xl border border-gray-200 bg-white p-5 shadow-xl animate-in zoom-in-95">
-                <h3 class="text-sm font-bold text-gray-900">Ubah Nama Penulis</h3>
-                <p class="mt-1 text-xs text-gray-500">Semua buku karya penulis ini akan otomatis diperbarui.</p>
+            <div class="absolute inset-0 bg-[#0d0d0d]/60 backdrop-blur-[2px]" @click="isRenameModalOpen = false"></div>
+            <div class="relative w-full max-w-sm rounded-lg border-2 border-[#0d0d0d] bg-white p-6 shadow-[8px_8px_0px_#0d0d0d] animate-in zoom-in-95">
+                <h3 class="text-base font-bold uppercase tracking-tight text-[#0d0d0d]">Ubah Nama Penulis</h3>
+                <p class="mt-1 font-mono text-xs text-[#44403c]">Semua buku karya penulis ini akan otomatis diperbarui.</p>
 
                 <form @submit.prevent="saveRenamedAuthor" class="mt-4 space-y-4">
-                    <input v-model="renameAuthorNewName" type="text" required placeholder="Nama baru..."
-                        class="w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-900/5" />
+                    <input v-model="renameAuthorNewName" type="text" required placeholder="NAMA BARU PENULIS..."
+                        class="w-full rounded-[4px] border-2 border-[#0d0d0d] bg-white px-3.5 py-2.5 font-mono text-sm font-bold text-[#0d0d0d] outline-none shadow-[2px_2px_0px_#0d0d0d] placeholder:text-[#57534e] focus:border-[#0047ff]" />
 
-                    <div class="flex justify-end gap-2">
+                    <div class="flex justify-end gap-2.5">
                         <button type="button" @click="isRenameModalOpen = false"
-                            class="cursor-pointer rounded-md border border-gray-200 px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50">
-                            Batal
+                            class="cursor-pointer rounded-[4px] border-2 border-[#0d0d0d] bg-white px-4 py-2 font-mono text-xs font-bold uppercase tracking-wider text-[#0d0d0d] shadow-[2px_2px_0px_#0d0d0d] transition-all hover:bg-[#f3ede2]">
+                            BATAL
                         </button>
                         <button type="submit"
-                            class="cursor-pointer rounded-md bg-gray-900 px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-black">
-                            Perbarui
+                            class="cursor-pointer rounded-[4px] border-2 border-[#0d0d0d] bg-[#0d0d0d] px-4 py-2 font-mono text-xs font-bold uppercase tracking-wider text-white shadow-[2px_2px_0px_#0d0d0d] transition-all hover:bg-[#262626] hover:shadow-[3px_3px_0px_#ff4800]">
+                            PERBARUI
                         </button>
                     </div>
                 </form>

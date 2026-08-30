@@ -1,5 +1,32 @@
 @import "tailwindcss";
 
+@theme {
+    /* 1. Display & Headings: Karakter geometris tebal khas brutalist / industrial */
+    --font-display: 'Azeret Mono', monospace;
+
+    /* 2. Body Text & Form Inputs: JetBrains Mono yang nyaman dan seimbang untuk membaca */
+    --font-sans: 'JetBrains Mono', monospace;
+    --font-body: 'JetBrains Mono', monospace;
+
+    /* 3. Numeric, Statistics, Chips, & Technical Data: Angka tabular presisi tinggi */
+    --font-mono: 'JetBrains Mono', monospace;
+    --font-data: 'JetBrains Mono', monospace;
+}
+
+body {
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* Headings dan judul menggunakan Azeret Mono */
+h1, h2, h3, h4, h5, h6, .font-display {
+    font-family: 'Azeret Mono', monospace;
+}
+
+/* Angka tabular dan elemen data teknis menggunakan JetBrains Mono */
+.tabular-nums, .font-mono, .font-data {
+    font-family: 'JetBrains Mono', monospace;
+}
+
 button,
 [role="button"],
 select,
@@ -18,10 +45,10 @@ a {
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #D1D5DB;
+    background: #e5dfd3;
     border-radius: 0px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #9CA3AF;
+    background: #57534e;
 }
