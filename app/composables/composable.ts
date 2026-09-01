@@ -43,24 +43,6 @@ export const useBooks = () => {
           b.publisher = b.publisher ? String(b.publisher).trim() : ''
         })
         
-        const sevenDaysAgo = new Date()
-        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
-        let needsCleanup = false
-        
-        loadedBooks.forEach((b: any) => {
-          if (b.readHistory && b.readHistory.length > 0) {
-            const originalLen = b.readHistory.length
-            b.readHistory = b.readHistory.filter((h: any) => new Date(h.date) >= sevenDaysAgo)
-            if (b.readHistory.length !== originalLen) needsCleanup = true
-          }
-        })
-        
-        if (needsCleanup) {
-          const cleanupTx = db.transaction(STORE_NAME, 'readwrite')
-          const cleanupStore = cleanupTx.objectStore(STORE_NAME)
-          loadedBooks.forEach((b: any) => cleanupStore.put(b))
-        }
-
         books.value = loadedBooks.sort((a, b) => {
           if (a.isPinned && !b.isPinned) return -1
           if (!a.isPinned && b.isPinned) return 1

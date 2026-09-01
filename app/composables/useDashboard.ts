@@ -21,7 +21,7 @@ export const useDashboard = (books: Ref<any[]>) => {
             case '6M':
                 return new Date(now.getFullYear(), now.getMonth() - 5, 1, 0, 0, 0, 0)
             case '1Y':
-                return new Date(now.getFullYear(), now.getMonth() - 11, 1, 0, 0, 0, 0)
+                return new Date(now.getFullYear(), 0, 1, 0, 0, 0, 0)
             case 'ALL':
                 return new Date(0)
             default:
@@ -73,35 +73,43 @@ export const useDashboard = (books: Ref<any[]>) => {
                 chartMap.set(key, { label, value: 0 })
             }
         } else if (step === 'month') {
-            let mCount = 12
-            if (filter === '3M') mCount = 3
-            else if (filter === '6M') mCount = 6
-            else if (filter === '1Y') mCount = 12
-            else if (filter === 'ALL') {
-                if (dataArray.length > 0) {
-                    const validTimestamps = dataArray
-                        .map(item => {
-                            const raw = item[dateKey] || item.createdAt || item.date || item.updatedAt
-                            return raw ? new Date(raw).getTime() : NaN
-                        })
-                        .filter(t => !isNaN(t))
-
-                    if (validTimestamps.length > 0) {
-                        const oldest = new Date(Math.min(...validTimestamps))
-                        mCount = (end.getFullYear() - oldest.getFullYear()) * 12 + (end.getMonth() - oldest.getMonth()) + 1
-                        if (mCount > 24) mCount = 24
-                        if (mCount < 6) mCount = 6
-                    }
-                } else {
-                    mCount = 12
+            if (filter === '1Y') {
+                for (let m = 0; m < 12; m++) {
+                    const d = new Date(now.getFullYear(), m, 1)
+                    const key = formatLocalMonthKey(d)
+                    const label = d.toLocaleDateString('id-ID', { month: 'short' })
+                    chartMap.set(key, { label, value: 0 })
                 }
-            }
+            } else {
+                let mCount = 12
+                if (filter === '3M') mCount = 3
+                else if (filter === '6M') mCount = 6
+                else if (filter === 'ALL') {
+                    if (dataArray.length > 0) {
+                        const validTimestamps = dataArray
+                            .map(item => {
+                                const raw = item[dateKey] || item.createdAt || item.date || item.updatedAt
+                                return raw ? new Date(raw).getTime() : NaN
+                            })
+                            .filter(t => !isNaN(t))
 
-            for (let i = mCount - 1; i >= 0; i--) {
-                const d = new Date(end.getFullYear(), end.getMonth() - i, 1)
-                const key = formatLocalMonthKey(d)
-                const label = d.toLocaleDateString('id-ID', { month: 'short', year: '2-digit' })
-                chartMap.set(key, { label, value: 0 })
+                        if (validTimestamps.length > 0) {
+                            const oldest = new Date(Math.min(...validTimestamps))
+                            mCount = (end.getFullYear() - oldest.getFullYear()) * 12 + (end.getMonth() - oldest.getMonth()) + 1
+                            if (mCount > 24) mCount = 24
+                            if (mCount < 6) mCount = 6
+                        }
+                    } else {
+                        mCount = 12
+                    }
+                }
+
+                for (let i = mCount - 1; i >= 0; i--) {
+                    const d = new Date(end.getFullYear(), end.getMonth() - i, 1)
+                    const key = formatLocalMonthKey(d)
+                    const label = d.toLocaleDateString('id-ID', { month: 'short', year: '2-digit' })
+                    chartMap.set(key, { label, value: 0 })
+                }
             }
         }
 
@@ -190,10 +198,15 @@ export const useDashboard = (books: Ref<any[]>) => {
     })
 
     const avgPagesPerDay = computed(() => {
-        const sevenDaysAgo = new Date()
-        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
+        const now = new Date()
+        const startOf7Days = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 6, 0, 0, 0, 0)
+        const endOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999)
         const pagesLast7Days = allHistoryLogs.value
-            .filter(log => new Date(log.date) >= sevenDaysAgo)
+            .filter(log => {
+                if (!log.date) return false
+                const d = new Date(log.date)
+                return !isNaN(d.getTime()) && d >= startOf7Days && d <= endOfToday
+            })
             .reduce((sum, log) => sum + log.pages, 0)
         return Math.round((pagesLast7Days / 7) * 10) / 10
     })
@@ -224,31 +237,58 @@ export const useDashboard = (books: Ref<any[]>) => {
         return streak
     })
 
+    const getBookCompletedDate = (b: any): string | null => {
+        const total = Number(b.totalPages) || 0
+        const read = Number(b.pagesRead) || 0
+        if (total <= 0 || read < total) return null
+
+        if (b.completedAt) return b.completedAt
+
+        if (b.readHistory && b.readHistory.length > 0) {
+            const finishSession = b.readHistory.find((s: any) => (Number(s.endPage) || 0) >= total)
+            if (finishSession && finishSession.date) return finishSession.date
+            const lastSession = b.readHistory[b.readHistory.length - 1]
+            if (lastSession && lastSession.date) return lastSession.date
+        }
+
+        return b.date || b.updatedAt || b.createdAt || null
+    }
+
     const completedData = computed(() => {
         const start = getStartDate(filterCompleted.value)
-        const validBooks = books.value.filter(b => {
-            const total = Number(b.totalPages) || 0
-            const read = Number(b.pagesRead) || 0
-            if (total <= 0 || read < total) return false
-            const raw = b.updatedAt || b.createdAt || b.date
-            if (!raw) return false
-            const d = new Date(raw)
-            return !isNaN(d.getTime()) && d >= start
+        const now = new Date()
+        const end = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999)
+
+        const completedBooksWithDate: any[] = []
+        books.value.forEach(b => {
+            const completedDate = getBookCompletedDate(b)
+            if (completedDate) {
+                const d = new Date(completedDate)
+                if (!isNaN(d.getTime()) && d >= start && d <= end) {
+                    completedBooksWithDate.push({
+                        ...b,
+                        completedDate
+                    })
+                }
+            }
         })
+
         return {
-            total: validBooks.length,
-            chart: buildChartData(validBooks, 'updatedAt', null, filterCompleted.value, true)
+            total: completedBooksWithDate.length,
+            chart: buildChartData(completedBooksWithDate, 'completedDate', null, filterCompleted.value, false)
         }
     })
 
     const pagesData = computed(() => {
         const filter = ['1D', '1W', '2W', '1M'].includes(filterPages.value) ? filterPages.value : '1W'
         const start = getStartDate(filter)
+        const now = new Date()
+        const end = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999)
         const validLogs = allHistoryLogs.value.filter(l => {
             const raw = l.date
             if (!raw) return false
             const d = new Date(raw)
-            return !isNaN(d.getTime()) && d >= start
+            return !isNaN(d.getTime()) && d >= start && d <= end
         })
         return {
             total: validLogs.reduce((sum, l) => sum + (Number(l.pages) || 0), 0),
@@ -258,13 +298,15 @@ export const useDashboard = (books: Ref<any[]>) => {
 
     const financeData = computed(() => {
         const start = getStartDate(filterFinance.value)
+        const now = new Date()
+        const end = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999)
         const validBooks = books.value.filter(b => {
             const price = Number(b.price) || 0
             if (price <= 0) return false
             const raw = b.date || b.createdAt || b.updatedAt
             if (!raw) return false
             const d = new Date(raw)
-            return !isNaN(d.getTime()) && d >= start
+            return !isNaN(d.getTime()) && d >= start && d <= end
         })
         return {
             total: validBooks.reduce((sum, b) => sum + (Number(b.price) || 0), 0),
@@ -273,9 +315,14 @@ export const useDashboard = (books: Ref<any[]>) => {
     })
 
     const mostReadBooksInsight = computed(() => {
-        const sevenDaysAgo = new Date()
-        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
-        const recentLogs = allHistoryLogs.value.filter(log => new Date(log.date) >= sevenDaysAgo)
+        const now = new Date()
+        const startOf7Days = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 6, 0, 0, 0, 0)
+        const endOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999)
+        const recentLogs = allHistoryLogs.value.filter(log => {
+            if (!log.date) return false
+            const d = new Date(log.date)
+            return !isNaN(d.getTime()) && d >= startOf7Days && d <= endOfToday
+        })
         if (recentLogs.length === 0) return []
 
         const bookStats: Record<number, { sessions: number, pagesAdded: number }> = {}

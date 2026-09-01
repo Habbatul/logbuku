@@ -13,6 +13,7 @@ export interface Book {
   date: string
   createdAt?: string
   updatedAt?: string
+  completedAt?: string
   isTarget?: boolean
   topic: string[]
   totalPages: number
