@@ -107,6 +107,16 @@
                     </div>
                 </div>
 
+                <NuxtLink v-if="book" :to="`/tracking?id=${book.id}`" @click="close"
+                    class="flex w-full items-center justify-center gap-1.5 rounded-[4px] border-2 border-[#0047ff] bg-[#f0f4ff] py-2 font-mono text-xs font-bold uppercase text-[#0047ff] shadow-[2px_2px_0px_#0047ff] hover:bg-[#e0eaff] transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10" />
+                        <polyline points="12 6 12 12 16 14" />
+                    </svg>
+                    <span>Buka Halaman Tracking & Timer</span>
+                </NuxtLink>
+
                 <div class="pt-2 flex gap-3">
                     <button type="button" @click="close"
                         class="flex-1 cursor-pointer bg-white border-2 border-[#0d0d0d] text-[#0d0d0d] font-mono text-xs font-bold uppercase py-2.5 rounded-[4px] shadow-[2px_2px_0px_#0d0d0d] hover:bg-[#f3ede2] transition-all focus:outline-none">

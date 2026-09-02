@@ -35,6 +35,7 @@
                             inactive-class="text-[#0d0d0d] hover:bg-[#f3ede2] border border-transparent">
                             Koleksi
                         </NuxtLink>
+
                     </div>
                 </div>
             </div>
@@ -128,6 +129,28 @@
                             </svg>
                         </NuxtLink>
 
+                        <NuxtLink to="/tracking" @click="navigationOpen = false"
+                            class="flex cursor-pointer items-center gap-3 rounded-[4px] px-3 py-2.5 text-xs font-bold uppercase tracking-wider transition-colors"
+                            :class="route.path === '/tracking'
+                                    ? 'bg-[#0d0d0d] text-white border border-[#0d0d0d] shadow-[1px_1px_0px_#0d0d0d]'
+                                    : 'text-[#0d0d0d] hover:bg-[#f3ede2]'
+                                ">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10" />
+                                <polyline points="12 6 12 12 16 14" />
+                            </svg>
+
+                            <span>Tracking</span>
+
+                            <svg v-if="route.path === '/tracking'" class="ml-auto" xmlns="http://www.w3.org/2000/svg"
+                                width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m5 12 4 4L19 6" />
+                            </svg>
+                        </NuxtLink>
+
                         <NuxtLink to="/authors" @click="navigationOpen = false"
                             class="flex cursor-pointer items-center gap-3 rounded-[4px] px-3 py-2.5 text-xs font-bold uppercase tracking-wider transition-colors"
                             :class="route.path === '/authors'
@@ -184,14 +207,89 @@
                 </div>
             </div>
         </Transition>
+
+        <div v-if="route.path !== '/tracking' && activeTimersList.length > 0"
+            class="fixed bottom-4 left-4 z-40 flex flex-col gap-2 max-w-[calc(100vw-2rem)] sm:max-w-xs md:max-w-sm pointer-events-none max-h-[60vh] overflow-y-auto custom-scrollbar p-1 -m-1">
+            <TransitionGroup enter-active-class="transition duration-200 ease-out"
+                enter-from-class="translate-y-4 opacity-0 scale-95" enter-to-class="translate-y-0 opacity-100 scale-100"
+                leave-active-class="transition duration-150 ease-in" leave-from-class="translate-y-0 opacity-100 scale-100"
+                leave-to-class="translate-y-4 opacity-0 scale-95">
+                <NuxtLink v-for="item in activeTimersList" :key="item.bookId"
+                    :to="`/tracking?id=${item.bookId}`"
+                    class="pointer-events-auto group flex items-center justify-between gap-3 rounded-lg border-2 border-[#0d0d0d] bg-[#0d0d0d] p-2.5 sm:p-3 text-white shadow-[4px_4px_0px_#ff4800] transition-all hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#ff4800] active:translate-y-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-white">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                        <span class="flex h-3 w-3 relative shrink-0">
+                            <span v-if="item.isRunning"
+                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ff4800] opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-3 w-3"
+                                :class="item.isRunning ? 'bg-[#ff4800]' : 'bg-[#ffb800]'"></span>
+                        </span>
+                        <div class="min-w-0 text-left">
+                            <p class="font-mono text-xs font-bold truncate text-white max-w-[140px] sm:max-w-[190px]">
+                                {{ item.title }}
+                            </p>
+                            <p class="font-mono text-[11px] text-[#e5dfd3] tabular-nums flex items-center gap-1.5 mt-0.5">
+                                <span>{{ item.displayTime }}</span>
+                                <span class="text-[#78716c]">·</span>
+                                <span :class="item.isRunning ? 'text-[#ff7844] font-bold' : 'text-[#facc15] font-bold'">
+                                    {{ item.isRunning ? 'Berjalan' : 'Jeda' }}
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                    <span
+                        class="shrink-0 rounded-[4px] border border-white bg-white px-2 py-1 font-mono text-[11px] font-bold uppercase text-[#0d0d0d] shadow-[1px_1px_0px_#ff4800] transition-colors group-hover:bg-[#f3ede2]">
+                        Buka →
+                    </span>
+                </NuxtLink>
+            </TransitionGroup>
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref, computed } from 'vue'
 import { useHead, useRoute } from '#imports'
 
 const route = useRoute()
+const { books, loadBooks } = useBooks()
+const timer = useReadingTimer()
+
+interface ActiveTimerItem {
+    bookId: string | number
+    title: string
+    isRunning: boolean
+    isPaused: boolean
+    elapsedSeconds: number
+    displayTime: string
+}
+
+const activeTimersList = computed<ActiveTimerItem[]>(() => {
+    const list: ActiveTimerItem[] = []
+    const timerEntries = Object.entries(timer.timers.value)
+
+    for (const [key, t] of timerEntries) {
+        if (!t) continue
+        if (t.isRunning || t.isPaused) {
+            const book = books.value.find(b => String(b.id) === String(key))
+            const elapsed = timer.getElapsedSecondsForBook(key)
+            list.push({
+                bookId: key,
+                title: book?.title || `Buku #${key}`,
+                isRunning: t.isRunning,
+                isPaused: t.isPaused,
+                elapsedSeconds: elapsed,
+                displayTime: timer.formatTimer(elapsed)
+            })
+        }
+    }
+
+    return list.sort((a, b) => {
+        if (a.isRunning && !b.isRunning) return -1
+        if (!a.isRunning && b.isRunning) return 1
+        return b.elapsedSeconds - a.elapsedSeconds
+    })
+})
 
 const showFloatingNav = ref(false)
 const navigationOpen = ref(false)
@@ -200,9 +298,14 @@ const handleScroll = () => {
     showFloatingNav.value = window.scrollY > 100
 }
 
-onMounted(() => {
+onMounted(async () => {
     handleScroll()
     window.addEventListener('scroll', handleScroll, { passive: true })
+    try {
+        await loadBooks()
+    } catch (e) {
+        console.error('Failed to load books in layout', e)
+    }
 })
 
 onUnmounted(() => {

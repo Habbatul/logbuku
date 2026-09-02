@@ -186,11 +186,19 @@ export const useDashboard = (books: Ref<any[]>) => {
     const unreadBooksCount = computed(() => books.value.filter(b => b.pagesRead === 0).length)
 
     const allHistoryLogs = computed(() => {
-        const logs: { date: string, pages: number, bookId: number }[] = []
+        const logs: { id?: string, date: string, pages: number, bookId: number, duration?: number | null }[] = []
         books.value.forEach(book => {
             if (book.readHistory && book.readHistory.length > 0) {
                 book.readHistory.forEach((h: any) => {
-                    if (h.pagesAdded > 0) logs.push({ date: h.date, pages: h.pagesAdded, bookId: book.id })
+                    if (h.pagesAdded > 0) {
+                        logs.push({
+                            id: h.id,
+                            date: h.date,
+                            pages: Number(h.pagesAdded) || 0,
+                            bookId: book.id,
+                            duration: h.duration !== undefined ? h.duration : null
+                        })
+                    }
                 })
             }
         })

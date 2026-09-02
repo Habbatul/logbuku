@@ -18,10 +18,10 @@
                                 <path d="M12 16v-4" />
                                 <path d="M12 8h.01" />
                             </svg>
-                            <div
-                                class="invisible absolute left-4 right-4 top-9 z-50 mx-auto mt-2 w-auto max-w-[320px] rounded-[4px] border-2 border-[#0d0d0d] bg-[#0d0d0d] px-3.5 py-3 text-left font-mono text-xs font-medium leading-5 text-white opacity-0 shadow-[4px_4px_0px_#ff4800] transition-all duration-150 group-hover:visible group-hover:opacity-100 group-focus:visible group-focus:opacity-100 group-active:visible group-active:opacity-100 sm:left-1/2 sm:top-full sm:mx-0 sm:w-64 sm:-translate-x-1/2 sm:right-auto sm:max-w-none">
-                                [SESI: TIAP 1 JAM PERUBAHAN HALAMAN BERTAMBAH]. Data historis mingguan terarsip otomatis.
-                            </div>
+                                <div
+                                    class="invisible absolute left-4 right-4 top-9 z-50 mx-auto mt-2 w-auto max-w-[320px] rounded-[4px] border-2 border-[#0d0d0d] bg-[#0d0d0d] px-3.5 py-3 text-left font-mono text-xs font-medium leading-5 text-white opacity-0 shadow-[4px_4px_0px_#ff4800] transition-all duration-150 group-hover:visible group-hover:opacity-100 group-focus:visible group-focus:opacity-100 group-active:visible group-active:opacity-100 sm:left-1/2 sm:top-full sm:mx-0 sm:w-64 sm:-translate-x-1/2 sm:right-auto sm:max-w-none">
+                                    [SUMBER SESI]: Sesi pencatatan manual dihitung per rentang 1 jam, sedangkan sesi fitur Tracking dihitung per tiap sesi waktu membaca saat timer dihentikan.
+                                </div>
                         </div>
                     </div>
                     <p class="mt-1 font-mono text-xs font-bold text-[#57534e] uppercase break-words">

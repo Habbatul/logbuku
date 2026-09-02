@@ -1,8 +1,10 @@
 export interface ReadSession {
+  id?: string
   date: string
   pagesAdded: number
-  startPage: number
-  endPage: number
+  startPage?: number
+  endPage?: number
+  duration?: number | null
 }
 
 export interface Book {
