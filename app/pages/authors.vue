@@ -164,7 +164,7 @@
                                     <path d="m15 5 4 4" />
                                 </svg>
                             </button>
-                            <button type="button" @click="confirmDeleteAuthor(author.name)" title="Hapus Penulis"
+                            <button type="button" @click="openDeleteAuthorModal(author.name)" title="Hapus Penulis"
                                 class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-[4px] border border-[#0d0d0d] bg-[#fff0eb] text-[#ff4800] shadow-[1px_1px_0px_#0d0d0d] transition-all hover:bg-[#ff4800] hover:text-white active:translate-x-0.5 active:translate-y-0.5 focus:outline-none">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
                                     stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -310,6 +310,29 @@
             @close="isAssignModalOpen = false"
             @assign="handleBulkAssign"
         />
+
+        <div v-if="isDeleteAuthorModalOpen && authorToDelete" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div class="absolute inset-0 bg-[#0d0d0d]/60 backdrop-blur-[2px]" @click="isDeleteAuthorModalOpen = false"></div>
+            <div class="relative w-full max-w-sm rounded-lg border-2 border-[#0d0d0d] bg-white p-5 sm:p-6 shadow-[8px_8px_0px_#0d0d0d] animate-in zoom-in-95 space-y-4">
+                <div class="flex items-center justify-between border-b-2 border-[#0d0d0d] pb-3">
+                    <h3 class="text-sm font-bold uppercase tracking-tight text-[#ff4800]">[HAPUS PENULIS]</h3>
+                    <button type="button" @click="isDeleteAuthorModalOpen = false" class="text-sm font-bold text-[#0d0d0d] hover:text-[#ff4800] cursor-pointer">×</button>
+                </div>
+                <p class="font-mono text-xs text-[#44403c] leading-relaxed">
+                    Yakin ingin menghapus penulis <strong>"{{ authorToDelete }}"</strong>? Buku yang terhubung tidak akan dihapus, tetapi relasi nama penulisnya akan dikosongkan.
+                </p>
+                <div class="flex justify-end gap-2.5 pt-2 border-t border-[#e5dfd3]">
+                    <button type="button" @click="isDeleteAuthorModalOpen = false"
+                        class="cursor-pointer rounded-[4px] border-2 border-[#0d0d0d] bg-white px-4 py-2 font-mono text-xs font-bold uppercase tracking-wider text-[#0d0d0d] shadow-[2px_2px_0px_#0d0d0d] transition-all hover:bg-[#f3ede2]">
+                        BATAL
+                    </button>
+                    <button type="button" @click="executeDeleteAuthor"
+                        class="cursor-pointer rounded-[4px] border-2 border-[#0d0d0d] bg-[#ff4800] px-4 py-2 font-mono text-xs font-bold uppercase tracking-wider text-white shadow-[2px_2px_0px_#0d0d0d] transition-all hover:bg-[#d93d00]">
+                        YA, HAPUS
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -453,22 +476,34 @@ const saveRenamedAuthor = async () => {
     isRenameModalOpen.value = false
 }
 
-const confirmDeleteAuthor = async (name: string) => {
-    if (confirm(`Hapus penulis "${name}"? Buku yang terhubung tidak akan dihapus, tetapi relasi penulisnya akan dikosongkan.`)) {
-        customAuthors.value = customAuthors.value.filter(a => a !== name)
-        saveCustomAuthors()
+const isDeleteAuthorModalOpen = ref(false)
+const authorToDelete = ref<string | null>(null)
 
-        const eIdx = expandedAuthors.value.indexOf(name)
-        if (eIdx >= 0) expandedAuthors.value.splice(eIdx, 1)
+const openDeleteAuthorModal = (name: string) => {
+    authorToDelete.value = name
+    isDeleteAuthorModalOpen.value = true
+}
 
-        const booksToUpdate = books.value
-            .filter((b: Book) => b.author && b.author.trim().toLowerCase() === name.toLowerCase())
-            .map((b: Book) => ({ ...b, author: '' }))
+const executeDeleteAuthor = async () => {
+    if (!authorToDelete.value) return
+    const name = authorToDelete.value
 
-        if (booksToUpdate.length > 0) {
-            await saveBooks(booksToUpdate)
-        }
+    customAuthors.value = customAuthors.value.filter(a => a !== name)
+    saveCustomAuthors()
+
+    const eIdx = expandedAuthors.value.indexOf(name)
+    if (eIdx >= 0) expandedAuthors.value.splice(eIdx, 1)
+
+    const booksToUpdate = books.value
+        .filter((b: Book) => b.author && b.author.trim().toLowerCase() === name.toLowerCase())
+        .map((b: Book) => ({ ...b, author: '' }))
+
+    if (booksToUpdate.length > 0) {
+        await saveBooks(booksToUpdate)
     }
+
+    isDeleteAuthorModalOpen.value = false
+    authorToDelete.value = null
 }
 
 const unassignBook = async (book: Book) => {

@@ -511,9 +511,12 @@
                         </div>
                     </div>
 
-                    <h3 class="font-mono text-xs uppercase text-[#0d0d0d] mt-8 border-[#0d0d0d] border-t-2 pt-3">
-                        Daftar Riwayat Sesi Baca Buku Ini ({{ bookHistorySessions.length }} sesi)
+
+                    <h3
+                        class="mt-8 mb-5 border-t-2 border-[#0d0d0d] pt-5 font-mono text-xs font-semibold tracking-[-0.01em] text-[#74716e]">
+                        <span class="uppercase text-black text-sm">Daftar Riwayat:</span> {{ bookHistorySessions.length }} Sesi Terhitung
                     </h3>
+
 
                     <div v-if="bookHistorySessions.length === 0"
                         class="rounded-lg border-2 border-[#0d0d0d] bg-white p-8 text-center shadow-[3px_3px_0px_#0d0d0d]">
@@ -561,7 +564,7 @@
                                     class="cursor-pointer rounded-[4px] border border-[#0d0d0d] bg-white px-2.5 py-1 font-mono text-xs font-bold text-[#0d0d0d] shadow-[1px_1px_0px_#0d0d0d] hover:bg-[#f3ede2] active:translate-x-0.5 active:translate-y-0.5">
                                     Edit
                                 </button>
-                                <button @click="handleDeleteSession(session)" type="button"
+                                <button @click="openDeleteSessionModal(session)" type="button"
                                     class="cursor-pointer rounded-[4px] border border-[#ff4800] bg-white px-2.5 py-1 font-mono text-xs font-bold text-[#ff4800] shadow-[1px_1px_0px_#ff4800] hover:bg-[#fff0eb] active:translate-x-0.5 active:translate-y-0.5">
                                     Hapus
                                 </button>
@@ -571,6 +574,68 @@
                 </div>
 
                 <div v-show="activeTab === 'stats'" class="space-y-6">
+
+                    <div
+                        class="rounded-lg border-2 border-[#0d0d0d] bg-[#f3ede2] p-5 shadow-[3px_3px_0px_#0d0d0d] space-y-3.5 my-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b-2 border-[#0d0d0d] pb-3">
+                            <div class="flex items-center gap-2">
+                                <span class="flex h-6 w-6 items-center justify-center rounded-[4px] border border-[#0d0d0d] bg-[#0d0d0d] text-white text-xs font-bold">
+                                    ✦
+                                </span>
+                                <h3 class="font-mono text-xs sm:text-sm font-bold uppercase text-[#0d0d0d]">
+                                    [EKSPOR DATA AKTIVITAS 30 HARI TERAKHIR]
+                                </h3>
+                            </div>
+                            <span class="font-mono text-[11px] font-bold text-[#57534e]">
+                                30 HARI TERAKHIR
+                            </span>
+                        </div>
+
+                        <p class="text-xs sm:text-sm text-black leading-relaxed text-justify">
+                            Data riwayat sesi membaca 30 hari terakhir dapat diekspor dalam format JSON atau langsung disalin bersama struktur template prompt kami untuk dikirimkan ke <strong>AI / LLM</strong> (seperti ChatGPT, Claude, Gemini, dll).
+                        </p>
+
+                        <div class="flex flex-wrap items-center gap-2.5 pt-1">
+                            <button type="button" @click="handleExportJSON"
+                                class="cursor-pointer inline-flex items-center gap-2 rounded-[4px] border-2 border-[#0d0d0d] bg-white px-3.5 py-2 font-mono text-xs sm:text-sm font-bold uppercase text-[#0d0d0d] shadow-[2px_2px_0px_#0d0d0d] transition-all hover:bg-[#faf8f5] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_#0d0d0d] active:translate-x-0.5 active:translate-y-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                    <polyline points="7 10 12 15 17 10" />
+                                    <line x1="12" y1="15" x2="12" y2="3" />
+                                </svg>
+                                <span>Export JSON</span>
+                            </button>
+
+                            <button type="button" @click="handleCopyPrompt"
+                                class="cursor-pointer inline-flex items-center gap-2 rounded-[4px] border-2 border-[#0d0d0d] bg-[#0d0d0d] px-3.5 py-2 font-mono text-xs sm:text-sm font-bold uppercase text-white shadow-[2px_2px_0px_#0d0d0d] transition-all hover:bg-[#262626] hover:shadow-[3px_3px_0px_#ff4800] hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5">
+                                <svg v-if="!isPromptCopied" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+                                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+                                </svg>
+                                <svg v-else xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                                    class="text-[#00875a]">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                                <span>{{ isPromptCopied ? '✓ Prompt Disalin' : 'Copy Prompt' }}</span>
+                            </button>
+                        </div>
+
+                        <div v-if="statsAlertMessage"
+                            class="rounded-[4px] border-2 p-3 font-mono text-xs font-bold flex items-center justify-between animate-in fade-in duration-200"
+                            :class="statsAlertMessage.includes('belum membaca')
+                                ? 'border-[#ff4800] bg-[#fff0eb] text-[#ff4800] shadow-[2px_2px_0px_#ff4800]'
+                                : 'border-[#00875a] bg-[#eafaf1] text-[#00875a] shadow-[2px_2px_0px_#00875a]'">
+                            <div class="flex items-center gap-2">
+                                <span>{{ statsAlertMessage.includes('belum membaca') ? '⚠️' : '✓' }}</span>
+                                <span>{{ statsAlertMessage }}</span>
+                            </div>
+                            <button type="button" @click="statsAlertMessage = ''"
+                                class="cursor-pointer font-bold text-sm leading-none ml-2">×</button>
+                        </div>
+                    </div>
 
                     <div class="space-y-3">
                         <div class="flex items-center justify-between flex-wrap gap-2">
@@ -884,6 +949,60 @@
                         </button>
                     </div>
                 </form>
+            </div>
+        </div>
+
+        <div v-if="isDeleteSessionModalOpen && sessionToDelete" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div class="absolute inset-0 bg-[#0d0d0d]/60 backdrop-blur-[2px]" @click="isDeleteSessionModalOpen = false"></div>
+            <div
+                class="relative bg-white rounded-lg shadow-[8px_8px_0px_#0d0d0d] border-2 border-[#0d0d0d] w-full max-w-sm overflow-hidden animate-in zoom-in-95 duration-150">
+                <div class="p-4 border-b-2 border-[#0d0d0d] flex items-center justify-between bg-white">
+                    <h2 class="font-mono text-sm font-bold uppercase text-[#ff4800]">[HAPUS RIWAYAT SESI]</h2>
+                    <button @click="isDeleteSessionModalOpen = false" type="button"
+                        class="cursor-pointer rounded-[4px] border border-transparent p-1 hover:border-[#0d0d0d] hover:bg-[#f3ede2]">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 6 6 18" />
+                            <path d="m6 6 12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="p-4 space-y-4">
+                    <div class="space-y-2 text-xs font-mono text-[#44403c]">
+                        <p class="leading-relaxed">
+                            Yakin ingin menghapus riwayat sesi membaca ini?
+                        </p>
+                        <div class="rounded-[4px] border-2 border-[#0d0d0d] bg-[#faf8f5] p-3 space-y-1.5 text-[#0d0d0d]">
+                            <div class="flex justify-between">
+                                <span class="text-[#57534e]">Tanggal:</span>
+                                <span class="font-bold">{{ formatSessionDate(sessionToDelete.date) }}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-[#57534e]">Halaman:</span>
+                                <span class="font-bold text-[#00875a]">+{{ sessionToDelete.pagesAdded }} HAL</span>
+                            </div>
+                            <div v-if="sessionToDelete.duration" class="flex justify-between">
+                                <span class="text-[#57534e]">Durasi:</span>
+                                <span class="font-bold">{{ timer.formatDuration(sessionToDelete.duration) }}</span>
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-[#ff4800] font-bold">
+                            ⚠️ Tindakan ini akan mengupdate progres buku dan tidak dapat dibatalkan.
+                        </p>
+                    </div>
+
+                    <div class="flex gap-2.5 pt-1">
+                        <button type="button" @click="isDeleteSessionModalOpen = false"
+                            class="flex-1 cursor-pointer rounded-[4px] border-2 border-[#0d0d0d] bg-white py-2 font-mono text-xs font-bold uppercase text-[#0d0d0d] shadow-[2px_2px_0px_#0d0d0d] hover:bg-[#f3ede2] active:translate-x-0.5 active:translate-y-0.5">
+                            Batal
+                        </button>
+                        <button type="button" @click="confirmDeleteSession"
+                            class="flex-1 cursor-pointer rounded-[4px] border-2 border-[#0d0d0d] bg-[#ff4800] py-2 font-mono text-xs font-bold uppercase text-white shadow-[2px_2px_0px_#0d0d0d] hover:bg-[#e03f00] active:translate-x-0.5 active:translate-y-0.5">
+                            Ya, Hapus
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -1301,10 +1420,207 @@ const saveEditedSession = async () => {
     editingSession.value = null
 }
 
-const handleDeleteSession = async (session: ReadSession) => {
-    if (!selectedBook.value) return
-    if (confirm(`Hapus riwayat sesi ${session.pagesAdded} halaman ini?`)) {
-        await deleteReadSession(selectedBook.value.id!, session.id || 0)
+const isDeleteSessionModalOpen = ref(false)
+const sessionToDelete = ref<ReadSession | null>(null)
+
+const openDeleteSessionModal = (session: ReadSession) => {
+    sessionToDelete.value = session
+    isDeleteSessionModalOpen.value = true
+}
+
+const confirmDeleteSession = async () => {
+    if (!selectedBook.value || !sessionToDelete.value) return
+    const pgs = sessionToDelete.value.pagesAdded
+    await deleteReadSession(selectedBook.value.id!, sessionToDelete.value.id || 0)
+    isDeleteSessionModalOpen.value = false
+    sessionToDelete.value = null
+    successNotification.value = `Riwayat sesi ${pgs} halaman berhasil dihapus.`
+    setTimeout(() => {
+        if (successNotification.value.includes('berhasil dihapus')) {
+            successNotification.value = ''
+        }
+    }, 4000)
+}
+
+const statsAlertMessage = ref('')
+const isPromptCopied = ref(false)
+
+const get30DaysReadingData = () => {
+    const now = new Date()
+    const end = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999)
+    const start = new Date(end.getFullYear(), end.getMonth(), end.getDate() - 29, 0, 0, 0, 0)
+
+    const result: Array<{
+        title: string
+        author: string
+        publisher: string
+        readHistory: Array<{
+            date: string
+            pagesAdded: number
+            durationSeconds: number | null
+            startPage?: number
+            endPage?: number
+        }>
+    }> = []
+
+    books.value.forEach(book => {
+        if (Array.isArray(book.readHistory)) {
+            const filteredSessions = book.readHistory
+                .filter((s: ReadSession) => {
+                    if (!s.date) return false
+                    const d = new Date(s.date)
+                    return !isNaN(d.getTime()) && d >= start && d <= end
+                })
+                .map((s: ReadSession) => {
+                    const sess: any = {
+                        date: s.date,
+                        pagesAdded: Number(s.pagesAdded) || 0,
+                        durationSeconds: s.duration !== null && s.duration !== undefined ? Number(s.duration) : null
+                    }
+                    if (s.startPage !== undefined) sess.startPage = s.startPage
+                    if (s.endPage !== undefined) sess.endPage = s.endPage
+                    return sess
+                })
+
+            if (filteredSessions.length > 0) {
+                result.push({
+                    title: book.title || 'Tanpa Judul',
+                    author: book.author || '',
+                    publisher: book.publisher || '',
+                    readHistory: filteredSessions
+                })
+            }
+        }
+    })
+
+    const startDateStr = start.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
+    const endDateStr = end.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
+
+    return {
+        startDate: start.toISOString().split('T')[0],
+        endDate: end.toISOString().split('T')[0],
+        startDateFormatted: startDateStr,
+        endDateFormatted: endDateStr,
+        data: result
+    }
+}
+
+const copyToClipboard = async (text: string) => {
+    if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text)
+    } else {
+        const textarea = document.createElement('textarea')
+        textarea.value = text
+        textarea.style.position = 'fixed'
+        textarea.style.left = '-999999px'
+        textarea.style.top = '-999999px'
+        document.body.appendChild(textarea)
+        textarea.focus()
+        textarea.select()
+        document.execCommand('copy')
+        textarea.remove()
+    }
+}
+
+const handleExportJSON = () => {
+    const { data, startDate, endDate } = get30DaysReadingData()
+    if (data.length === 0) {
+        statsAlertMessage.value = 'Anda belum membaca apapun 30 hari terakhir.'
+        setTimeout(() => {
+            if (statsAlertMessage.value === 'Anda belum membaca apapun 30 hari terakhir.') {
+                statsAlertMessage.value = ''
+            }
+        }, 5000)
+        return
+    }
+
+    const payload = {
+        title: 'LogBuku - Riwayat Sesi Membaca 30 Hari Terakhir',
+        period: '30_days',
+        startDate,
+        endDate,
+        exportedAt: new Date().toISOString(),
+        books: data
+    }
+
+    const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(payload, null, 2))}`
+    const downloadAnchor = document.createElement('a')
+    downloadAnchor.setAttribute('href', jsonString)
+    downloadAnchor.setAttribute('download', `logbuku-reading-history-30-days-${startDate}-to-${endDate}.json`)
+    document.body.appendChild(downloadAnchor)
+    downloadAnchor.click()
+    downloadAnchor.remove()
+
+    statsAlertMessage.value = '✓ Data JSON 30 hari terakhir berhasil diekspor!'
+    setTimeout(() => {
+        if (statsAlertMessage.value === '✓ Data JSON 30 hari terakhir berhasil diekspor!') {
+            statsAlertMessage.value = ''
+        }
+    }, 4000)
+}
+
+const handleCopyPrompt = async () => {
+    const { data, startDate, endDate, startDateFormatted, endDateFormatted } = get30DaysReadingData()
+    if (data.length === 0) {
+        statsAlertMessage.value = 'Anda belum membaca apapun 30 hari terakhir.'
+        setTimeout(() => {
+            if (statsAlertMessage.value === 'Anda belum membaca apapun 30 hari terakhir.') {
+                statsAlertMessage.value = ''
+            }
+        }, 5000)
+        return
+    }
+
+    const payload = {
+        period: '30_days',
+        startDate,
+        endDate,
+        books: data
+    }
+
+    const promptText = `Berikut adalah data histori aktivitas membaca saya selama 30 hari terakhir (${startDateFormatted} — ${endDateFormatted}) dalam format JSON dari aplikasi LogBuku:
+
+\`\`\`json
+${JSON.stringify(payload, null, 2)}
+\`\`\`
+
+Sebagai seorang reading coach dan analis data membaca, tolong berikan analisis mendalam dan personal mengenai kebiasaan membaca saya berdasarkan data di atas:
+
+1. **Pola & Konsistensi Membaca**:
+   - Analisis seberapa konsisten saya membaca dalam 30 hari terakhir (frekuensi harian, streak, hari paling produktif, atau jeda membaca).
+   - Pola waktu atau ritme baca yang terlihat dari data sesi.
+
+2. **Analisis Durasi & Reading Pace (Kecepatan Membaca)**:
+   - Evaluasi total durasi waktu yang dihabiskan untuk membaca dan rata-rata waktu per sesi.
+   - Analisis reading pace (kecepatan per halaman / estimasi halaman per jam) pada masing-masing buku atau keseluruhan.
+
+3. **Fokus Buku & Preferensi Bacaan**:
+   - Buku mana yang paling banyak mendapat progres dan perhatian?
+   - Bagaimana dinamika pergantian buku atau progres penyelesaian buku?
+
+4. **Kekuatan & Evaluasi Kebiasaan Membaca**:
+   - Apa poin positif dan kelebihan dari pola membaca saya sejauh ini?
+   - Apa hambatan atau aspek yang bisa dioptimalkan?
+
+5. **Rekomendasi & Actionable Plan untuk 30 Hari ke Depan**:
+   - Berikan rekomendasi target harian/mingguan yang realistis.
+   - Tips praktis untuk menjaga konsistensi dan efektivitas membaca saya.
+
+Sajikan analisis dalam format yang rapi, terstruktur, mudah dipahami, dan tajam!`
+
+    try {
+        await copyToClipboard(promptText)
+        isPromptCopied.value = true
+        statsAlertMessage.value = '✓ Prompt analisis AI berhasil disalin ke clipboard!'
+        setTimeout(() => {
+            isPromptCopied.value = false
+            if (statsAlertMessage.value === '✓ Prompt analisis AI berhasil disalin ke clipboard!') {
+                statsAlertMessage.value = ''
+            }
+        }, 4000)
+    } catch (e) {
+        console.error('Gagal menyalin prompt:', e)
+        statsAlertMessage.value = 'Gagal menyalin ke clipboard. Silakan coba lagi.'
     }
 }
 
