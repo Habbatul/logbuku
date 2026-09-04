@@ -1,21 +1,21 @@
 <template>
     <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
-        <div class="absolute inset-0 bg-[#0d0d0d]/60 backdrop-blur-xs" @click="close"></div>
+        <div class="absolute inset-0 bg-black/40 backdrop-blur-md" @click="close"></div>
         <div
-            class="relative flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden rounded-lg border-2 border-[#0d0d0d] bg-white shadow-[8px_8px_0px_#0d0d0d] animate-in zoom-in-95 duration-150">
-            <div class="flex shrink-0 items-center justify-between border-b-2 border-[#0d0d0d] bg-white px-5 py-4 sm:px-6">
+            class="relative flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden liquid-glass-modal animate-in zoom-in-95 duration-150">
+            <div class="flex shrink-0 items-center justify-between px-5 py-4 sm:px-6">
                 <div class="min-w-0 pr-3">
-                    <h2 class="truncate text-base font-bold uppercase tracking-[-0.015em] text-[#0d0d0d] leading-tight">
+                    <h2 class="truncate text-base font-bold text-white leading-tight">
                         {{ form.id ? 'Edit Buku' : 'Tambah Buku Baru' }}
                     </h2>
-                    <p class="mt-1 text-xs text-[#44403c]">
+                    <p class="mt-1 text-xs text-white">
                         {{ form.id ? 'Perbarui informasi dan metadata buku koleksi.' : 'Tambahkan data buku fisik baru ke arsip inventaris.' }}
                     </p>
                 </div>
                 <button @click="close" type="button" aria-label="Tutup modal"
-                    class="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-[4px] border border-transparent text-[#0d0d0d] transition-colors hover:border-[#0d0d0d] hover:bg-[#f3ede2] focus:outline-none">
+                    class="btn-sunset-ghost flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-lg text-white hover:bg-white/15 transition-colors focus:outline-none">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M18 6 6 18" />
                         <path d="m6 6 12 12" />
                     </svg>
@@ -23,63 +23,63 @@
             </div>
 
             <div class="custom-scrollbar overflow-y-auto px-5 py-5 sm:px-6 sm:py-6">
-                <div v-if="!form.id" class="mb-5 flex rounded-[4px] border border-[#0d0d0d] bg-[#f3ede2] p-1 shadow-[1px_1px_0px_#0d0d0d]">
+                <div v-if="!form.id" class="mb-5 flex rounded-xl bg-white/10 backdrop-blur-md p-1">
                     <button type="button" @click="addMode = 'form'"
-                        :class="addMode === 'form' ? 'bg-[#0d0d0d] text-white shadow-[1px_1px_0px_#0d0d0d]' : 'text-[#44403c] hover:text-[#0d0d0d]'"
-                        class="flex-1 cursor-pointer rounded-[3px] py-1.5 font-mono text-xs font-bold uppercase tracking-wider transition-all focus:outline-none">
-                        FORM BIASA
+                        :class="addMode === 'form' ? 'bg-white text-zinc-950 font-bold shadow-sm' : 'text-white hover:bg-white/10'"
+                        class="flex-1 cursor-pointer rounded-lg py-1.5 text-xs font-semibold transition-all focus:outline-none">
+                        Form Biasa
                     </button>
                     <button type="button" @click="addMode = 'json'"
-                        :class="addMode === 'json' ? 'bg-[#0d0d0d] text-white shadow-[1px_1px_0px_#0d0d0d]' : 'text-[#44403c] hover:text-[#0d0d0d]'"
-                        class="flex-1 cursor-pointer rounded-[3px] py-1.5 font-mono text-xs font-bold uppercase tracking-wider transition-all focus:outline-none">
-                        DATA JSON
+                        :class="addMode === 'json' ? 'bg-white text-zinc-950 font-bold shadow-sm' : 'text-white hover:bg-white/10'"
+                        class="flex-1 cursor-pointer rounded-lg py-1.5 text-xs font-semibold transition-all focus:outline-none">
+                        Data JSON
                     </button>
                 </div>
 
                 <form v-if="addMode === 'form'" @submit.prevent="handleSubmitForm" class="space-y-4">
                     <div>
-                        <label class="mb-1.5 block font-mono text-[11px] font-bold uppercase tracking-wider text-[#57534e]">
-                            JUDUL BUKU <span class="text-[#ff4800]">*</span>
+                        <label class="mb-1.5 block text-xs font-semibold text-white">
+                            Judul Buku <span class="text-sky-300">*</span>
                         </label>
                         <input v-model="form.title" type="text" required placeholder="Contoh: Filosofi Teras..."
-                            class="w-full rounded-[4px] border-1.5 border-[#0d0d0d] bg-white px-3 py-2 font-mono text-xs font-bold text-[#0d0d0d] shadow-[1.5px_1.5px_0px_#0d0d0d] outline-none transition-all placeholder:text-[#57534e] placeholder:font-normal focus:border-[#0047ff] focus:shadow-[2px_2px_0px_#0047ff]" />
+                            class="w-full rounded-xl glass-input px-3.5 py-2 text-xs font-medium text-white placeholder:text-white/75" />
                     </div>
 
                     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <div>
-                            <label class="mb-1.5 block font-mono text-[11px] font-bold uppercase tracking-wider text-[#57534e]">
-                                PENULIS <span class="text-[10px] font-normal text-[#57534e]">(OPSIONAL)</span>
+                            <label class="mb-1.5 block text-xs font-semibold text-white">
+                                Penulis <span class="text-[10px] font-normal text-white">(Opsional)</span>
                             </label>
                             <input v-model="form.author" type="text" placeholder="Nama penulis..."
-                                class="w-full rounded-[4px] border-1.5 border-[#0d0d0d] bg-white px-3 py-2 font-mono text-xs font-bold text-[#0d0d0d] shadow-[1.5px_1.5px_0px_#0d0d0d] outline-none transition-all placeholder:text-[#57534e] placeholder:font-normal focus:border-[#0047ff] focus:shadow-[2px_2px_0px_#0047ff]" />
+                                class="w-full rounded-xl glass-input px-3.5 py-2 text-xs font-medium text-white placeholder:text-white/75" />
                         </div>
                         <div>
-                            <label class="mb-1.5 block font-mono text-[11px] font-bold uppercase tracking-wider text-[#57534e]">
-                                PENERBIT <span class="text-[10px] font-normal text-[#57534e]">(OPSIONAL)</span>
+                            <label class="mb-1.5 block text-xs font-semibold text-white">
+                                Penerbit <span class="text-[10px] font-normal text-white">(Opsional)</span>
                             </label>
                             <input v-model="form.publisher" type="text" placeholder="Nama penerbit..."
-                                class="w-full rounded-[4px] border-1.5 border-[#0d0d0d] bg-white px-3 py-2 font-mono text-xs font-bold text-[#0d0d0d] shadow-[1.5px_1.5px_0px_#0d0d0d] outline-none transition-all placeholder:text-[#57534e] placeholder:font-normal focus:border-[#0047ff] focus:shadow-[2px_2px_0px_#0047ff]" />
+                                class="w-full rounded-xl glass-input px-3.5 py-2 text-xs font-medium text-white placeholder:text-white/75" />
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <div>
-                            <label class="mb-1.5 block font-mono text-[11px] font-bold uppercase tracking-wider text-[#57534e]">
-                                TANGGAL BELI <span class="text-[#ff4800]">*</span>
+                            <label class="mb-1.5 block text-xs font-semibold text-white">
+                                Tanggal Beli <span class="text-sky-300">*</span>
                             </label>
                             <input v-model="form.date" type="date" required
-                                class="w-full rounded-[4px] border-1.5 border-[#0d0d0d] bg-white px-3 py-2 font-mono text-xs font-bold text-[#0d0d0d] shadow-[1.5px_1.5px_0px_#0d0d0d] outline-none transition-all focus:border-[#0047ff] focus:shadow-[2px_2px_0px_#0047ff]" />
+                                class="w-full rounded-xl glass-input px-3.5 py-2 text-xs font-medium text-white" />
                         </div>
                         <div class="min-w-0">
-                            <label class="mb-1.5 block font-mono text-[11px] font-bold uppercase tracking-wider text-[#57534e]">
-                                TOPIK <span class="text-[10px] font-normal text-[#57534e]">(MAKS. 3)</span>
+                            <label class="mb-1.5 block text-xs font-semibold text-white">
+                                Topik <span class="text-[10px] font-normal text-white">(Maks. 3)</span>
                             </label>
                             <div v-if="form.topic.length > 0" class="mb-2 flex flex-wrap gap-1.5">
                                 <span v-for="(t, idx) in form.topic" :key="idx"
-                                    class="inline-flex max-w-full items-center gap-1.5 rounded-[3px] border border-[#0d0d0d] bg-[#f3ede2] px-2 py-0.5 font-mono text-[11px] font-bold text-[#0d0d0d] shadow-[1px_1px_0px_#0d0d0d]">
+                                    class="inline-flex max-w-full items-center gap-1.5 rounded-lg bg-white/15 px-2.5 py-1 text-[11px] font-medium text-white">
                                     <span class="max-w-[120px] truncate">{{ t }}</span>
                                     <button type="button" @click="removeTopic(idx)"
-                                        class="shrink-0 cursor-pointer text-[#57534e] transition-colors hover:text-[#ff4800] focus:outline-none">
+                                        class="shrink-0 cursor-pointer text-white transition-colors hover:text-rose-300 focus:outline-none">
                                         &times;
                                     </button>
                                 </span>
@@ -87,49 +87,49 @@
                             <input v-if="form.topic.length < 3" v-model="topicInput" type="text"
                                 @keydown.enter.prevent="addTopic" @keydown.comma.prevent="addTopic" @blur="addTopic"
                                 placeholder="Ketik lalu tekan Enter..."
-                                class="w-full rounded-[4px] border-1.5 border-[#0d0d0d] bg-white px-3 py-2 font-mono text-xs font-bold text-[#0d0d0d] shadow-[1.5px_1.5px_0px_#0d0d0d] outline-none transition-all placeholder:text-[#57534e] placeholder:font-normal focus:border-[#0047ff] focus:shadow-[2px_2px_0px_#0047ff]" />
+                                class="w-full rounded-xl glass-input px-3.5 py-2 text-xs font-medium text-white placeholder:text-white/75" />
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <div>
-                            <label class="mb-1.5 block font-mono text-[11px] font-bold uppercase tracking-wider text-[#57534e]">
-                                TOTAL HALAMAN <span class="text-[#ff4800]">*</span>
+                            <label class="mb-1.5 block text-xs font-semibold text-white">
+                                Total Halaman <span class="text-sky-300">*</span>
                             </label>
                             <input v-model.number="form.totalPages" type="number" min="1" required
-                                class="w-full rounded-[4px] border-1.5 border-[#0d0d0d] bg-white px-3 py-2 font-mono text-xs font-bold text-[#0d0d0d] shadow-[1.5px_1.5px_0px_#0d0d0d] outline-none transition-all focus:border-[#0047ff] focus:shadow-[2px_2px_0px_#0047ff]" />
+                                class="w-full rounded-xl glass-input px-3.5 py-2 text-xs font-medium tabular-nums text-white" />
                         </div>
                         <div>
-                            <label class="mb-1.5 block font-mono text-[11px] font-bold uppercase tracking-wider text-[#57534e]">
-                                HARGA (RP) <span class="text-[#ff4800]">*</span>
+                            <label class="mb-1.5 block text-xs font-semibold text-white">
+                                Harga (Rp) <span class="text-sky-300">*</span>
                             </label>
                             <input v-model.number="form.price" type="number" min="0" required
-                                class="w-full rounded-[4px] border-1.5 border-[#0d0d0d] bg-white px-3 py-2 font-mono text-xs font-bold text-[#0d0d0d] shadow-[1.5px_1.5px_0px_#0d0d0d] outline-none transition-all focus:border-[#0047ff] focus:shadow-[2px_2px_0px_#0047ff]" />
+                                class="w-full rounded-xl glass-input px-3.5 py-2 text-xs font-medium tabular-nums text-white" />
                         </div>
                     </div>
 
                     <div>
-                        <label class="mb-1.5 block font-mono text-[11px] font-bold uppercase tracking-wider text-[#57534e]">
-                            URL GAMBAR COVER <span class="text-[10px] font-normal text-[#57534e]">(OPSIONAL)</span>
+                        <label class="mb-1.5 block text-xs font-semibold text-white">
+                            URL Gambar Cover <span class="text-[10px] font-normal text-white">(Opsional)</span>
                         </label>
                         <input v-model="form.imageUrl" type="url" placeholder="https://..."
-                            class="w-full rounded-[4px] border-1.5 border-[#0d0d0d] bg-white px-3 py-2 font-mono text-xs font-bold text-[#0d0d0d] shadow-[1.5px_1.5px_0px_#0d0d0d] outline-none transition-all placeholder:text-[#57534e] placeholder:font-normal focus:border-[#0047ff] focus:shadow-[2px_2px_0px_#0047ff]" />
+                            class="w-full rounded-xl glass-input px-3.5 py-2 text-xs font-medium text-white placeholder:text-white/75" />
                     </div>
 
                     <div
-                        class="mt-6 flex flex-col-reverse gap-2.5 border-t-2 border-[#0d0d0d] pt-4 sm:flex-row sm:items-center">
+                        class="mt-6 flex flex-col-reverse gap-2.5 pt-4 sm:flex-row sm:items-center">
                         <button v-if="form.id" type="button" @click="showDeleteConfirm = true"
-                            class="w-full cursor-pointer rounded-[4px] border border-transparent px-3 py-2 font-mono text-xs font-bold uppercase text-[#ff4800] transition-colors hover:border-[#ff4800] hover:bg-[#fff0eb] focus:outline-none sm:mr-auto sm:w-auto">
-                            HAPUS BUKU
+                            class="w-full cursor-pointer rounded-xl bg-red-500/20 px-3.5 py-2 text-xs font-semibold text-red-200 hover:bg-red-500/30 transition-all focus:outline-none sm:mr-auto sm:w-auto">
+                            Hapus Buku
                         </button>
                         <div class="flex w-full gap-2.5 sm:w-auto">
                             <button type="button" @click="close"
-                                class="flex-1 cursor-pointer rounded-[4px] border-2 border-[#0d0d0d] bg-white px-4 py-2 font-mono text-xs font-bold uppercase text-[#0d0d0d] shadow-[2px_2px_0px_#0d0d0d] transition-all hover:bg-[#f3ede2] focus:outline-none sm:flex-none">
-                                BATAL
+                                class="btn-sunset-secondary flex-1 rounded-xl px-4 py-2 text-xs font-semibold text-white hover:bg-white/20 transition-all sm:flex-none">
+                                Batal
                             </button>
                             <button type="submit"
-                                class="flex-1 cursor-pointer rounded-[4px] border-2 border-[#0d0d0d] bg-[#0d0d0d] px-5 py-2 font-mono text-xs font-bold uppercase text-white shadow-[2px_2px_0px_#0d0d0d] transition-all hover:bg-[#262626] hover:shadow-[3px_3px_0px_#ff4800] focus:outline-none sm:flex-none">
-                                SIMPAN
+                                class="btn-sunset-primary flex-1 rounded-xl px-5 py-2 text-xs font-bold sm:flex-none">
+                                Simpan
                             </button>
                         </div>
                     </div>
@@ -137,67 +137,67 @@
 
                 <div v-if="addMode === 'json'" class="space-y-4">
                     <div
-                        class="rounded-[4px] border-2 border-[#0d0d0d] bg-[#f3ede2] p-3.5 font-mono text-xs leading-relaxed text-[#0d0d0d] shadow-[2px_2px_0px_#0d0d0d]">
-                        <p class="mb-2 font-bold uppercase tracking-wider text-[#0d0d0d]">
-                            [FORMAT DATA BUKU JSON]
+                        class="rounded-xl bg-white/10 backdrop-blur-md p-4 text-xs leading-relaxed text-white">
+                        <p class="mb-2 font-bold text-white">
+                            Format Data Buku JSON
                         </p>
-                        <p class="mb-2 text-[#44403c]">
+                        <p class="mb-2 text-white text-xs">
                             Isi data buku dengan struktur JSON berikut. Anda juga dapat meminta AI membuat datanya dengan format yang sama:
                         </p>
 
-                        <p class="mb-2 italic text-[#0047ff] font-medium">
+                        <p class="mb-2 italic text-sky-300 text-xs font-medium">
                             "{{ jsonPromptText }}"
                         </p>
 
                         <div class="relative">
                             <button type="button" @click="copyJsonTemplate" title="Salin prompt dan JSON"
-                                class="absolute right-2 top-2 z-10 inline-flex cursor-pointer items-center gap-1.5 rounded-[4px] border border-[#0d0d0d] bg-white px-2 py-1 font-mono text-[11px] font-bold text-[#0d0d0d] shadow-[1px_1px_0px_#0d0d0d] transition-colors hover:bg-[#f3ede2] focus:outline-none">
+                                class="btn-sunset-secondary absolute right-2 top-2 z-10 inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-[11px] font-semibold text-white">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round">
                                     <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
                                     <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
                                 </svg>
-                                SALIN TEMPLATE
+                                Salin Template
                             </button>
 
                             <pre
-                                class="overflow-x-auto rounded-[3px] border border-[#0d0d0d] bg-white p-2.5 pr-16 font-mono text-[11px] leading-5 text-[#0d0d0d] select-all custom-scrollbar">{{ jsonTemplateText }}</pre>
+                                class="overflow-x-auto rounded-lg bg-white/[0.08] backdrop-blur-sm p-3 pr-16 text-[11px] leading-5 text-white select-all custom-scrollbar font-mono">{{ jsonTemplateText }}</pre>
                         </div>
                     </div>
 
                     <div>
                         <textarea v-model="jsonInput" rows="6"
-                            class="w-full text-xs font-mono p-3 border-2 border-[#0d0d0d] rounded-[4px] bg-white text-[#0d0d0d] shadow-[2px_2px_0px_#0d0d0d] focus:border-[#0047ff] focus:shadow-[2px_2px_0px_#0047ff] outline-none transition-all placeholder:text-[#57534e] custom-scrollbar"
+                            class="w-full text-xs p-3.5 glass-input rounded-xl text-white placeholder:text-white/75 custom-scrollbar"
                             placeholder="Paste data JSON di sini..."></textarea>
                     </div>
 
                     <div v-if="jsonErrorMessage"
-                        class="rounded-[4px] bg-[#fff0eb] p-3 font-mono text-xs font-bold text-[#ff4800] border-2 border-[#ff4800] shadow-[2px_2px_0px_#ff4800]">
+                        class="rounded-xl bg-red-500/20 border border-red-500/30 p-3 text-xs font-semibold text-red-200">
                         {{ jsonErrorMessage }}
                     </div>
 
-                    <div class="flex flex-wrap items-center justify-between gap-3 border-t-2 border-[#0d0d0d] pt-4">
+                    <div class="flex flex-wrap items-center justify-between gap-3 pt-4">
                         <div class="flex items-center gap-2.5">
-                            <span class="font-mono text-xs font-bold uppercase text-[#57534e]">Upload File:</span>
+                            <span class="text-xs font-semibold text-white">Upload File:</span>
                             <input type="file" accept=".json" class="hidden" ref="jsonFileRef"
                                 @change="handleJsonFile" />
                             <button type="button" @click="triggerJsonFile"
-                                class="inline-flex cursor-pointer items-center gap-1.5 font-mono text-xs font-bold uppercase bg-white hover:bg-[#f3ede2] text-[#0d0d0d] py-1.5 px-3 rounded-[4px] transition-colors border border-[#0d0d0d] shadow-[1px_1px_0px_#0d0d0d] focus:outline-none">
+                                class="btn-sunset-secondary inline-flex cursor-pointer items-center gap-1.5 text-xs font-semibold py-2 px-3.5 rounded-xl text-white">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round">
                                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                                     <polyline points="17 8 12 3 7 8" />
                                     <line x1="12" y1="3" x2="12" y2="15" />
                                 </svg>
-                                PILIH .JSON
+                                Pilih .json
                             </button>
                         </div>
 
                         <button type="button" @click="handleProcessJson"
-                            class="rounded-[4px] cursor-pointer bg-[#0d0d0d] px-5 py-2 font-mono text-xs font-bold uppercase text-white shadow-[2px_2px_0px_#0d0d0d] transition-all hover:bg-[#262626] hover:shadow-[3px_3px_0px_#ff4800] focus:outline-none w-full sm:w-auto">
-                            PROSES JSON
+                            class="btn-sunset-primary rounded-xl px-5 py-2 text-xs font-bold w-full sm:w-auto">
+                            Proses JSON
                         </button>
                     </div>
                 </div>
@@ -205,20 +205,20 @@
         </div>
 
         <div v-if="showDeleteConfirm"
-            class="fixed inset-0 z-60 flex items-center justify-center p-4 bg-[#0d0d0d]/60 backdrop-blur-xs">
-            <div class="bg-white rounded-lg max-w-sm w-full p-5 border-2 border-[#0d0d0d] shadow-[6px_6px_0px_#0d0d0d] space-y-4 animate-in zoom-in-95 duration-150">
-                <h3 class="font-mono text-sm font-bold uppercase tracking-wider text-[#ff4800]">[KONFIRMASI HAPUS BUKU]</h3>
-                <p class="text-xs text-[#44403c] leading-relaxed">
-                    Yakin ingin menghapus buku <strong>"{{ form.title }}"</strong> dari arsip? Tindakan ini tidak dapat dibatalkan.
+            class="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/40 backdrop-blur-md">
+            <div class="liquid-glass-modal rounded-2xl max-w-sm w-full p-5 space-y-4 animate-in zoom-in-95 duration-150">
+                <h3 class="text-sm font-bold text-red-300">Konfirmasi Hapus Buku</h3>
+                <p class="text-xs text-white leading-relaxed">
+                    Yakin ingin menghapus buku <strong class="text-white font-bold">"{{ form.title }}"</strong> dari arsip? Tindakan ini tidak dapat dibatalkan.
                 </p>
-                <div class="flex justify-end gap-2.5 pt-2 border-t border-[#e5dfd3]">
+                <div class="flex justify-end gap-2.5 pt-3">
                     <button type="button" @click="showDeleteConfirm = false"
-                        class="cursor-pointer px-3.5 py-1.5 rounded-[4px] border-2 border-[#0d0d0d] bg-white font-mono text-xs font-bold uppercase text-[#0d0d0d] shadow-[1.5px_1.5px_0px_#0d0d0d] hover:bg-[#f3ede2] transition-all">
-                        BATAL
+                        class="btn-sunset-secondary px-3.5 py-1.5 rounded-xl text-xs font-semibold text-white">
+                        Batal
                     </button>
                     <button type="button" @click="confirmDelete"
-                        class="cursor-pointer px-4 py-1.5 rounded-[4px] border-2 border-[#0d0d0d] bg-[#ff4800] font-mono text-xs font-bold uppercase text-white shadow-[1.5px_1.5px_0px_#0d0d0d] hover:bg-[#d93d00] transition-all">
-                        YA, HAPUS
+                        class="px-4 py-1.5 rounded-xl bg-red-600 hover:bg-red-500 text-xs font-bold text-white transition-all shadow-md">
+                        Ya, Hapus
                     </button>
                 </div>
             </div>
@@ -428,11 +428,11 @@ const copyJsonTemplate = () => {
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #e5dfd3;
-    border-radius: 0px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 9999px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #57534e;
+    background: rgba(255, 255, 255, 0.25);
 }
 </style>

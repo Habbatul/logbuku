@@ -1,60 +1,60 @@
 <template>
-    <section>
-        <div class="border-y-2 border-[#0d0d0d] py-4 sm:py-6">
-            <div class="flex flex-col gap-4 sm:gap-5 lg:flex-row lg:items-center lg:gap-10">
-                <div class="min-w-0 lg:w-64 lg:shrink-0">
-                    <div class="flex items-center gap-2.5">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24"
+    <section class="surface-hero rounded-2xl border border-white/14 p-5 sm:p-6 shadow-lg">
+        <div class="flex flex-col gap-4 sm:gap-6 lg:flex-row lg:items-center lg:gap-10">
+            <div class="min-w-0 lg:w-64 lg:shrink-0">
+                <div class="flex items-center gap-2.5">
+                    <div class="flex h-8 w-8 items-center justify-center rounded-xl bg-amber-500/20 text-amber-300 border border-amber-400/30 shadow-[0_0_12px_rgba(245,158,11,0.25)]">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                             fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-                            stroke-linejoin="round" class="shrink-0 text-[#0d0d0d]">
+                            stroke-linejoin="round">
                             <circle cx="12" cy="12" r="10" />
-                            <circle cx="12" cy="12" r="6" />
-                            <circle cx="12" cy="12" r="2" />
+                            <circle cx="12" cy="6" r="6" />
+                            <circle cx="12" cy="2" r="2" />
                         </svg>
-                        <h2 class="text-lg sm:text-xl font-bold tracking-[-0.02em] text-[#0d0d0d] leading-snug uppercase break-words">
-                            TARGET MEMBACA
-                        </h2>
                     </div>
-                    <p v-if="targetBooksCount > 0" class="mt-1 text-xs sm:text-sm leading-relaxed text-[#44403c] sm:max-w-[280px]">
-                        Selesaikan <span class="font-bold text-[#0d0d0d] tabular-nums">{{ targetBooksCount }}</span> buku pilihan prioritasmu.
-                    </p>
-                    <p v-else class="mt-1 text-xs sm:text-sm leading-relaxed text-[#44403c] sm:max-w-[280px]">
-                        Tentukan buku prioritas dari koleksimu untuk mulai memantau target membaca.
-                    </p>
+                    <h2 class="text-base sm:text-lg font-bold tracking-tight text-white leading-snug">
+                        Target Membaca
+                    </h2>
                 </div>
+                <p v-if="targetBooksCount > 0" class="mt-1.5 text-xs leading-relaxed text-white">
+                    Selesaikan <span class="font-bold text-white tabular-nums">{{ targetBooksCount }}</span> buku pilihan prioritasmu.
+                </p>
+                <p v-else class="mt-1.5 text-xs leading-relaxed text-white">
+                    Tentukan buku prioritas dari koleksimu untuk mulai memantau target membaca.
+                </p>
+            </div>
 
-                <div class="min-w-0 flex-1">
-                    <template v-if="targetBooksCount > 0">
-                        <div class="mb-2 flex flex-wrap items-baseline justify-between gap-2 sm:gap-4">
-                            <p class="min-w-0 text-xs sm:text-base font-medium text-[#0d0d0d] break-words">
-                                <span class="tabular-nums font-bold text-[#0d0d0d]">{{ targetCompleted }}</span>
-                                <span class="text-[#57534e]"> / </span>
-                                <span class="tabular-nums font-bold text-[#0d0d0d]">{{ targetBooksCount }}</span>
-                                <span class="font-mono text-xs sm:text-sm font-bold text-[#57534e] uppercase"> BUKU SELESAI</span>
-                            </p>
-                            <span class="shrink-0 font-mono text-xs sm:text-base font-bold tabular-nums"
-                                :class="targetProgressPct >= 100 ? 'text-[#00875a]' : 'text-[#0d0d0d]'">
-                                [{{ targetProgressPct }}%]
-                            </span>
-                        </div>
-                        <div class="h-3 w-full border border-[#0d0d0d] bg-[#f3ede2] rounded-[2px] p-[1px]">
-                            <div class="h-full transition-all duration-300 ease-out"
-                                :class="targetProgressPct >= 100 ? 'bg-[#00875a]' : 'bg-[#0d0d0d]'"
-                                :style="{ width: `${Math.min(targetProgressPct, 100)}%` }">
-                            </div>
-                        </div>
-                    </template>
-                    <div v-else class="rounded-[4px] border-2 border-dashed border-[#0d0d0d]/30 bg-[#f3ede2] p-3 sm:p-3.5 text-center font-mono text-xs sm:text-sm font-bold uppercase text-[#44403c] break-words">
-                        [BELUM ADA BUKU YANG DITANDAI SEBAGAI TARGET AKTIF]
+            <div class="min-w-0 flex-1">
+                <template v-if="targetBooksCount > 0">
+                    <div class="mb-2 flex flex-wrap items-baseline justify-between gap-2">
+                        <p class="text-xs sm:text-sm font-semibold text-white">
+                            <span class="tabular-nums font-extrabold text-white">{{ targetCompleted }}</span>
+                            <span class="text-white"> / </span>
+                            <span class="tabular-nums font-extrabold text-white">{{ targetBooksCount }}</span>
+                            <span class="text-xs font-medium text-white"> buku selesai</span>
+                        </p>
+                        <span class="text-xs sm:text-sm font-extrabold tabular-nums"
+                            :class="targetProgressPct >= 100 ? 'text-emerald-400' : 'text-amber-300'">
+                            {{ targetProgressPct }}%
+                        </span>
                     </div>
+                    <div class="h-2.5 w-full rounded-full bg-black/40 overflow-hidden shadow-inner border border-white/[0.08]">
+                        <div class="h-full rounded-full transition-all duration-500 ease-out shadow-sm"
+                            :class="targetProgressPct >= 100 ? 'bg-gradient-to-r from-emerald-500 to-teal-400' : 'bg-gradient-to-r from-amber-500 via-orange-500 to-rose-400 shadow-[0_0_12px_rgba(245,158,11,0.4)]'"
+                            :style="{ width: `${Math.min(targetProgressPct, 100)}%` }">
+                        </div>
+                    </div>
+                </template>
+                <div v-else class="rounded-xl bg-black/25 backdrop-blur-sm border border-white/15 p-3.5 sm:p-4 text-center text-xs font-medium text-white">
+                    Belum ada buku yang ditandai sebagai target aktif
                 </div>
+            </div>
 
-                <div class="shrink-0 w-full sm:w-auto">
-                    <button @click="$emit('openTargetModal')"
-                        class="inline-flex w-full cursor-pointer items-center justify-center rounded-[4px] border-2 border-[#0d0d0d] bg-white px-4 py-2.5 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-[#0d0d0d] shadow-[2px_2px_0px_#0d0d0d] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_#0d0d0d] hover:bg-[#f3ede2] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0d0d0d] sm:w-auto">
-                        {{ targetBooksCount > 0 ? 'KELOLA TARGET' : 'TENTUKAN TARGET' }}
-                    </button>
-                </div>
+            <div class="shrink-0 w-full sm:w-auto">
+                <button @click="$emit('openTargetModal')"
+                    class="btn-sunset-primary inline-flex w-full items-center justify-center px-4 py-2.5 text-xs font-semibold sm:w-auto shadow-md">
+                    {{ targetBooksCount > 0 ? 'Kelola Target' : 'Tentukan Target' }}
+                </button>
             </div>
         </div>
     </section>

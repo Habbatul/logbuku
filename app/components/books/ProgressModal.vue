@@ -1,17 +1,17 @@
 <template>
     <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-[#0d0d0d]/60 backdrop-blur-[2px]" @click="close"></div>
+        <div class="absolute inset-0 bg-black/40 backdrop-blur-md" @click="close"></div>
         <div
-            class="relative bg-white rounded-lg shadow-[8px_8px_0px_#0d0d0d] border-2 border-[#0d0d0d] w-full max-w-sm overflow-hidden animate-in zoom-in-95 duration-150">
-            <div class="p-4 sm:p-5 border-b-2 border-[#0d0d0d] bg-white flex items-center justify-between">
+            class="relative liquid-glass-modal w-full max-w-sm overflow-hidden animate-in zoom-in-95 duration-150">
+            <div class="p-4 sm:p-5 flex items-center justify-between">
                 <div class="min-w-0 pr-2">
-                    <h2 class="text-base font-bold uppercase tracking-[-0.015em] text-[#0d0d0d] leading-tight truncate">Update Progres</h2>
-                    <p class="font-mono text-xs text-[#57534e] mt-1 line-clamp-1 uppercase">{{ book?.title }}</p>
+                    <h2 class="text-sm font-bold tracking-tight text-white leading-tight truncate">Update Progres Baca</h2>
+                    <p class="text-xs text-white mt-0.5 line-clamp-1 font-medium">{{ book?.title }}</p>
                 </div>
                 <button @click="close" type="button" aria-label="Tutup modal"
-                    class="cursor-pointer text-[#0d0d0d] rounded-[4px] border border-transparent p-1 transition-colors hover:border-[#0d0d0d] hover:bg-[#f3ede2] focus:outline-none shrink-0">
+                    class="btn-sunset-ghost p-1.5 rounded-lg text-white hover:bg-white/15 transition-colors shrink-0">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M18 6 6 18" />
                         <path d="m6 6 12 12" />
                     </svg>
@@ -21,18 +21,18 @@
             <form @submit.prevent="handleSave" class="p-4 sm:p-5 space-y-4">
                 <div class="flex items-center justify-center gap-3">
                     <button type="button" @click="decrement"
-                        class="w-10 h-10 cursor-pointer flex items-center justify-center bg-[#f3ede2] border-2 border-[#0d0d0d] rounded-[4px] hover:bg-white text-[#0d0d0d] font-mono font-bold text-lg shadow-[2px_2px_0px_#0d0d0d] transition-all active:translate-x-0.5 active:translate-y-0.5 focus:outline-none"
+                        class="btn-sunset-secondary w-10 h-10 rounded-xl flex items-center justify-center font-bold text-lg text-white focus:outline-none"
                         aria-label="Kurangi satu halaman">
                         -
                     </button>
 
                     <input v-model.number="pagesRead" type="number"
-                        class="w-24 h-10 text-center bg-white border-2 border-[#0d0d0d] rounded-[4px] font-mono text-base font-bold tabular-nums text-[#0d0d0d] shadow-[2px_2px_0px_#0d0d0d] outline-none transition-all focus:border-[#0047ff] hide-arrows"
+                        class="w-24 h-10 text-center glass-input rounded-xl text-base font-bold tabular-nums text-white hide-arrows"
                         @input="validate"
                         @keydown.enter.prevent="handleSave" />
 
                     <button type="button" @click="increment"
-                        class="w-10 h-10 cursor-pointer flex items-center justify-center bg-[#f3ede2] border-2 border-[#0d0d0d] rounded-[4px] hover:bg-white text-[#0d0d0d] font-mono font-bold text-lg shadow-[2px_2px_0px_#0d0d0d] transition-all active:translate-x-0.5 active:translate-y-0.5 focus:outline-none"
+                        class="btn-sunset-secondary w-10 h-10 rounded-xl flex items-center justify-center font-bold text-lg text-white focus:outline-none"
                         aria-label="Tambah satu halaman">
                         +
                     </button>
@@ -40,47 +40,47 @@
 
                 <div class="flex items-center justify-center gap-1.5">
                     <button type="button" @click="addPages(5)"
-                        class="cursor-pointer rounded-[4px] border border-[#0d0d0d] bg-[#f3ede2] px-2 py-1 font-mono text-xs font-bold text-[#0d0d0d] shadow-[1px_1px_0px_#0d0d0d] hover:bg-white transition-all active:translate-x-0.5 active:translate-y-0.5">
+                        class="btn-sunset-secondary rounded-lg px-2.5 py-1 text-xs font-semibold text-white">
                         +5
                     </button>
                     <button type="button" @click="addPages(10)"
-                        class="cursor-pointer rounded-[4px] border border-[#0d0d0d] bg-[#f3ede2] px-2 py-1 font-mono text-xs font-bold text-[#0d0d0d] shadow-[1px_1px_0px_#0d0d0d] hover:bg-white transition-all active:translate-x-0.5 active:translate-y-0.5">
+                        class="btn-sunset-secondary rounded-lg px-2.5 py-1 text-xs font-semibold text-white">
                         +10
                     </button>
                     <button type="button" @click="addPages(25)"
-                        class="cursor-pointer rounded-[4px] border border-[#0d0d0d] bg-[#f3ede2] px-2 py-1 font-mono text-xs font-bold text-[#0d0d0d] shadow-[1px_1px_0px_#0d0d0d] hover:bg-white transition-all active:translate-x-0.5 active:translate-y-0.5">
+                        class="btn-sunset-secondary rounded-lg px-2.5 py-1 text-xs font-semibold text-white">
                         +25
                     </button>
                     <button type="button" @click="markCompleted"
-                        class="cursor-pointer rounded-[4px] border border-[#0d0d0d] bg-[#eafaf1] px-2.5 py-1 font-mono text-xs font-bold text-[#00875a] shadow-[1px_1px_0px_#00875a] hover:bg-[#d1f5e0] transition-all active:translate-x-0.5 active:translate-y-0.5">
-                        SELESAI
+                        class="rounded-lg bg-emerald-500/20 border border-emerald-500/30 px-2.5 py-1 text-xs font-bold text-emerald-300 hover:bg-emerald-500/30 transition-colors">
+                        Selesai
                     </button>
                 </div>
 
-                <div class="text-center font-mono text-xs text-[#57534e]">
-                    DARI TOTAL <span class="font-bold tabular-nums text-[#0d0d0d]">{{ totalPages }}</span> HALAMAN
+                <div class="text-center text-xs text-white font-medium">
+                    Dari total <span class="font-bold tabular-nums text-white">{{ totalPages }}</span> halaman
                 </div>
 
-                <div class="border-t-2 border-[#0d0d0d] pt-3.5 space-y-2">
+                <div class="pt-2 space-y-2">
                     <button type="button" @click="isDateExpanded = !isDateExpanded"
-                        class="flex w-full cursor-pointer items-center justify-between rounded-[4px] border-2 border-[#0d0d0d] bg-[#f3ede2] px-3 py-2 font-mono text-xs font-bold uppercase text-[#0d0d0d] shadow-[2px_2px_0px_#0d0d0d] transition-all hover:bg-white active:translate-x-0.5 active:translate-y-0.5 focus:outline-none">
+                        class="flex w-full cursor-pointer items-center justify-between rounded-xl bg-white/10 hover:bg-white/15 px-3.5 py-2.5 text-xs font-semibold text-white transition-colors focus:outline-none">
                         <div class="flex items-center gap-2 min-w-0">
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 text-[#0d0d0d]">
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 text-sky-300">
                                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
                                 <line x1="16" y1="2" x2="16" y2="6" />
                                 <line x1="8" y1="2" x2="8" y2="6" />
                                 <line x1="3" y1="10" x2="21" y2="10" />
                             </svg>
                             <span class="truncate">
-                                TANGGAL: <span class="text-[#0047ff]">{{ formattedSelectedDate }}</span>
+                                Tanggal: <span class="text-sky-300 font-bold">{{ formattedSelectedDate }}</span>
                             </span>
                         </div>
                         <div class="flex items-center gap-1.5 shrink-0">
-                            <span class="text-xs text-[#57534e] underline" v-if="!isDateExpanded">[UBAH]</span>
+                            <span class="text-xs text-white font-semibold" v-if="!isDateExpanded">Ubah</span>
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
-                                class="transition-transform duration-200"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="transition-transform duration-200 text-white"
                                 :class="isDateExpanded ? 'rotate-180' : ''">
                                 <polyline points="6 9 12 15 18 9" />
                             </svg>
@@ -88,29 +88,29 @@
                     </button>
 
                     <div v-show="isDateExpanded"
-                        class="space-y-2 rounded-[4px] border-2 border-[#0d0d0d] bg-[#faf8f5] p-3 shadow-[2px_2px_0px_#0d0d0d] animate-in fade-in zoom-in-95 duration-150">
-                        <label class="block font-mono text-xs font-bold uppercase text-[#44403c]">
-                            PILIH TANGGAL SESI:
+                        class="space-y-2 rounded-xl bg-white/10 backdrop-blur-md p-3 shadow-inner animate-in fade-in zoom-in-95 duration-150">
+                        <label class="block text-[11px] font-bold tracking-wider text-white">
+                            Pilih Tanggal Sesi:
                         </label>
                         <div class="flex items-center gap-2">
                             <input v-model="selectedDate" type="date" :max="todayDateString"
-                                class="w-full rounded-[4px] border-2 border-[#0d0d0d] bg-white px-3 py-1.5 font-mono text-xs font-bold text-[#0d0d0d] shadow-[2px_2px_0px_#0d0d0d] outline-none transition-colors focus:border-[#0047ff]" />
+                                class="w-full glass-input rounded-lg px-3 py-1.5 text-xs font-semibold text-white" />
                             <button v-if="selectedDate !== todayDateString" type="button" @click="selectedDate = todayDateString"
                                 title="Reset ke hari ini"
-                                class="shrink-0 cursor-pointer rounded-[4px] border border-[#0d0d0d] bg-[#f3ede2] px-2 py-1.5 font-mono text-xs font-bold uppercase text-[#0d0d0d] shadow-[1px_1px_0px_#0d0d0d] hover:bg-white active:translate-x-0.5 active:translate-y-0.5">
-                                HARI INI
+                                class="btn-sunset-secondary shrink-0 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-white">
+                                Hari Ini
                             </button>
                         </div>
-                        <p class="font-mono text-xs text-[#57534e]">
+                        <p class="text-[11px] text-white">
                             *Otomatis tercatat untuk tanggal hari ini jika tidak diubah.
                         </p>
                     </div>
                 </div>
 
                 <NuxtLink v-if="book" :to="`/tracking?id=${book.id}`" @click="close"
-                    class="flex w-full items-center justify-center gap-1.5 rounded-[4px] border-2 border-[#0047ff] bg-[#f0f4ff] py-2 font-mono text-xs font-bold uppercase text-[#0047ff] shadow-[2px_2px_0px_#0047ff] hover:bg-[#e0eaff] transition-all">
+                    class="flex w-full items-center justify-center gap-1.5 rounded-xl bg-sky-500/20 border border-sky-500/30 py-2.5 text-xs font-bold text-sky-300 hover:bg-sky-500/30 transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="10" />
                         <polyline points="12 6 12 12 16 14" />
                     </svg>
@@ -119,12 +119,12 @@
 
                 <div class="pt-2 flex gap-3">
                     <button type="button" @click="close"
-                        class="flex-1 cursor-pointer bg-white border-2 border-[#0d0d0d] text-[#0d0d0d] font-mono text-xs font-bold uppercase py-2.5 rounded-[4px] shadow-[2px_2px_0px_#0d0d0d] hover:bg-[#f3ede2] transition-all focus:outline-none">
-                        BATAL
+                        class="btn-sunset-secondary flex-1 py-2.5 rounded-xl text-xs font-semibold text-white">
+                        Batal
                     </button>
                     <button type="submit"
-                        class="flex-1 cursor-pointer bg-[#0d0d0d] border-2 border-[#0d0d0d] text-white font-mono text-xs font-bold uppercase py-2.5 rounded-[4px] shadow-[2px_2px_0px_#0d0d0d] hover:bg-[#262626] hover:shadow-[3px_3px_0px_#ff4800] transition-all focus:outline-none">
-                        SIMPAN
+                        class="btn-sunset-primary flex-1 py-2.5 rounded-xl text-xs font-bold">
+                        Simpan
                     </button>
                 </div>
             </form>

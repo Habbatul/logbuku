@@ -1,30 +1,136 @@
 @import "tailwindcss";
 
 @theme {
-    /* 1. Display & Headings: Karakter geometris tebal khas brutalist / industrial */
-    --font-display: 'Azeret Mono', monospace;
+    --font-display: 'Outfit', system-ui, -apple-system, sans-serif;
+    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-mono: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-data: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
 
-    /* 2. Body Text & Form Inputs: JetBrains Mono yang nyaman dan seimbang untuk membaca */
-    --font-sans: 'JetBrains Mono', monospace;
-    --font-body: 'JetBrains Mono', monospace;
+    /* ============================================================
+       COOL OCEAN — TRANSPARENT GLASS
+       ============================================================ */
 
-    /* 3. Numeric, Statistics, Chips, & Technical Data: Angka tabular presisi tinggi */
-    --font-mono: 'JetBrains Mono', monospace;
-    --font-data: 'JetBrains Mono', monospace;
+    --color-canvas: #52788c;
+    --color-bg-deep: #428194;
+
+    /*
+       White translucent surfaces.
+       Low opacity keeps the ocean background visible.
+    */
+
+    --color-surface-section: rgba(255, 255, 255, 0.08);
+    --color-surface-card: rgba(255, 255, 255, 0.12);
+    --color-surface-elevated: rgba(255, 255, 255, 0.16);
+    --color-surface-soft: rgba(255, 255, 255, 0.06);
+    --color-surface-strong: rgba(255, 255, 255, 0.20);
+
+    --color-text-primary: #FFFFFF;
+    --color-text-secondary: rgba(255, 255, 255, 0.88);
+    --color-text-tertiary: rgba(255, 255, 255, 0.74);
+    --color-text-muted: rgba(255, 255, 255, 0.58);
+
+    --color-accent-warm: #38bdf8;
+    --color-accent-amber: #0ea5e9;
+    --color-accent-soft: #7dd3fc;
+
+    --color-border-subtle: transparent;
+    --color-border-default: transparent;
+    --color-border-strong: transparent;
+}
+
+/* ================================================================
+   ROOT
+   ================================================================ */
+
+:root {
+    color-scheme: dark;
+    color: #FFFFFF;
+}
+
+html,
+body {
+    max-width: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
+
+    background-color: #52788c;
+    color: #FFFFFF;
+
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    letter-spacing: -0.01em;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-    font-family: 'JetBrains Mono', monospace;
+    position: relative;
 }
 
-/* Headings dan judul menggunakan Azeret Mono */
-h1, h2, h3, h4, h5, h6, .font-display {
-    font-family: 'Azeret Mono', monospace;
+body::before,
+body::after {
+    display: none;
 }
 
-/* Angka tabular dan elemen data teknis menggunakan JetBrains Mono */
-.tabular-nums, .font-mono, .font-data {
-    font-family: 'JetBrains Mono', monospace;
+/* ================================================================
+   BROWSER SURFACES & ACCESSIBILITY DEFAULTS
+   ================================================================ */
+
+::selection {
+    background-color: rgba(56, 189, 248, 0.35);
+    color: #FFFFFF;
+}
+
+input,
+textarea,
+select {
+    caret-color: #38bdf8;
+}
+
+:focus-visible {
+    outline: 2px solid rgba(56, 189, 248, 0.70);
+    outline-offset: 2px;
+}
+
+a {
+    text-underline-offset: 3px;
+}
+
+/* Cross-browser standard scrollbar */
+* {
+    scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+    scrollbar-width: thin;
+}
+
+/* ================================================================
+   TYPOGRAPHY
+   ================================================================ */
+
+h1,
+.font-display {
+    font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+    letter-spacing: -0.025em;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    letter-spacing: -0.02em;
+    color: #FFFFFF;
+}
+
+.tabular-nums,
+.font-mono,
+.font-data {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
 }
 
 button,
@@ -35,20 +141,391 @@ a {
     cursor: pointer;
 }
 
-.custom-scrollbar::-webkit-scrollbar {
-    width: 4px;
-    height: 4px;
+/* ================================================================
+   SURFACE SYSTEM
+   AQUA LIQUID GLASS WITH SPECULAR CRAFT DEPTH
+   ================================================================ */
+
+/* ------------------------------------------------
+   Section Container
+   ------------------------------------------------ */
+
+.surface-section {
+    background: rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(24px) saturate(150%);
+    -webkit-backdrop-filter: blur(24px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.20);
+    box-shadow:
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.30),
+        0 12px 32px rgba(0, 0, 0, 0.14);
+    border-radius: 1.5rem;
 }
 
-.custom-scrollbar::-webkit-scrollbar-track {
+/* ------------------------------------------------
+   Card (Aqua Liquid Glass - Translucent, Frosted & Static)
+   ------------------------------------------------ */
+
+.surface-card,
+.glass-card,
+.liquid-glass {
+    background: rgba(0, 0, 0, 0.12);
+    backdrop-filter: blur(24px) saturate(160%);
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow:
+        inset 0 1px 1px 0 rgba(255, 255, 255, 0.35),
+        0 10px 30px -4px rgba(0, 0, 0, 0.15);
+    border-radius: 1.25rem;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.surface-card2
+ {
+    background: rgba(200, 200, 200, 0.12);
+    backdrop-filter: blur(24px) saturate(160%);
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow:
+        inset 0 1px 1px 0 rgba(255, 255, 255, 0.35),
+        0 10px 30px -4px rgba(0, 0, 0, 0.15);
+    border-radius: 1.25rem;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+/* ------------------------------------------------
+   Interactive Card (Aqua Glass - Static Position, Subtle Shimmer)
+   ------------------------------------------------ */
+
+.surface-card-interactive {
+    background: rgba(200, 200, 200, 0.12);
+    backdrop-filter: blur(24px) saturate(160%);
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow:
+        inset 0 1px 1px 0 rgba(255, 255, 255, 0.35),
+        0 10px 30px -4px rgba(0, 0, 0, 0.15);
+    border-radius: 1.25rem;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.surface-card-interactive:hover {
+    border-color: rgba(200, 200, 200, 0.38);
+    background: rgba(200, 200, 200, 0.18);
+}
+
+.surface-card-interactive:active {
+    background: rgba(200, 200, 200, 0.14);
+}
+
+/* ------------------------------------------------
+   Hero / Highlight Surface (Luminous Aqua Glass Hero)
+   ------------------------------------------------ */
+
+.surface-hero {
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.18) 0%, rgba(0, 0, 0, 0.08) 100%);
+    backdrop-filter: blur(28px) saturate(160%);
+    -webkit-backdrop-filter: blur(28px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    box-shadow:
+        inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.15),
+        0 16px 36px -4px rgba(0, 0, 0, 0.18);
+    border-radius: 1.5rem;
+    transition: border-color 0.2s ease;
+}
+
+.surface-hero:hover {
+    border-color: rgba(255, 255, 255, 0.38);
+}
+
+/* ------------------------------------------------
+   Stat Surface (Aqua Glass Stat Tiles - Static)
+   ------------------------------------------------ */
+
+.surface-stat {
+    background: rgba(0, 0, 0, 0.11);
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow:
+        inset 0 1px 1px 0 rgba(255, 255, 255, 0.32),
+        0 8px 24px -4px rgba(0, 0, 0, 0.14);
+    border-radius: 1.25rem;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.surface-stat:hover {
+    border-color: rgba(255, 255, 255, 0.35);
+}
+
+/* ------------------------------------------------
+   Elevated Surface
+   ------------------------------------------------ */
+
+.surface-elevated {
+    background: rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(28px) saturate(160%);
+    -webkit-backdrop-filter: blur(28px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.26);
+    box-shadow:
+        inset 0 1px 1px 0 rgba(255, 255, 255, 0.38),
+        0 16px 40px rgba(0, 0, 0, 0.18);
+    border-radius: 1.25rem;
+}
+
+/* ------------------------------------------------
+   Floating Navigation (Selective Clean Glass)
+   ------------------------------------------------ */
+
+.liquid-glass-nav {
+    background: rgba(38, 97, 128, 0.25);
+    backdrop-filter: blur(24px) saturate(160%);
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), inset 0 -1px 0 0 rgba(255, 255, 255, 0.08);
+}
+
+/* ------------------------------------------------
+   Modal (Frosted Translucent Aqua Glass Dialog)
+   ------------------------------------------------ */
+
+.liquid-glass-modal,
+.glass-modal {
+    background: rgba(40, 92, 112, 0.72);
+    backdrop-filter: blur(32px) saturate(160%);
+    -webkit-backdrop-filter: blur(32px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.30);
+    box-shadow:
+        inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.40),
+        0 24px 60px -8px rgba(0, 0, 0, 0.28);
+    border-radius: 1.5rem;
+}
+
+/* ------------------------------------------------
+   Tooltip & Floating Popovers (Aqua Glass)
+   ------------------------------------------------ */
+
+.liquid-glass-tooltip {
+    background: rgba(35, 82, 100, 0.85);
+    backdrop-filter: blur(28px) saturate(160%);
+    -webkit-backdrop-filter: blur(28px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.32);
+    box-shadow:
+        inset 0 1px 1px 0 rgba(255, 255, 255, 0.40),
+        0 16px 36px -4px rgba(0, 0, 0, 0.28);
+    border-radius: 1.25rem;
+}
+
+/* ------------------------------------------------
+   Floating Pill
+   ------------------------------------------------ */
+
+.liquid-glass-pill {
+    background: rgba(0, 0, 0, 0.30);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow:
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.25),
+        0 4px 16px rgba(0, 0, 0, 0.12);
+    border-radius: 20px;
+    transition: all 0.2s ease;
+}
+
+.liquid-glass-pill:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.35);
+}
+
+/* ================================================================
+   INPUTS & CONTROLS (SOLID & HIGH CONTRAST)
+   Solid deep ocean ground for crystal clear typing and reading
+   ================================================================ */
+
+.sunset-input,
+.glass-input {
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: #FFFFFF;
+    border-radius: 12px;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.08),
+        0 2px 8px rgba(0, 0, 0, 0.08);
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.sunset-input::placeholder,
+.glass-input::placeholder {
+    color: rgba(255, 255, 255, 0.50);
+}
+
+.sunset-input:hover,
+.glass-input:hover {
+    background: rgba(255, 255, 255, 0.10);
+    border-color: rgba(255, 255, 255, 0.28);
+}
+
+.sunset-input:focus,
+.glass-input:focus {
+    outline: none;
+
+    background: rgba(255, 255, 255, 0.10);
+    border-color: rgba(125, 211, 252, 0.65);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.10),
+        0 0 0 2px rgba(56, 189, 248, 0.18),
+        0 4px 16px rgba(56, 189, 248, 0.08);
+}
+
+/* ================================================================
+   BUTTONS — TRANSPARENT GLASS
+   ================================================================ */
+
+.btn-sunset-primary {
+    background: rgba(255, 255, 255, 0.14);
+    color: #ffffff;
+    font-weight: 600;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.20),
+        0 4px 14px rgba(0, 0, 0, 0.10);
+
+    cursor: pointer;
+    transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-sunset-primary:hover {
+    background: rgba(255, 255, 255, 0.20);
+    border-color: rgba(255, 255, 255, 0.38);
+    transform: translateY(-1.5px);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.25),
+        0 8px 24px rgba(0, 0, 0, 0.14);
+}
+
+.btn-sunset-primary:active {
+    transform: translateY(0) scale(0.98);
+    background: rgba(255, 255, 255, 0.12);
+}
+
+
+/* ------------------------------------------------
+   Accent — Transparent Aqua Glass
+   ------------------------------------------------ */
+
+.btn-sunset-amber {
+    background: rgba(56, 189, 248, 0.12);
+    color: #ffffff;
+    font-weight: 600;
+    border-radius: 12px;
+    border: 1px solid rgba(125, 211, 252, 0.28);
+
+    backdrop-filter: blur(16px) saturate(150%);
+    -webkit-backdrop-filter: blur(16px) saturate(150%);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.12),
+        0 4px 16px rgba(0, 0, 0, 0.08);
+
+    cursor: pointer;
+    transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-sunset-amber:hover {
+    background: rgba(56, 189, 248, 0.18);
+    border-color: rgba(125, 211, 252, 0.40);
+    transform: translateY(-1.5px);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.18),
+        0 8px 24px rgba(14, 165, 233, 0.14);
+}
+
+.btn-sunset-amber:active {
+    transform: translateY(0) scale(0.98);
+    background: rgba(56, 189, 248, 0.10);
+}
+
+
+/* ------------------------------------------------
+   Secondary — Transparent Dark Glass
+   ------------------------------------------------ */
+
+.btn-sunset-secondary,
+.btn-aqua-glass {
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.92);
+    font-weight: 500;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+
+    backdrop-filter: blur(16px) saturate(130%);
+    -webkit-backdrop-filter: blur(16px) saturate(130%);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.08),
+        0 2px 8px rgba(0, 0, 0, 0.08);
+
+    cursor: pointer;
+    transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-sunset-secondary:hover,
+.btn-aqua-glass:hover {
+    background: rgba(255, 255, 255, 0.10);
+    border-color: rgba(255, 255, 255, 0.28);
+    transform: translateY(-1.5px);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.12),
+        0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.btn-sunset-secondary:active,
+.btn-aqua-glass:active {
+    transform: translateY(0) scale(0.98);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+
+/* ------------------------------------------------
+   Ghost — Pure Transparent
+   ------------------------------------------------ */
+
+.btn-sunset-ghost {
     background: transparent;
+    color: rgba(255, 255, 255, 0.90);
+    border-radius: 12px;
+    border: 1px solid transparent;
+
+    cursor: pointer;
+    transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #e5dfd3;
-    border-radius: 0px;
+.btn-sunset-ghost:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.14);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    transform: translateY(-1px);
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #57534e;
+.btn-sunset-ghost:active {
+    transform: translateY(0) scale(0.96);
 }

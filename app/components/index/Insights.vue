@@ -1,46 +1,44 @@
 <template>
-    <div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <section
-            class="relative flex min-w-0 flex-col overflow-visible rounded-lg border-2 border-[#0d0d0d] bg-white shadow-[3px_3px_0px_#0d0d0d] transition-all duration-150 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#0d0d0d]">
-            <div class="border-b-2 border-[#0d0d0d] px-4 py-3.5 sm:px-5 sm:py-4">
-                <div class="min-w-0">
+    <div class="grid grid-cols-1 gap-5 lg:grid-cols-3">
+        <!-- Card 1: Aktivitas Teratas -->
+        <section class="surface-card rounded-2xl border border-white/14 flex min-w-0 flex-col overflow-visible shadow-lg">
+            <div class="px-5 py-3.5 bg-white/[0.03] border-b border-white/[0.08]">
+                <div class="flex items-center justify-between gap-2">
                     <div class="flex items-center gap-2">
-                        <h3 class="text-sm font-bold uppercase tracking-[-0.015em] text-[#0d0d0d] leading-snug break-words">
-                            "Aktivitas Teratas"
+                        <h3 class="text-sm font-bold text-white leading-snug">
+                            Aktivitas Teratas
                         </h3>
-                        <div tabindex="0"
-                            class="group static sm:relative flex shrink-0 cursor-help items-center outline-none">
+                        <div tabindex="0" class="group static sm:relative flex shrink-0 cursor-help items-center outline-none">
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-                                stroke-linejoin="round"
-                                class="text-[#57534e] transition-colors group-hover:text-[#0d0d0d] group-focus:text-[#0d0d0d]">
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="text-white transition-colors group-hover:text-sky-300">
                                 <circle cx="12" cy="12" r="10" />
                                 <path d="M12 16v-4" />
                                 <path d="M12 8h.01" />
                             </svg>
-                                <div
-                                    class="invisible absolute left-4 right-4 top-9 z-50 mx-auto mt-2 w-auto max-w-[320px] rounded-[4px] border-2 border-[#0d0d0d] bg-[#0d0d0d] px-3.5 py-3 text-left font-mono text-xs font-medium leading-5 text-white opacity-0 shadow-[4px_4px_0px_#ff4800] transition-all duration-150 group-hover:visible group-hover:opacity-100 group-focus:visible group-focus:opacity-100 group-active:visible group-active:opacity-100 sm:left-1/2 sm:top-full sm:mx-0 sm:w-64 sm:-translate-x-1/2 sm:right-auto sm:max-w-none">
-                                    [SUMBER SESI]: Sesi pencatatan manual dihitung per rentang 1 jam, sedangkan sesi fitur Tracking dihitung per tiap sesi waktu membaca saat timer dihentikan.
-                                </div>
+                            <div class="invisible absolute left-4 right-4 top-9 z-50 mx-auto mt-2 w-auto max-w-[320px] liquid-glass-tooltip p-3.5 text-left text-xs font-normal text-white opacity-0 shadow-2xl transition-all duration-150 group-hover:visible group-hover:opacity-100 group-focus:visible group-focus:opacity-100 sm:left-1/2 sm:top-full sm:mx-0 sm:w-64 sm:-translate-x-1/2 sm:right-auto sm:max-w-none">
+                                Sesi pencatatan manual dihitung per rentang 1 jam, sedangkan sesi fitur Tracking dihitung per tiap sesi waktu membaca saat timer dihentikan.
+                            </div>
                         </div>
                     </div>
-                    <p class="mt-1 font-mono text-xs font-bold text-[#57534e] uppercase break-words">
-                        [7 HARI TERAKHIR]
-                    </p>
+                    <span class="text-[11px] font-semibold uppercase tracking-wider text-white">
+                        7 Hari Terakhir
+                    </span>
                 </div>
             </div>
-            <div class="custom-scrollbar max-h-80 flex-1 overflow-y-auto px-4 sm:px-5 divide-y divide-[#e5dfd3]">
+
+            <div class="custom-scrollbar max-h-80 flex-1 overflow-y-auto px-5 py-1">
                 <div v-if="mostReadBooksInsight.length === 0"
-                    class="flex min-h-40 items-center justify-center py-6 text-center font-mono text-xs sm:text-sm font-bold uppercase text-[#57534e]">
-                    [BELUM ADA AKTIVITAS MEMBACA]
+                    class="flex min-h-40 items-center justify-center py-6 text-center text-xs font-medium text-white">
+                    Belum ada aktivitas membaca
                 </div>
                 <div v-for="(insight, idx) in mostReadBooksInsight" :key="'act-' + idx"
-                    class="flex gap-3 sm:gap-3.5 py-3.5 sm:py-4">
+                    class="group flex gap-3.5 py-3 px-2 -mx-2 rounded-xl transition-colors duration-150 hover:bg-white/[0.05]">
                     <div
-                        class="h-[68px] w-[46px] sm:h-[72px] sm:w-[50px] shrink-0 overflow-hidden rounded-[3px] border border-[#0d0d0d] bg-[#f3ede2] shadow-[1px_1px_0px_#0d0d0d]">
+                        class="h-[70px] w-[48px] shrink-0 overflow-hidden rounded-xl bg-white/10 shadow-sm border border-white/[0.08]">
                         <img v-if="insight.book.imageUrl" :src="insight.book.imageUrl"
                             class="h-full w-full object-cover" loading="lazy" />
-                        <div v-else class="flex h-full w-full items-center justify-center bg-[#f3ede2] text-[#57534e]">
+                        <div v-else class="flex h-full w-full items-center justify-center text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 0-2.5-2.5A2.5 2.5 0 0 1 6.5 17H20" />
@@ -48,17 +46,17 @@
                         </div>
                     </div>
                     <div class="min-w-0 flex-1">
-                        <h4 class="line-clamp-2 text-xs sm:text-sm font-bold font-mono leading-snug text-[#0d0d0d] break-words">
+                        <h4 class="line-clamp-2 text-xs sm:text-sm font-bold text-white leading-snug">
                             {{ insight.book.title }}
                         </h4>
-                        <div class="mt-1.5 sm:mt-2 space-y-1 font-mono text-xs text-[#44403c]">
-                            <div class="flex min-w-0 items-center gap-1.5">
-                                <span class="h-2 w-2 shrink-0 rounded-full border border-[#0d0d0d] bg-[#ff4800]"></span>
-                                <span class="break-words"><strong class="font-bold tabular-nums text-[#0d0d0d]">{{ insight.sessions }}</strong> SESI BACA</span>
+                        <div class="mt-2 space-y-1 text-xs text-white">
+                            <div class="flex items-center gap-1.5">
+                                <span class="h-1.5 w-1.5 shrink-0 rounded-full bg-amber-400"></span>
+                                <span><strong class="font-extrabold tabular-nums text-white">{{ insight.sessions }}</strong> sesi baca</span>
                             </div>
-                            <div class="flex min-w-0 items-center gap-1.5">
-                                <span class="h-2 w-2 shrink-0 rounded-full border border-[#0d0d0d] bg-[#0d0d0d]"></span>
-                                <span class="break-words"><strong class="font-bold tabular-nums text-[#0d0d0d]">{{ insight.pagesAdded }}</strong> HAL DIBACA</span>
+                            <div class="flex items-center gap-1.5">
+                                <span class="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400"></span>
+                                <span><strong class="font-extrabold tabular-nums text-white">{{ insight.pagesAdded }}</strong> hal dibaca</span>
                             </div>
                         </div>
                     </div>
@@ -66,25 +64,27 @@
             </div>
         </section>
 
-        <section
-            class="flex min-w-0 flex-col overflow-hidden rounded-lg border-2 border-[#0d0d0d] bg-white shadow-[3px_3px_0px_#0d0d0d] transition-all duration-150 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#0d0d0d]">
-            <div class="flex items-center justify-between gap-2.5 sm:gap-3 border-b-2 border-[#0d0d0d] px-4 py-3.5 sm:px-5 sm:py-4">
-                <h3 class="text-sm font-bold uppercase tracking-[-0.015em] text-[#0d0d0d] leading-snug break-words"> "Sedang Dibaca" </h3>
-                <span
-                    class="shrink-0 rounded-[4px] border border-[#0d0d0d] bg-[#f3ede2] px-2 py-0.5 sm:px-2.5 font-mono text-xs font-bold uppercase tracking-wider text-[#0047ff] shadow-[1px_1px_0px_#0d0d0d]">
-                    TOP 3 </span>
+        <!-- Card 2: Sedang Dibaca -->
+        <section class="surface-card rounded-2xl border border-white/14 flex min-w-0 flex-col overflow-hidden shadow-lg">
+            <div class="flex items-center justify-between gap-2.5 px-5 py-3.5 bg-white/[0.03] border-b border-white/[0.08]">
+                <h3 class="text-sm font-bold text-white leading-snug">
+                    Sedang Dibaca
+                </h3>
+                <span class="rounded-full bg-amber-500/20 border border-amber-400/30 px-2.5 py-0.5 text-xs font-bold text-amber-300">
+                    Top 3
+                </span>
             </div>
-            <div class="custom-scrollbar max-h-80 flex-1 overflow-y-auto px-4 sm:px-5 divide-y divide-[#e5dfd3]">
+            <div class="custom-scrollbar max-h-80 flex-1 overflow-y-auto px-5 py-1">
                 <div v-if="currentlyReadingList.length === 0"
-                    class="flex min-h-40 items-center justify-center py-6 text-center font-mono text-xs sm:text-sm font-bold uppercase text-[#57534e]">
-                    [TIDAK ADA BUKU YANG SEDANG DIBACA]
+                    class="flex min-h-40 items-center justify-center py-6 text-center text-xs font-medium text-white">
+                    Tidak ada buku yang sedang dibaca
                 </div>
                 <div v-for="book in currentlyReadingList" :key="book.id"
-                    class="flex gap-3 sm:gap-3.5 py-3.5 sm:py-4">
-                    <div class="h-16 w-12 shrink-0 overflow-hidden rounded-[3px] border border-[#0d0d0d] bg-[#f3ede2] shadow-[1px_1px_0px_#0d0d0d]">
+                    class="group flex gap-3.5 py-3 px-2 -mx-2 rounded-xl transition-colors duration-150 hover:bg-white/[0.05]">
+                    <div class="h-[70px] w-[48px] shrink-0 overflow-hidden rounded-xl bg-white/10 shadow-sm border border-white/[0.08]">
                         <img v-if="book.imageUrl" :src="book.imageUrl" class="h-full w-full object-cover"
                             loading="lazy" />
-                        <div v-else class="flex h-full w-full items-center justify-center bg-[#f3ede2] text-[#57534e]">
+                        <div v-else class="flex h-full w-full items-center justify-center text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 0-2.5-2.5A2.5 2.5 0 0 1 6.5 17H20" />
@@ -92,18 +92,20 @@
                         </div>
                     </div>
                     <div class="min-w-0 flex-1">
-                        <h4 class="line-clamp-2 text-xs sm:text-sm font-bold text-[#0d0d0d] font-mono leading-snug break-words"> {{ book.title }} </h4>
-                        <div class="mt-2 flex flex-wrap items-center justify-between gap-1.5 font-mono text-xs sm:text-sm">
-                            <span class="font-bold text-[#44403c] min-w-0">
-                                <span class="tabular-nums font-bold text-[#0d0d0d]">{{ book.pagesRead }}</span> / <span class="tabular-nums text-[#0d0d0d]">{{ book.totalPages }}</span> HAL
+                        <h4 class="line-clamp-2 text-xs sm:text-sm font-bold text-white leading-snug">
+                            {{ book.title }}
+                        </h4>
+                        <div class="mt-2 flex flex-wrap items-center justify-between gap-1.5 text-xs">
+                            <span class="text-white">
+                                <strong class="tabular-nums font-bold text-white">{{ book.pagesRead }}</strong> / <span class="tabular-nums">{{ book.totalPages }}</span> hal
                             </span>
-                            <span class="shrink-0 font-bold tabular-nums text-[#0d0d0d]">
-                                [{{ Math.round((book.pagesRead / book.totalPages) * 100) }}%]
+                            <span class="font-extrabold tabular-nums text-amber-300">
+                                {{ Math.round((book.pagesRead / book.totalPages) * 100) }}%
                             </span>
                         </div>
-                        <div class="mt-2 h-2.5 w-full border border-[#0d0d0d] bg-[#f3ede2] rounded-[2px] p-[1px]">
-                            <div class="h-full transition-all duration-300"
-                                :class="Math.round((book.pagesRead / book.totalPages) * 100) >= 100 ? 'bg-[#00875a]' : 'bg-[#0d0d0d]'"
+                        <div class="mt-2 h-1.5 w-full rounded-full bg-black/40 overflow-hidden border border-white/[0.08]">
+                            <div class="h-full rounded-full transition-all duration-300"
+                                :class="Math.round((book.pagesRead / book.totalPages) * 100) >= 100 ? 'bg-emerald-400' : 'bg-gradient-to-r from-amber-500 to-orange-400'"
                                 :style="{ width: `${Math.min((book.pagesRead / book.totalPages) * 100, 100)}%` }">
                             </div>
                         </div>
@@ -112,42 +114,56 @@
             </div>
         </section>
 
-        <section
-            class="relative flex min-w-0 flex-col overflow-visible rounded-lg border-2 border-[#0d0d0d] bg-white shadow-[3px_3px_0px_#0d0d0d] transition-all duration-150 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#0d0d0d]">
-            <div class="border-b-2 border-[#0d0d0d] px-4 py-3.5 sm:px-5 sm:py-4">
-                <div class="flex min-w-0 items-center gap-2">
-                    <h3 class="text-sm font-bold uppercase tracking-[-0.015em] text-[#0d0d0d] leading-snug break-words"> "Topik Dominan" </h3>
-                    <div tabindex="0"
-                        class="group static sm:relative flex shrink-0 cursor-help items-center outline-none">
+        <!-- Card 3: Topik Dominan -->
+        <section class="surface-card rounded-2xl border border-white/14 flex min-w-0 flex-col overflow-visible shadow-lg">
+            <div class="px-5 py-3.5 bg-white/[0.03] border-b border-white/[0.08]">
+                <div class="flex items-center gap-2">
+                    <h3 class="text-sm font-bold text-white leading-snug">
+                        Topik Dominan
+                    </h3>
+                    <div tabindex="0" class="group static sm:relative flex shrink-0 cursor-help items-center outline-none">
                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-                            stroke-linejoin="round"
-                            class="text-[#57534e] transition-colors group-hover:text-[#0d0d0d] group-focus:text-[#0d0d0d]">
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" class="text-white transition-colors group-hover:text-sky-300">
                             <circle cx="12" cy="12" r="10" />
                             <path d="M12 16v-4" />
                             <path d="M12 8h.01" />
                         </svg>
-                        <div
-                            class="invisible absolute left-4 right-4 top-9 z-50 mx-auto mt-2 w-auto max-w-[320px] rounded-[4px] border-2 border-[#0d0d0d] bg-[#0d0d0d] px-3.5 py-3 text-left font-mono text-xs font-medium leading-5 text-white opacity-0 shadow-[4px_4px_0px_#0047ff] transition-all duration-150 group-hover:visible group-hover:opacity-100 group-focus:visible group-focus:opacity-100 group-active:visible group-active:opacity-100 sm:left-1/2 sm:top-full sm:mx-0 sm:w-64 sm:-translate-x-1/2 sm:right-auto sm:max-w-none">
-                            [SKOR ARSIP]: 100 poin tiap buku selesai + persentase progres buku aktif.
+                        <div class="invisible absolute left-4 right-4 top-9 z-50 mx-auto mt-2 w-auto max-w-[320px] liquid-glass-tooltip p-3.5 text-left text-xs font-normal text-white opacity-0 shadow-2xl transition-all duration-150 group-hover:visible group-hover:opacity-100 group-focus:visible group-focus:opacity-100 sm:left-1/2 sm:top-full sm:mx-0 sm:w-64 sm:-translate-x-1/2 sm:right-auto sm:max-w-none">
+                            100 poin tiap buku selesai + persentase progres buku aktif.
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="p-4 sm:p-5 overflow-y-auto max-h-80 space-y-3.5 sm:space-y-4 custom-scrollbar">
-                <div v-if="topicScores.length === 0" class="text-center font-mono text-xs sm:text-sm font-bold uppercase text-[#57534e] py-4">
-                    [BELUM ADA TOPIK BUKU]
+            <div class="p-5 pt-3 overflow-y-auto max-h-80 space-y-3 custom-scrollbar">
+                <div v-if="topicScores.length === 0" class="text-center text-xs font-medium text-white py-6">
+                    Belum ada topik buku
                 </div>
-                <div v-for="cat in topicScores" :key="cat.name" class="space-y-1.5">
-                    <div class="flex items-center justify-between gap-2 sm:gap-3">
-                        <span class="min-w-0 text-xs sm:text-sm font-bold text-[#0d0d0d] font-mono break-words line-clamp-1"> {{ cat.name }}
+                <div v-for="(cat, idx) in topicScores" :key="cat.name" class="group space-y-1.5 p-2 -mx-2 rounded-xl transition-colors duration-150 hover:bg-white/[0.05]">
+                    <div class="flex items-center justify-between gap-3 text-xs sm:text-sm">
+                        <span class="font-bold text-white line-clamp-1">
+                            {{ cat.name }}
                         </span>
-                        <span class="shrink-0 font-mono text-xs sm:text-sm font-bold tabular-nums text-[#0d0d0d]">
-                            {{ cat.score }} <span class="font-bold text-[#57534e]">PTS</span>
+                        <span class="font-bold tabular-nums"
+                            :class="[
+                                'text-cyan-300',
+                                'text-emerald-300',
+                                'text-amber-300',
+                                'text-pink-300',
+                                'text-sky-300'
+                            ][idx % 5]">
+                            {{ cat.score }} <span class="text-xs font-normal text-white">pts</span>
                         </span>
                     </div>
-                    <div class="h-2.5 w-full border border-[#0d0d0d] bg-[#f3ede2] rounded-[2px] p-[1px]">
-                        <div class="h-full bg-[#0d0d0d] transition-all duration-500"
+                    <div class="h-1.5 w-full rounded-full bg-black/40 overflow-hidden border border-white/[0.08]">
+                        <div class="h-full rounded-full transition-all duration-500"
+                            :class="[
+                                'bg-gradient-to-r from-cyan-500 to-sky-400',
+                                'bg-gradient-to-r from-emerald-500 to-teal-400',
+                                'bg-gradient-to-r from-amber-500 to-orange-400',
+                                'bg-gradient-to-r from-pink-500 to-rose-400',
+                                'bg-gradient-to-r from-sky-500 to-blue-500'
+                            ][idx % 5]"
                             :style="{ width: `${(cat.score / maxTopicScore) * 100}%` }"></div>
                     </div>
                 </div>
@@ -171,23 +187,3 @@ defineProps<{
     maxTopicScore: number
 }>()
 </script>
-
-<style scoped>
-.custom-scrollbar::-webkit-scrollbar {
-    width: 4px;
-    height: 4px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #e5dfd3;
-    border-radius: 0px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #57534e;
-}
-</style>

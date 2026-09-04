@@ -1,53 +1,50 @@
 <template>
-    <section class="space-y-3 sm:space-y-4">
-        <div class="flex items-end justify-between gap-4">
-            <div class="min-w-0">
-                <h2 class="text-lg sm:text-xl font-bold tracking-[-0.02em] text-[#0d0d0d] leading-snug uppercase break-words">
-                    ANALITIK DETAIL
-                </h2>
-                <p class="mt-1 text-xs sm:text-sm leading-relaxed text-[#44403c]">
-                    Grafik tren aktivitas dan pengeluaran berdasarkan periode yang dipilih.
-                </p>
-            </div>
+    <section class="space-y-4">
+        <div>
+            <h2 class="text-lg sm:text-xl font-bold tracking-tight text-white leading-snug">
+                Analitik Detail
+            </h2>
+            <p class="mt-0.5 text-xs sm:text-sm leading-relaxed text-white">
+                Grafik tren aktivitas dan pengeluaran berdasarkan periode yang dipilih.
+            </p>
         </div>
 
         <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-            <div
-                class="group flex min-w-0 flex-col overflow-visible rounded-lg border-2 border-[#0d0d0d] bg-white p-4 sm:p-5 shadow-[3px_3px_0px_#0d0d0d] transition-all duration-150 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#0d0d0d]">
-                <div class="flex flex-wrap items-center justify-between gap-2 sm:gap-3">
-                    <span class="font-mono text-xs font-bold uppercase tracking-wider text-[#44403c] break-words">[BUKU SELESAI DIBACA]</span>
+            <!-- Chart 1: Buku Selesai Dibaca (Emerald) -->
+            <div class="surface-card rounded-2xl border border-white/14 p-4 sm:p-5 flex flex-col justify-between shadow-lg">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">
+                        Buku Selesai Dibaca
+                    </span>
 
                     <select v-model="filterCompleted"
-                        class="shrink-0 cursor-pointer rounded-[4px] border border-[#0d0d0d] bg-[#f3ede2] px-2 py-1 sm:px-2.5 sm:py-1.5 font-mono text-xs font-bold uppercase text-[#0d0d0d] shadow-[1px_1px_0px_#0d0d0d] outline-none transition-colors hover:bg-white focus:ring-2 focus:ring-[#0d0d0d]/15">
-                        <option value="1M">1 Bulan Terakhir</option>
-                        <option value="6M">6 Bulan Terakhir</option>
-                        <option value="1Y">Tahun Ini</option>
-                        <option value="ALL">Total Keseluruhan</option>
+                        class="glass-input cursor-pointer px-2.5 py-1 text-xs font-semibold text-white outline-none hover:border-emerald-400/40 transition-colors">
+                        <option class="bg-[#245466] text-white" value="1M">1 Bulan Terakhir</option>
+                        <option class="bg-[#245466] text-white" value="6M">6 Bulan Terakhir</option>
+                        <option class="bg-[#245466] text-white" value="1Y">Tahun Ini</option>
+                        <option class="bg-[#245466] text-white" value="ALL">Total Keseluruhan</option>
                     </select>
                 </div>
 
-                <div class="mt-2.5 flex items-baseline gap-2 flex-wrap">
-                    <span
-                        class="text-xl sm:text-2xl lg:text-[28px] font-bold tracking-tight text-[#00875a] tabular-nums break-words">
+                <div class="mt-3 flex items-baseline gap-2">
+                    <span class="text-2xl sm:text-3xl font-extrabold tracking-tight text-emerald-400 tabular-nums">
                         {{ completedData.total }}
                     </span>
-                    <span class="shrink-0 font-mono text-xs sm:text-sm font-bold uppercase text-[#57534e]">BUKU</span>
+                    <span class="text-xs font-semibold text-white">buku</span>
                 </div>
 
                 <div class="mt-6 min-w-0">
                     <div class="relative h-[150px] sm:h-[165px] w-full">
-                        <div
-                            class="pointer-events-none absolute inset-x-0 bottom-6 top-0 flex flex-col justify-between">
-                            <div class="border-t border-dashed border-[#e5dfd3]"></div>
-                            <div class="border-t border-dashed border-[#e5dfd3]"></div>
-                            <div class="border-t border-dashed border-[#e5dfd3]"></div>
-                            <div class="border-t border-[#0d0d0d]"></div>
+                        <div class="pointer-events-none absolute inset-x-0 bottom-6 top-0 flex flex-col justify-between">
+                            <div class="h-px w-full bg-white/10"></div>
+                            <div class="h-px w-full bg-white/10"></div>
+                            <div class="h-px w-full bg-white/15"></div>
                         </div>
 
                         <svg class="pointer-events-none absolute inset-x-0 top-0 h-[calc(100%-24px)] w-full overflow-visible"
                             preserveAspectRatio="none" viewBox="0 0 100 100">
-                            <path :d="generatePath(processedCompletedChart)" fill="none" stroke="#00875a"
-                                stroke-width="2.5" vector-effect="non-scaling-stroke" stroke-linecap="round"
+                            <path :d="generatePath(processedCompletedChart)" fill="none" stroke="#10B981"
+                                stroke-width="2" vector-effect="non-scaling-stroke" stroke-linecap="round"
                                 stroke-linejoin="round" />
                         </svg>
 
@@ -58,23 +55,25 @@
                             <div v-for="(point, index) in processedCompletedChart" :key="'comp-' + index"
                                 class="chart-col relative flex h-full min-w-0 flex-1 items-end outline-none cursor-pointer"
                                 :data-index="index" @mouseenter="activeTooltip.comp = index">
-                                <div class="pointer-events-none absolute left-1/2 bottom-full z-30 -translate-x-1/2 pb-2 transition-all duration-200 ease-out"
-                                    :class="activeTooltip.comp === index ? 'opacity-100 -translate-y-1' : 'opacity-0 translate-y-1'">
-                                    <div
-                                        class="whitespace-nowrap rounded-[4px] border border-[#0d0d0d] bg-[#0d0d0d] px-2.5 py-1.5 font-mono text-xs font-bold text-white shadow-[2px_2px_0px_#ff4800]">
-                                        {{ point.label }} · {{ point.value }} BUKU
+                                <div class="pointer-events-none absolute bottom-full z-30 pb-2 transition-all duration-150 ease-out"
+                                    :class="[
+                                        activeTooltip.comp === index ? 'opacity-100 -translate-y-1' : 'opacity-0 translate-y-1',
+                                        getTooltipPositionClass(index, processedCompletedChart.length)
+                                    ]">
+                                    <div class="liquid-glass-tooltip whitespace-nowrap px-3 py-1.5 text-xs font-semibold tabular-nums text-white shadow-xl max-w-[calc(100vw-2.5rem)]">
+                                        {{ point.label }} · {{ point.value }} buku
                                     </div>
                                 </div>
 
-                                <div class="absolute inset-0 rounded-t-md bg-[#00875a]/5 transition-opacity duration-200 ease-out"
+                                <div class="absolute inset-0 rounded-t-md bg-emerald-400/10 transition-opacity duration-150 ease-out"
                                     :class="activeTooltip.comp === index ? 'opacity-100' : 'opacity-0'"></div>
 
-                                <div class="absolute left-1/2 z-20 h-1.5 w-1.5 -translate-x-1/2 rounded-full border border-[#0d0d0d] bg-[#00875a] transition-transform duration-200 ease-out"
-                                    :class="activeTooltip.comp === index ? 'scale-150' : 'scale-100'"
-                                    :style="{ bottom: `calc(${point.percent}% - 3px)` }"></div>
+                                <div class="absolute left-1/2 z-20 h-2 w-2 -translate-x-1/2 rounded-full bg-emerald-400"
+                                    :class="activeTooltip.comp === index ? 'scale-125 shadow-md shadow-emerald-400/50' : 'scale-100'"
+                                    :style="{ bottom: `calc(${point.percent}% - 4px)` }"></div>
 
                                 <span v-if="processedCompletedChart.length <= 15"
-                                    class="absolute -bottom-6 left-0 w-full truncate px-0.5 text-center font-mono text-xs font-bold uppercase text-[#44403c]">
+                                    class="absolute -bottom-6 left-0 w-full truncate px-0.5 text-center text-[10px] text-white font-semibold tabular-nums">
                                     {{ point.label }}
                                 </span>
                             </div>
@@ -83,40 +82,39 @@
                 </div>
             </div>
 
-            <div
-                class="group flex min-w-0 flex-col overflow-visible rounded-lg border-2 border-[#0d0d0d] bg-white p-4 sm:p-5 shadow-[3px_3px_0px_#0d0d0d] transition-all duration-150 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#0d0d0d]">
-                <div class="flex flex-wrap items-center justify-between gap-2 sm:gap-3">
-                    <span class="font-mono text-xs font-bold uppercase tracking-wider text-[#44403c] break-words">[TOTAL HALAMAN DIBACA]</span>
+            <!-- Chart 2: Total Halaman Dibaca (Royal Blue) -->
+            <div class="surface-card rounded-2xl border border-white/14 p-4 sm:p-5 flex flex-col justify-between shadow-lg">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <span class="text-xs font-bold uppercase tracking-wider text-sky-400">
+                        Total Halaman Dibaca
+                    </span>
 
                     <select v-model="filterPages"
-                        class="shrink-0 cursor-pointer rounded-[4px] border border-[#0d0d0d] bg-[#f3ede2] px-2 py-1 sm:px-2.5 sm:py-1.5 font-mono text-xs font-bold uppercase text-[#0d0d0d] shadow-[1px_1px_0px_#0d0d0d] outline-none transition-colors hover:bg-white focus:ring-2 focus:ring-[#0d0d0d]/15">
-                        <option value="1D">Hari Ini</option>
-                        <option value="1W">7 Hari Terakhir</option>
+                        class="glass-input cursor-pointer px-2.5 py-1 text-xs font-semibold text-white outline-none hover:border-sky-400/40 transition-colors">
+                        <option class="bg-[#245466] text-white" value="1D">Hari Ini</option>
+                        <option class="bg-[#245466] text-white" value="1W">7 Hari Terakhir</option>
                     </select>
                 </div>
 
-                <div class="mt-2.5 flex items-baseline gap-2 flex-wrap">
-                    <span
-                        class="text-xl sm:text-2xl lg:text-[28px] font-bold tracking-tight text-[#0d0d0d] tabular-nums break-words">
+                <div class="mt-3 flex items-baseline gap-2">
+                    <span class="text-2xl sm:text-3xl font-extrabold tracking-tight text-sky-400 tabular-nums">
                         {{ formatNumber(pagesData.total) }}
                     </span>
-                    <span
-                        class="shrink-0 font-mono text-xs sm:text-sm font-bold uppercase text-[#57534e]">HALAMAN</span>
+                    <span class="text-xs font-semibold text-white">halaman</span>
                 </div>
 
                 <div class="mt-6 min-w-0">
                     <div class="relative h-[150px] sm:h-[165px] w-full">
-                        <div
-                            class="pointer-events-none absolute inset-x-0 bottom-6 top-0 flex flex-col justify-between">
-                            <div class="border-t border-dashed border-[#e5dfd3]"></div>
-                            <div class="border-t border-dashed border-[#e5dfd3]"></div>
-                            <div class="border-t border-dashed border-[#e5dfd3]"></div>
-                            <div class="border-t border-[#0d0d0d]"></div>
+                        <div class="pointer-events-none absolute inset-x-0 bottom-6 top-0 flex flex-col justify-between">
+                            <div class="h-px w-full bg-white/10"></div>
+                            <div class="h-px w-full bg-white/10"></div>
+                            <div class="h-px w-full bg-white/10"></div>
+                            <div class="h-px w-full bg-white/15"></div>
                         </div>
 
                         <svg class="pointer-events-none absolute inset-x-0 top-0 h-[calc(100%-24px)] w-full overflow-visible"
                             preserveAspectRatio="none" viewBox="0 0 100 100">
-                            <path :d="generatePath(processedPagesChart)" fill="none" stroke="#0d0d0d" stroke-width="2.5"
+                            <path :d="generatePath(processedPagesChart)" fill="none" stroke="#38BDF8" stroke-width="2"
                                 vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
 
@@ -127,23 +125,25 @@
                             <div v-for="(point, index) in processedPagesChart" :key="'page-' + index"
                                 class="chart-col relative flex h-full min-w-0 flex-1 items-end outline-none cursor-pointer"
                                 :data-index="index" @mouseenter="activeTooltip.page = index">
-                                <div class="pointer-events-none absolute left-1/2 bottom-full z-30 -translate-x-1/2 pb-2 transition-all duration-200 ease-out"
-                                    :class="activeTooltip.page === index ? 'opacity-100 -translate-y-1' : 'opacity-0 translate-y-1'">
-                                    <div
-                                        class="whitespace-nowrap rounded-[4px] border border-[#0d0d0d] bg-[#0d0d0d] px-2.5 py-1.5 font-mono text-xs font-bold text-white shadow-[2px_2px_0px_#ff4800]">
-                                        {{ point.label }} · {{ formatNumber(point.value) }} HAL
+                                <div class="pointer-events-none absolute bottom-full z-30 pb-2 transition-all duration-150 ease-out"
+                                    :class="[
+                                        activeTooltip.page === index ? 'opacity-100 -translate-y-1' : 'opacity-0 translate-y-1',
+                                        getTooltipPositionClass(index, processedPagesChart.length)
+                                    ]">
+                                    <div class="liquid-glass-tooltip whitespace-nowrap px-3 py-1.5 text-xs font-semibold tabular-nums text-white shadow-xl max-w-[calc(100vw-2.5rem)]">
+                                        {{ point.label }} · {{ formatNumber(point.value) }} hal
                                     </div>
                                 </div>
 
-                                <div class="absolute inset-0 rounded-t-md bg-[#0d0d0d]/5 transition-opacity duration-200 ease-out"
+                                <div class="absolute inset-0 rounded-t-md bg-sky-500/10 transition-opacity duration-150 ease-out"
                                     :class="activeTooltip.page === index ? 'opacity-100' : 'opacity-0'"></div>
 
-                                <div class="absolute left-1/2 z-20 h-1.5 w-1.5 -translate-x-1/2 rounded-full border border-[#0d0d0d] bg-[#0d0d0d] transition-transform duration-200 ease-out"
-                                    :class="activeTooltip.page === index ? 'scale-150' : 'scale-100'"
-                                    :style="{ bottom: `calc(${point.percent}% - 3px)` }"></div>
+                                <div class="absolute left-1/2 z-20 h-2 w-2 -translate-x-1/2 rounded-full bg-sky-400"
+                                    :class="activeTooltip.page === index ? 'scale-125 shadow-md shadow-sky-400/50' : 'scale-100'"
+                                    :style="{ bottom: `calc(${point.percent}% - 4px)` }"></div>
 
                                 <span v-if="processedPagesChart.length <= 15"
-                                    class="absolute -bottom-6 left-0 w-full truncate px-0.5 text-center font-mono text-xs font-bold uppercase text-[#44403c]">
+                                    class="absolute -bottom-6 left-0 w-full truncate px-0.5 text-center text-[10px] text-white font-semibold tabular-nums">
                                     {{ point.label }}
                                 </span>
                             </div>
@@ -152,45 +152,45 @@
                 </div>
             </div>
 
-            <div
-                class="group flex min-w-0 flex-col overflow-visible rounded-lg border-2 border-[#0d0d0d] bg-white p-4 sm:p-5 shadow-[3px_3px_0px_#0d0d0d] transition-all duration-150 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#0d0d0d] md:col-span-2 lg:col-span-1">
-                <div class="flex flex-wrap items-center justify-between gap-2 sm:gap-3">
-                    <span class="font-mono text-xs font-bold uppercase tracking-wider text-[#44403c] break-words">[UANG DIHABISKAN]</span>
+            <!-- Chart 3: Uang Dihabiskan (Warm Amber Gold) -->
+            <div class="surface-card rounded-2xl border border-white/14 p-4 sm:p-5 flex flex-col justify-between md:col-span-2 lg:col-span-1 shadow-lg">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <span class="text-xs font-bold uppercase tracking-wider text-amber-400">
+                        Uang Dihabiskan
+                    </span>
 
                     <select v-model="filterFinance"
-                        class="shrink-0 cursor-pointer rounded-[4px] border border-[#0d0d0d] bg-[#f3ede2] px-2 py-1 sm:px-2.5 sm:py-1.5 font-mono text-xs font-bold uppercase text-[#0d0d0d] shadow-[1px_1px_0px_#0d0d0d] outline-none transition-colors hover:bg-white focus:ring-2 focus:ring-[#0d0d0d]/15">
-                        <option value="1D">Hari Ini</option>
-                        <option value="1W">7 Hari Terakhir</option>
-                        <option value="2W">14 Hari Terakhir</option>
-                        <option value="1M">1 Bulan Terakhir</option>
-                        <option value="3M">3 Bulan Terakhir</option>
-                        <option value="6M">6 Bulan Terakhir</option>
-                        <option value="1Y">Tahun Ini</option>
-                        <option value="ALL">Total Keseluruhan</option>
+                        class="glass-input cursor-pointer px-2.5 py-1 text-xs font-semibold text-white outline-none hover:border-amber-400/40 transition-colors">
+                        <option class="bg-[#245466] text-white" value="1D">Hari Ini</option>
+                        <option class="bg-[#245466] text-white" value="1W">7 Hari Terakhir</option>
+                        <option class="bg-[#245466] text-white" value="2W">14 Hari Terakhir</option>
+                        <option class="bg-[#245466] text-white" value="1M">1 Bulan Terakhir</option>
+                        <option class="bg-[#245466] text-white" value="3M">3 Bulan Terakhir</option>
+                        <option class="bg-[#245466] text-white" value="6M">6 Bulan Terakhir</option>
+                        <option class="bg-[#245466] text-white" value="1Y">Tahun Ini</option>
+                        <option class="bg-[#245466] text-white" value="ALL">Total Keseluruhan</option>
                     </select>
                 </div>
 
-                <div class="mt-2.5 flex items-baseline gap-2 flex-wrap">
-                    <span
-                        class="text-xl sm:text-2xl lg:text-[28px] font-bold tracking-tight text-[#0047ff] tabular-nums break-words">
+                <div class="mt-3 flex items-baseline gap-2">
+                    <span class="text-2xl sm:text-3xl font-extrabold tracking-tight text-amber-400 tabular-nums">
                         {{ formatCurrency(financeData.total) }}
                     </span>
                 </div>
 
                 <div class="mt-6 min-w-0">
                     <div class="relative h-[150px] sm:h-[165px] w-full">
-                        <div
-                            class="pointer-events-none absolute inset-x-0 bottom-6 top-0 flex flex-col justify-between">
-                            <div class="border-t border-dashed border-[#e5dfd3]"></div>
-                            <div class="border-t border-dashed border-[#e5dfd3]"></div>
-                            <div class="border-t border-dashed border-[#e5dfd3]"></div>
-                            <div class="border-t border-[#0d0d0d]"></div>
+                        <div class="pointer-events-none absolute inset-x-0 bottom-6 top-0 flex flex-col justify-between">
+                            <div class="h-px w-full bg-white/10"></div>
+                            <div class="h-px w-full bg-white/10"></div>
+                            <div class="h-px w-full bg-white/10"></div>
+                            <div class="h-px w-full bg-white/15"></div>
                         </div>
 
                         <svg class="pointer-events-none absolute inset-x-0 top-0 h-[calc(100%-24px)] w-full overflow-visible"
                             preserveAspectRatio="none" viewBox="0 0 100 100">
-                            <path :d="generatePath(processedFinanceChart)" fill="none" stroke="#0047ff"
-                                stroke-width="2.5" vector-effect="non-scaling-stroke" stroke-linecap="round"
+                            <path :d="generatePath(processedFinanceChart)" fill="none" stroke="#F59E0B"
+                                stroke-width="2" vector-effect="non-scaling-stroke" stroke-linecap="round"
                                 stroke-linejoin="round" />
                         </svg>
 
@@ -201,23 +201,25 @@
                             <div v-for="(point, index) in processedFinanceChart" :key="'fin-' + index"
                                 class="chart-col relative flex h-full min-w-0 flex-1 items-end outline-none cursor-pointer"
                                 :data-index="index" @mouseenter="activeTooltip.fin = index">
-                                <div class="pointer-events-none absolute left-1/2 bottom-full z-30 -translate-x-1/2 pb-2 transition-all duration-200 ease-out"
-                                    :class="activeTooltip.fin === index ? 'opacity-100 -translate-y-1' : 'opacity-0 translate-y-1'">
-                                    <div
-                                        class="whitespace-nowrap rounded-[4px] border border-[#0d0d0d] bg-[#0d0d0d] px-2.5 py-1.5 font-mono text-xs font-bold text-white shadow-[2px_2px_0px_#ff4800]">
+                                <div class="pointer-events-none absolute bottom-full z-30 pb-2 transition-all duration-150 ease-out"
+                                    :class="[
+                                        activeTooltip.fin === index ? 'opacity-100 -translate-y-1' : 'opacity-0 translate-y-1',
+                                        getTooltipPositionClass(index, processedFinanceChart.length)
+                                    ]">
+                                    <div class="liquid-glass-tooltip whitespace-nowrap px-3 py-1.5 text-xs font-semibold tabular-nums text-white shadow-xl max-w-[calc(100vw-2.5rem)]">
                                         {{ point.label }} · {{ formatCurrency(point.value) }}
                                     </div>
                                 </div>
 
-                                <div class="absolute inset-0 rounded-t-md bg-[#0047ff]/5 transition-opacity duration-200 ease-out"
+                                <div class="absolute inset-0 rounded-t-md bg-amber-400/10 transition-opacity duration-150 ease-out"
                                     :class="activeTooltip.fin === index ? 'opacity-100' : 'opacity-0'"></div>
 
-                                <div class="absolute left-1/2 z-20 h-1.5 w-1.5 -translate-x-1/2 rounded-full border border-[#0d0d0d] bg-[#0047ff] transition-transform duration-200 ease-out"
-                                    :class="activeTooltip.fin === index ? 'scale-150' : 'scale-100'"
-                                    :style="{ bottom: `calc(${point.percent}% - 3px)` }"></div>
+                                <div class="absolute left-1/2 z-20 h-2 w-2 -translate-x-1/2 rounded-full bg-amber-400"
+                                    :class="activeTooltip.fin === index ? 'scale-125 shadow-md shadow-amber-400/50' : 'scale-100'"
+                                    :style="{ bottom: `calc(${point.percent}% - 4px)` }"></div>
 
                                 <span v-if="processedFinanceChart.length <= 15"
-                                    class="absolute -bottom-6 left-0 w-full truncate px-0.5 text-center font-mono text-xs font-bold uppercase text-[#44403c]">
+                                    class="absolute -bottom-6 left-0 w-full truncate px-0.5 text-center text-[10px] text-white font-semibold tabular-nums">
                                     {{ point.label }}
                                 </span>
                             </div>
@@ -452,5 +454,17 @@ const generatePath = (chart: ChartPoint[]) => {
             return `${i === 0 ? 'M' : 'L'} ${x} ${y}`
         })
         .join(' ')
+}
+
+const getTooltipPositionClass = (index: number, total: number) => {
+    if (total <= 1) return 'left-1/2 -translate-x-1/2 right-auto'
+    const ratio = index / (total - 1)
+    if (ratio <= 0.3) {
+        return 'left-0 right-auto'
+    }
+    if (ratio >= 0.7) {
+        return 'right-0 left-auto'
+    }
+    return 'left-1/2 -translate-x-1/2 right-auto'
 }
 </script>

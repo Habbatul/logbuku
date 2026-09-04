@@ -17,8 +17,8 @@
         <BooksEmptyState v-if="filteredBooks.length === 0" />
 
         <div v-else>
-            <div class="mb-4 flex items-center justify-between font-mono text-[11px] font-bold text-[#57534e]">
-                <span>[MENAMPILKAN {{ filteredBooks.length }} DARI {{ books.length }} ARSIP BUKU]</span>
+            <div class="mb-4 flex items-center justify-between text-xs font-semibold text-white">
+                <span>Menampilkan <strong class="text-sky-300 tabular-nums">{{ filteredBooks.length }}</strong> dari <strong class="text-sky-300 tabular-nums">{{ books.length }}</strong> arsip buku</span>
             </div>
 
             <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
