@@ -1,6 +1,5 @@
 <template>
     <div class="grid grid-cols-1 gap-5 lg:grid-cols-3">
-        <!-- Card 1: Aktivitas Teratas -->
         <section class="surface-card rounded-2xl border border-white/14 flex min-w-0 flex-col overflow-visible shadow-lg">
             <div class="px-5 py-3.5 bg-white/[0.03] border-b border-white/[0.08]">
                 <div class="flex items-center justify-between gap-2">
@@ -8,17 +7,43 @@
                         <h3 class="text-sm font-bold text-white leading-snug">
                             Aktivitas Teratas
                         </h3>
-                        <div tabindex="0" class="group static sm:relative flex shrink-0 cursor-help items-center outline-none">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" class="text-white transition-colors group-hover:text-sky-300">
-                                <circle cx="12" cy="12" r="10" />
-                                <path d="M12 16v-4" />
-                                <path d="M12 8h.01" />
-                            </svg>
-                            <div class="invisible absolute left-4 right-4 top-9 z-50 mx-auto mt-2 w-auto max-w-[320px] liquid-glass-tooltip p-3.5 text-left text-xs font-normal text-white opacity-0 shadow-2xl transition-all duration-150 group-hover:visible group-hover:opacity-100 group-focus:visible group-focus:opacity-100 sm:left-1/2 sm:top-full sm:mx-0 sm:w-64 sm:-translate-x-1/2 sm:right-auto sm:max-w-none">
-                                Sesi pencatatan manual dihitung per rentang 1 jam, sedangkan sesi fitur Tracking dihitung per tiap sesi waktu membaca saat timer dihentikan.
-                            </div>
+                        <div class="relative flex shrink-0 items-center">
+                            <button type="button" @click="activeInsightTooltip = activeInsightTooltip === 'activity' ? null : 'activity'"
+                                class="cursor-pointer text-white transition-colors hover:text-sky-300 focus:outline-none"
+                                aria-label="Info Aktivitas Teratas">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <path d="M12 16v-4" />
+                                    <path d="M12 8h.01" />
+                                </svg>
+                            </button>
+
+                            <Teleport to="body">
+                                <div v-if="activeInsightTooltip === 'activity'"
+                                    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40"
+                                    @click="activeInsightTooltip = null">
+                                    <div @click.stop class="liquid-glass-tooltip relative w-full max-w-sm p-5 text-white shadow-2xl">
+                                        <div class="flex items-center justify-between pb-2 mb-2.5 border-b border-white/15">
+                                            <span class="text-xs font-bold text-sky-300 uppercase tracking-wider flex items-center gap-1.5">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                    <circle cx="12" cy="12" r="10"/>
+                                                    <line x1="12" y1="16" x2="12" y2="12"/>
+                                                    <line x1="12" y1="8" x2="12.01" y2="8"/>
+                                                </svg>
+                                                Info Aktivitas Teratas
+                                            </span>
+                                            <button type="button" @click="activeInsightTooltip = null"
+                                                class="flex h-6 w-6 items-center justify-center rounded-lg bg-white/10 text-white hover:bg-white/20 hover:text-sky-300 transition-colors text-xs font-bold cursor-pointer"
+                                                aria-label="Tutup">✕</button>
+                                        </div>
+                                        <p class="text-xs text-white leading-relaxed">
+                                            Sesi pencatatan manual dihitung per rentang 1 jam, sedangkan sesi fitur Tracking dihitung per tiap sesi waktu membaca saat timer dihentikan.
+                                        </p>
+                                    </div>
+                                </div>
+                            </Teleport>
                         </div>
                     </div>
                     <span class="text-[11px] font-semibold uppercase tracking-wider text-white">
@@ -64,7 +89,6 @@
             </div>
         </section>
 
-        <!-- Card 2: Sedang Dibaca -->
         <section class="surface-card rounded-2xl border border-white/14 flex min-w-0 flex-col overflow-hidden shadow-lg">
             <div class="flex items-center justify-between gap-2.5 px-5 py-3.5 bg-white/[0.03] border-b border-white/[0.08]">
                 <h3 class="text-sm font-bold text-white leading-snug">
@@ -114,24 +138,49 @@
             </div>
         </section>
 
-        <!-- Card 3: Topik Dominan -->
         <section class="surface-card rounded-2xl border border-white/14 flex min-w-0 flex-col overflow-visible shadow-lg">
             <div class="px-5 py-3.5 bg-white/[0.03] border-b border-white/[0.08]">
                 <div class="flex items-center gap-2">
                     <h3 class="text-sm font-bold text-white leading-snug">
                         Topik Dominan
                     </h3>
-                    <div tabindex="0" class="group static sm:relative flex shrink-0 cursor-help items-center outline-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="text-white transition-colors group-hover:text-sky-300">
-                            <circle cx="12" cy="12" r="10" />
-                            <path d="M12 16v-4" />
-                            <path d="M12 8h.01" />
-                        </svg>
-                        <div class="invisible absolute left-4 right-4 top-9 z-50 mx-auto mt-2 w-auto max-w-[320px] liquid-glass-tooltip p-3.5 text-left text-xs font-normal text-white opacity-0 shadow-2xl transition-all duration-150 group-hover:visible group-hover:opacity-100 group-focus:visible group-focus:opacity-100 sm:left-1/2 sm:top-full sm:mx-0 sm:w-64 sm:-translate-x-1/2 sm:right-auto sm:max-w-none">
-                            100 poin tiap buku selesai + persentase progres buku aktif.
-                        </div>
+                    <div class="relative flex shrink-0 items-center">
+                        <button type="button" @click="activeInsightTooltip = activeInsightTooltip === 'topic' ? null : 'topic'"
+                            class="cursor-pointer text-white transition-colors hover:text-sky-300 focus:outline-none"
+                            aria-label="Info Topik Dominan">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="M12 16v-4" />
+                                <path d="M12 8h.01" />
+                            </svg>
+                        </button>
+
+                        <Teleport to="body">
+                            <div v-if="activeInsightTooltip === 'topic'"
+                                class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40"
+                                @click="activeInsightTooltip = null">
+                                <div @click.stop class="liquid-glass-tooltip relative w-full max-w-sm p-5 text-white shadow-2xl">
+                                    <div class="flex items-center justify-between pb-2 mb-2.5 border-b border-white/15">
+                                        <span class="text-xs font-bold text-sky-300 uppercase tracking-wider flex items-center gap-1.5">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                <circle cx="12" cy="12" r="10"/>
+                                                <line x1="12" y1="16" x2="12" y2="12"/>
+                                                <line x1="12" y1="8" x2="12.01" y2="8"/>
+                                            </svg>
+                                            Info Topik Dominan
+                                        </span>
+                                        <button type="button" @click="activeInsightTooltip = null"
+                                            class="flex h-6 w-6 items-center justify-center rounded-lg bg-white/10 text-white hover:bg-white/20 hover:text-sky-300 transition-colors text-xs font-bold cursor-pointer"
+                                            aria-label="Tutup">✕</button>
+                                    </div>
+                                    <p class="text-xs text-white leading-relaxed">
+                                        100 poin tiap buku selesai + persentase progres buku aktif.
+                                    </p>
+                                </div>
+                            </div>
+                        </Teleport>
                     </div>
                 </div>
             </div>
@@ -173,6 +222,10 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+
+const activeInsightTooltip = ref<'activity' | 'topic' | null>(null)
+
 defineProps<{
     mostReadBooksInsight: Array<{
         book: any

@@ -2,25 +2,20 @@
     <div
         class="min-h-screen overflow-x-hidden bg-gradient-to-b from-[#52788c] via-[#3a7f94] to-[#428194] pb-16 text-white relative selection:bg-sky-400/30 selection:text-white">
 
-        <!-- Ambient Sunset Illumination (Pendaran cahaya matahari terbenam yang glowing & kaya warna) -->
         <div class="pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden="true">
-            <!-- Pendaran utama cahaya senja / golden hour di kanan atas -->
             <div
                 class="absolute -top-[10%] right-[-5%] h-[850px] w-[850px] rounded-full bg-[radial-gradient(circle,rgba(254,215,170,0.45)_0%,rgba(249,115,22,0.25)_45%,transparent_70%)] blur-3xl">
             </div>
 
-            <!-- Pendaran sekunder teal/cyan segar di kiri tengah untuk kontras kedalaman -->
             <div
                 class="absolute top-[30%] -left-[10%] h-[750px] w-[750px] rounded-full bg-[radial-gradient(circle,rgba(186,230,253,0.30)_0%,rgba(56,189,248,0.15)_40%,transparent_65%)] blur-3xl">
             </div>
 
-            <!-- Aksen lembut di bagian bawah -->
             <div
                 class="absolute -bottom-[15%] right-[15%] h-[650px] w-[650px] rounded-full bg-[radial-gradient(circle,rgba(253,186,116,0.25)_0%,transparent_65%)] blur-2xl">
             </div>
         </div>
 
-        <!-- Sticky Selective Liquid Glass Navigation -->
         <nav class="liquid-glass-nav sticky top-0 relative">
             <div class="mx-auto w-full max-w-6xl px-3.5 sm:px-6 lg:px-8">
                 <div class="flex h-16 min-w-0 items-center justify-between gap-3">
@@ -65,7 +60,6 @@
             <slot />
         </main>
 
-        <!-- Floating Quick Navigation Trigger -->
         <Transition enter-active-class="transition duration-150 ease-out"
             enter-from-class="translate-y-2 scale-90 opacity-0" enter-to-class="translate-y-0 scale-100 opacity-100"
             leave-active-class="transition duration-100 ease-in" leave-from-class="translate-y-0 scale-100 opacity-100"
@@ -81,14 +75,13 @@
             </button>
         </Transition>
 
-        <!-- Floating Navigation Modal (Liquid Glass Sheet - Borderless) -->
         <Transition enter-active-class="transition duration-150 ease-out" enter-from-class="opacity-0"
             enter-to-class="opacity-100" leave-active-class="transition duration-100 ease-in"
             leave-from-class="opacity-100" leave-to-class="opacity-0">
             <div v-if="navigationOpen"
-                class="fixed inset-0 z-[60] flex items-end justify-center bg-black/40 px-3 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-4 backdrop-blur-md sm:items-center sm:p-4"
-                @click.self="navigationOpen = false">
-                <div class="liquid-glass-modal w-full max-w-sm rounded-3xl p-3 shadow-2xl"
+                class="fixed inset-0 z-[60] flex items-end justify-center px-3 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-4 sm:items-center sm:p-4">
+                <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="navigationOpen = false"></div>
+                <div class="liquid-glass-modal relative w-full max-w-sm rounded-3xl p-3 shadow-2xl"
                     role="dialog" aria-modal="true" aria-label="Navigasi halaman">
                     <div class="flex items-center justify-between px-3 py-2.5">
                         <span class="text-xs font-semibold uppercase tracking-wider text-white">
@@ -219,7 +212,6 @@
             </div>
         </Transition>
 
-        <!-- Floating Active Timer Indicator (Static Pill - Borderless) -->
         <div v-if="route.path !== '/tracking' && activeTimersList.length > 0"
             class="fixed bottom-4 left-4 z-40 flex flex-col gap-2 max-w-[calc(100vw-2rem)] sm:max-w-xs md:max-w-sm pointer-events-none max-h-[60vh] overflow-y-auto custom-scrollbar p-1 -m-1">
             <TransitionGroup enter-active-class="transition duration-200 ease-out"

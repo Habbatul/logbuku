@@ -10,7 +10,6 @@
         </div>
 
         <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-            <!-- Chart 1: Buku Selesai Dibaca (Emerald) -->
             <div class="surface-card rounded-2xl border border-white/14 p-4 sm:p-5 flex flex-col justify-between shadow-lg">
                 <div class="flex flex-wrap items-center justify-between gap-2">
                     <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">
@@ -60,7 +59,7 @@
                                         activeTooltip.comp === index ? 'opacity-100 -translate-y-1' : 'opacity-0 translate-y-1',
                                         getTooltipPositionClass(index, processedCompletedChart.length)
                                     ]">
-                                    <div class="liquid-glass-tooltip whitespace-nowrap px-3 py-1.5 text-xs font-semibold tabular-nums text-white shadow-xl max-w-[calc(100vw-2.5rem)]">
+                                    <div class="whitespace-nowrap rounded-xl bg-[#163645]/95 border border-white/25 px-3 py-1.5 text-xs font-semibold tabular-nums text-white shadow-xl max-w-[calc(100vw-2.5rem)]">
                                         {{ point.label }} · {{ point.value }} buku
                                     </div>
                                 </div>
@@ -82,7 +81,6 @@
                 </div>
             </div>
 
-            <!-- Chart 2: Total Halaman Dibaca (Royal Blue) -->
             <div class="surface-card rounded-2xl border border-white/14 p-4 sm:p-5 flex flex-col justify-between shadow-lg">
                 <div class="flex flex-wrap items-center justify-between gap-2">
                     <span class="text-xs font-bold uppercase tracking-wider text-sky-400">
@@ -130,7 +128,7 @@
                                         activeTooltip.page === index ? 'opacity-100 -translate-y-1' : 'opacity-0 translate-y-1',
                                         getTooltipPositionClass(index, processedPagesChart.length)
                                     ]">
-                                    <div class="liquid-glass-tooltip whitespace-nowrap px-3 py-1.5 text-xs font-semibold tabular-nums text-white shadow-xl max-w-[calc(100vw-2.5rem)]">
+                                    <div class="whitespace-nowrap rounded-xl bg-[#163645]/95 border border-white/25 px-3 py-1.5 text-xs font-semibold tabular-nums text-white shadow-xl max-w-[calc(100vw-2.5rem)]">
                                         {{ point.label }} · {{ formatNumber(point.value) }} hal
                                     </div>
                                 </div>
@@ -152,7 +150,6 @@
                 </div>
             </div>
 
-            <!-- Chart 3: Uang Dihabiskan (Warm Amber Gold) -->
             <div class="surface-card rounded-2xl border border-white/14 p-4 sm:p-5 flex flex-col justify-between md:col-span-2 lg:col-span-1 shadow-lg">
                 <div class="flex flex-wrap items-center justify-between gap-2">
                     <span class="text-xs font-bold uppercase tracking-wider text-amber-400">
@@ -206,7 +203,7 @@
                                         activeTooltip.fin === index ? 'opacity-100 -translate-y-1' : 'opacity-0 translate-y-1',
                                         getTooltipPositionClass(index, processedFinanceChart.length)
                                     ]">
-                                    <div class="liquid-glass-tooltip whitespace-nowrap px-3 py-1.5 text-xs font-semibold tabular-nums text-white shadow-xl max-w-[calc(100vw-2.5rem)]">
+                                    <div class="whitespace-nowrap rounded-xl bg-[#163645]/95 border border-white/25 px-3 py-1.5 text-xs font-semibold tabular-nums text-white shadow-xl max-w-[calc(100vw-2.5rem)]">
                                         {{ point.label }} · {{ formatCurrency(point.value) }}
                                     </div>
                                 </div>

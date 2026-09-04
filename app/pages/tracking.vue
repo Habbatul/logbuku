@@ -175,7 +175,7 @@
                         <div class="space-y-2.5">
                             <div v-if="trackingState === 'idle'">
                                 <button type="button" @click="handleStart"
-                                    class="btn-sunset-primary w-full py-3.5 rounded-xl text-sm font-bold uppercase flex items-center justify-center gap-2">
+                                    class="border bg-green-500/15 border-green-600 w-full py-3.5 rounded-xl text-sm font-bold uppercase flex items-center justify-center gap-2 hover:border-green-500 hover:bg-green-500/40 hover:brightness-150 transition-colors">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                                         <polygon points="5 3 19 12 5 21 5 3" />
                                     </svg>
@@ -192,12 +192,17 @@
                                     </svg>
                                     <span>Jeda</span>
                                 </button>
-                                <button type="button" @click="handleStop" :disabled="currentElapsedSeconds < 60"
-                                    class="cursor-pointer flex items-center justify-center gap-1.5 rounded-xl py-3 text-xs sm:text-sm font-bold uppercase disabled:opacity-40 disabled:cursor-not-allowed"
-                                    :class="currentElapsedSeconds >= 60 ? 'bg-red-600 hover:bg-red-500 text-white shadow-md' : 'bg-white/10 text-white'">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                               <button type="button" @click="handleStop" :disabled="currentElapsedSeconds < 60" class="cursor-pointer flex items-center justify-center gap-1.5 rounded-xl py-3 text-xs sm:text-sm font-bold uppercase
+           border transition-all duration-300 backdrop-blur-xl
+           disabled:opacity-40 disabled:cursor-not-allowed" :class="currentElapsedSeconds >= 60
+            ? 'bg-red-500/15 border-red-400/40 text-red-100 shadow-[0_0_15px_rgba(255,0,60,0.35),inset_0_0_20px_rgba(255,0,60,0.08)] hover:bg-red-500/25 hover:border-red-400/70 hover:shadow-[0_0_25px_rgba(255,0,60,0.6),inset_0_0_25px_rgba(255,0,60,0.12)]'
+            : 'bg-white/10 border-white/10 text-white'">
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                        fill="currentColor" class="drop-shadow-[0_0_6px_rgba(255,50,80,0.9)]">
                                         <rect x="4" y="4" width="16" height="16" />
                                     </svg>
+
                                     <span>Stop Tracking</span>
                                 </button>
                             </div>
@@ -211,12 +216,19 @@
                                         </svg>
                                         <span>Lanjut</span>
                                     </button>
-                                    <button type="button" @click="handleStop" :disabled="currentElapsedSeconds < 60"
-                                        class="cursor-pointer flex items-center justify-center gap-1.5 rounded-xl py-3 text-xs sm:text-sm font-bold uppercase disabled:opacity-40 disabled:cursor-not-allowed"
-                                        :class="currentElapsedSeconds >= 60 ? 'bg-red-600 hover:bg-red-500 text-white shadow-md' : 'bg-white/10 text-white'">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                   <button type="button" @click="handleStop" :disabled="currentElapsedSeconds < 60"
+                                        class="cursor-pointer flex items-center justify-center gap-1.5 rounded-xl py-3 text-xs sm:text-sm font-bold uppercase
+           border border-white/10 backdrop-blur-xl transition-all duration-300
+           disabled:opacity-40 disabled:cursor-not-allowed" :class="currentElapsedSeconds >= 60
+            ? 'bg-red-500/50 border-red-400/40 text-red-100 shadow-[0_0_18px_rgba(255,0,60,0.4),inset_0_0_18px_rgba(255,0,60,0.08)] hover:bg-red-500/25 hover:border-red-400/70 hover:text-white hover:shadow-[0_0_30px_rgba(255,0,60,0.65),inset_0_0_25px_rgba(255,0,60,0.12)]'
+            : 'bg-white/10 text-white'">
+
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                            viewBox="0 0 24 24" fill="currentColor"
+                                            class="drop-shadow-[0_0_7px_rgba(255,40,70,0.9)]">
                                             <rect x="4" y="4" width="16" height="16" />
                                         </svg>
+
                                         <span>Stop Tracking</span>
                                     </button>
                                 </div>
@@ -393,8 +405,7 @@
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="surface-stat relative rounded-2xl p-5 space-y-2 transition-all"
-                            :class="{ 'z-30 ring-1 ring-sky-400/40': activeHistoryTooltip === 'pace' }">
+                        <div class="surface-stat relative rounded-2xl p-5 space-y-2 transition-all">
                             <div class="flex items-center justify-between">
                                 <span class="text-xs font-semibold uppercase tracking-wider text-white">Reading Pace Buku</span>
                                 <div class="relative">
@@ -404,44 +415,50 @@
                                         i
                                     </button>
 
-                                    <div v-if="activeHistoryTooltip === 'pace'" @click.stop
-                                        class="liquid-glass-tooltip absolute right-[-8px] sm:right-0 top-full mt-2.5 z-50 w-[calc(100vw-2.5rem)] sm:w-80 max-w-sm p-4 text-white shadow-2xl animate-in fade-in zoom-in-95 duration-150">
-                                        <div class="flex items-center justify-between pb-2 mb-2.5 border-b border-white/15">
-                                            <span class="text-xs font-bold text-sky-300 uppercase tracking-wider flex items-center gap-1.5">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                                    <circle cx="12" cy="12" r="10"/>
-                                                    <line x1="12" y1="16" x2="12" y2="12"/>
-                                                    <line x1="12" y1="8" x2="12.01" y2="8"/>
-                                                </svg>
-                                                Rumus Reading Pace
-                                            </span>
-                                            <button type="button" @click.stop="activeHistoryTooltip = null"
-                                                class="flex h-6 w-6 items-center justify-center rounded-lg bg-white/10 text-white hover:bg-white/20 hover:text-sky-300 transition-colors text-xs font-bold cursor-pointer"
-                                                aria-label="Tutup">✕</button>
-                                        </div>
-                                        <div class="text-xs space-y-2 text-white">
-                                            <p class="font-semibold text-white">
-                                                = Total Durasi Sesi ÷ Total Halaman Dibaca
-                                            </p>
-                                            <p class="text-[11px] text-white/90 leading-relaxed">
-                                                Dihitung khusus dari seluruh riwayat sesi buku ini yang memiliki catatan durasi timer.
-                                            </p>
-                                            <div class="mt-2.5 rounded-xl bg-white/10 border border-white/15 p-3 space-y-1.5 text-xs">
-                                                <div class="flex justify-between items-center text-white">
-                                                   <span class="text-white">Total Durasi:</span>
-                                                   <span class="font-bold text-white tabular-nums">{{ timer.formatDuration(bookPaceStats.totalDuration) }}</span>
+                                    <Teleport to="body">
+                                        <div v-if="activeHistoryTooltip === 'pace'"
+                                            class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40"
+                                            @click="activeHistoryTooltip = null">
+                                            <div @click.stop
+                                                class="liquid-glass-tooltip relative w-full max-w-sm p-5 text-white shadow-2xl">
+                                                <div class="flex items-center justify-between pb-2 mb-2.5 border-b border-white/15">
+                                                    <span class="text-xs font-bold text-sky-300 uppercase tracking-wider flex items-center gap-1.5">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                            <circle cx="12" cy="12" r="10"/>
+                                                            <line x1="12" y1="16" x2="12" y2="12"/>
+                                                            <line x1="12" y1="8" x2="12.01" y2="8"/>
+                                                        </svg>
+                                                        Rumus Reading Pace
+                                                    </span>
+                                                    <button type="button" @click.stop="activeHistoryTooltip = null"
+                                                        class="flex h-6 w-6 items-center justify-center rounded-lg bg-white/10 text-white hover:bg-white/20 hover:text-sky-300 transition-colors text-xs font-bold cursor-pointer"
+                                                        aria-label="Tutup">✕</button>
                                                 </div>
-                                                <div class="flex justify-between items-center text-white">
-                                                   <span class="text-white">Total Halaman:</span>
-                                                   <span class="font-bold text-white tabular-nums">{{ bookPaceStats.totalPages }} hal ({{ bookPaceStats.sessionsCount }} sesi)</span>
-                                                </div>
-                                                <div class="flex justify-between items-center pt-1.5 border-t border-white/15 text-sky-300">
-                                                   <span class="font-bold">Hasil Pace:</span>
-                                                   <span class="font-extrabold tabular-nums">{{ bookReadingPaceDisplay }}</span>
+                                                <div class="text-xs space-y-2 text-white">
+                                                    <p class="font-semibold text-white">
+                                                        = Total Durasi Sesi ÷ Total Halaman Dibaca
+                                                    </p>
+                                                    <p class="text-[11px] text-white/90 leading-relaxed">
+                                                        Dihitung khusus dari seluruh riwayat sesi buku ini yang memiliki catatan durasi timer.
+                                                    </p>
+                                                    <div class="mt-2.5 rounded-xl bg-white/10 border border-white/15 p-3 space-y-1.5 text-xs">
+                                                        <div class="flex justify-between items-center text-white">
+                                                           <span class="text-white">Total Durasi:</span>
+                                                           <span class="font-bold text-white tabular-nums">{{ timer.formatDuration(bookPaceStats.totalDuration) }}</span>
+                                                        </div>
+                                                        <div class="flex justify-between items-center text-white">
+                                                           <span class="text-white">Total Halaman:</span>
+                                                           <span class="font-bold text-white tabular-nums">{{ bookPaceStats.totalPages }} hal ({{ bookPaceStats.sessionsCount }} sesi)</span>
+                                                        </div>
+                                                        <div class="flex justify-between items-center pt-1.5 border-t border-white/15 text-sky-300">
+                                                           <span class="font-bold">Hasil Pace:</span>
+                                                           <span class="font-extrabold tabular-nums">{{ bookReadingPaceDisplay }}</span>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </Teleport>
                                 </div>
                             </div>
 
@@ -456,8 +473,7 @@
                             </p>
                         </div>
 
-                        <div class="surface-stat relative rounded-2xl p-5 space-y-2 transition-all"
-                            :class="{ 'z-30 ring-1 ring-emerald-400/40': activeHistoryTooltip === 'estimate' }">
+                        <div class="surface-stat relative rounded-2xl p-5 space-y-2 transition-all">
                             <div class="flex items-center justify-between">
                                 <span class="text-xs font-semibold uppercase tracking-wider text-white">Estimasi Sisa Waktu</span>
                                 <div class="relative">
@@ -467,44 +483,50 @@
                                         i
                                     </button>
 
-                                    <div v-if="activeHistoryTooltip === 'estimate'" @click.stop
-                                        class="liquid-glass-tooltip absolute right-[-8px] sm:right-0 top-full mt-2.5 z-50 w-[calc(100vw-2.5rem)] sm:w-80 max-w-sm p-4 text-white shadow-2xl animate-in fade-in zoom-in-95 duration-150">
-                                        <div class="flex items-center justify-between pb-2 mb-2.5 border-b border-white/15">
-                                            <span class="text-xs font-bold text-emerald-300 uppercase tracking-wider flex items-center gap-1.5">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                                    <circle cx="12" cy="12" r="10"/>
-                                                    <line x1="12" y1="16" x2="12" y2="12"/>
-                                                    <line x1="12" y1="8" x2="12.01" y2="8"/>
-                                                </svg>
-                                                Rumus Estimasi Waktu
-                                            </span>
-                                            <button type="button" @click.stop="activeHistoryTooltip = null"
-                                                class="flex h-6 w-6 items-center justify-center rounded-lg bg-white/10 text-white hover:bg-white/20 hover:text-emerald-300 transition-colors text-xs font-bold cursor-pointer"
-                                                aria-label="Tutup">✕</button>
-                                        </div>
-                                        <div class="text-xs space-y-2 text-white">
-                                            <p class="font-semibold text-white">
-                                                = Sisa Halaman × Reading Pace Buku
-                                            </p>
-                                            <p class="text-[11px] text-white/90 leading-relaxed">
-                                                Memprediksi total waktu yang dibutuhkan untuk menuntaskan sisa halaman buku ini berdasarkan ritme baca historis Anda.
-                                            </p>
-                                            <div class="mt-2.5 rounded-xl bg-white/10 border border-white/15 p-3 space-y-1.5 text-xs">
-                                                <div class="flex justify-between items-center text-white">
-                                                   <span class="text-white">Sisa Halaman:</span>
-                                                   <span class="font-bold text-white tabular-nums">{{ remainingPages }} hal</span>
+                                    <Teleport to="body">
+                                        <div v-if="activeHistoryTooltip === 'estimate'"
+                                            class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40"
+                                            @click="activeHistoryTooltip = null">
+                                            <div @click.stop
+                                                class="liquid-glass-tooltip relative w-full max-w-sm p-5 text-white shadow-2xl">
+                                                <div class="flex items-center justify-between pb-2 mb-2.5 border-b border-white/15">
+                                                    <span class="text-xs font-bold text-emerald-300 uppercase tracking-wider flex items-center gap-1.5">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                            <circle cx="12" cy="12" r="10"/>
+                                                            <line x1="12" y1="16" x2="12" y2="12"/>
+                                                            <line x1="12" y1="8" x2="12.01" y2="8"/>
+                                                        </svg>
+                                                        Rumus Estimasi Waktu
+                                                    </span>
+                                                    <button type="button" @click.stop="activeHistoryTooltip = null"
+                                                        class="flex h-6 w-6 items-center justify-center rounded-lg bg-white/10 text-white hover:bg-white/20 hover:text-emerald-300 transition-colors text-xs font-bold cursor-pointer"
+                                                        aria-label="Tutup">✕</button>
                                                 </div>
-                                                <div class="flex justify-between items-center text-white">
-                                                   <span class="text-white">Reading Pace:</span>
-                                                   <span class="font-bold text-white tabular-nums">{{ bookPaceStats.secondsPerPage > 0 ? `${Math.round(bookPaceStats.secondsPerPage)} dtk/hal` : '-' }}</span>
-                                                </div>
-                                                <div class="flex justify-between items-center pt-1.5 border-t border-white/15 text-emerald-300">
-                                                   <span class="font-bold">Estimasi Selesai:</span>
-                                                   <span class="font-extrabold tabular-nums">{{ bookEstimatedRemainingDisplay }}</span>
+                                                <div class="text-xs space-y-2 text-white">
+                                                    <p class="font-semibold text-white">
+                                                        = Sisa Halaman × Reading Pace Buku
+                                                    </p>
+                                                    <p class="text-[11px] text-white/90 leading-relaxed">
+                                                        Memprediksi total waktu yang dibutuhkan untuk menuntaskan sisa halaman buku ini berdasarkan ritme baca historis Anda.
+                                                    </p>
+                                                    <div class="mt-2.5 rounded-xl bg-white/10 border border-white/15 p-3 space-y-1.5 text-xs">
+                                                        <div class="flex justify-between items-center text-white">
+                                                           <span class="text-white">Sisa Halaman:</span>
+                                                           <span class="font-bold text-white tabular-nums">{{ remainingPages }} hal</span>
+                                                        </div>
+                                                        <div class="flex justify-between items-center text-white">
+                                                           <span class="text-white">Reading Pace:</span>
+                                                           <span class="font-bold text-white tabular-nums">{{ bookPaceStats.secondsPerPage > 0 ? `${Math.round(bookPaceStats.secondsPerPage)} dtk/hal` : '-' }}</span>
+                                                        </div>
+                                                        <div class="flex justify-between items-center pt-1.5 border-t border-white/15 text-emerald-300">
+                                                           <span class="font-bold">Estimasi Selesai:</span>
+                                                           <span class="font-extrabold tabular-nums">{{ bookEstimatedRemainingDisplay }}</span>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </Teleport>
                                 </div>
                             </div>
 
@@ -828,7 +850,6 @@
                 </div>
             </div>
 
-            <!-- Book Picker Modal -->
             <div v-if="showBookPicker" class="fixed inset-0 z-50 flex items-center justify-center p-4">
                 <div class="absolute inset-0 bg-black/40 backdrop-blur-md" @click="showBookPicker = false"></div>
                 <div class="relative liquid-glass-modal rounded-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-150">
@@ -866,7 +887,6 @@
                 </div>
             </div>
 
-            <!-- Edit Session Modal -->
             <div v-if="isEditSessionModalOpen && editingSession" class="fixed inset-0 z-50 flex items-center justify-center p-4">
                 <div class="absolute inset-0 bg-black/40 backdrop-blur-md" @click="isEditSessionModalOpen = false"></div>
                 <div class="relative liquid-glass-modal rounded-2xl w-full max-w-sm overflow-hidden animate-in zoom-in-95 duration-150">
@@ -937,7 +957,6 @@
                 </div>
             </div>
 
-            <!-- Delete Session Modal -->
             <div v-if="isDeleteSessionModalOpen && sessionToDelete" class="fixed inset-0 z-50 flex items-center justify-center p-4">
                 <div class="absolute inset-0 bg-black/40 backdrop-blur-md" @click="isDeleteSessionModalOpen = false"></div>
                 <div class="relative liquid-glass-modal rounded-2xl w-full max-w-sm overflow-hidden animate-in zoom-in-95 duration-150">

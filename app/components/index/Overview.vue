@@ -10,7 +10,6 @@
         </div>
 
         <div class="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4">
-            <!-- Total Koleksi (Royal Sapphire Blue) -->
             <div @click="$emit('openCategoryModal')"
                 class="surface-stat group relative flex flex-col justify-between p-4 sm:p-5 cursor-pointer select-none rounded-2xl border border-white/14 transition-all duration-200 hover:border-white/30 hover:bg-white/10">
                 <div class="flex items-start justify-between gap-2">
@@ -35,13 +34,9 @@
                             buku
                         </span>
                     </div>
-                    <span class="hidden sm:inline-flex text-[11px] font-semibold text-sky-300 group-hover:text-white transition-colors">
-                        Kategori →
-                    </span>
                 </div>
             </div>
 
-            <!-- Sedang Dibaca (Sunset Amber) -->
             <div class="surface-stat relative flex flex-col justify-between p-4 sm:p-5 rounded-2xl border border-white/14 select-none">
                 <div class="flex items-start justify-between gap-2">
                     <span class="text-xs font-bold uppercase tracking-wider text-amber-300">
@@ -65,7 +60,6 @@
                 </div>
             </div>
 
-            <!-- Belum Dibaca (Sunset Coral Rose) -->
             <div class="surface-stat relative flex flex-col justify-between p-4 sm:p-5 rounded-2xl border border-white/14 select-none">
                 <div class="flex items-start justify-between gap-2">
                     <span class="text-xs font-bold uppercase tracking-wider text-rose-300">
@@ -88,7 +82,6 @@
                 </div>
             </div>
 
-            <!-- Rata-Rata 7 Hari (Fresh Emerald Mint) -->
             <div class="surface-stat relative flex flex-col justify-between p-4 sm:p-5 rounded-2xl border border-white/14 select-none">
                 <div class="flex items-start justify-between gap-2">
                     <span class="text-xs font-bold uppercase tracking-wider text-emerald-300">
