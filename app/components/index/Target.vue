@@ -45,7 +45,7 @@
                         </div>
                     </div>
                 </template>
-                <div v-else class="rounded-xl bg-black/25 backdrop-blur-sm border border-white/15 p-3.5 sm:p-4 text-center text-xs font-medium text-white">
+                <div v-else class="rounded-xl bg-black/15 border border-white/15 p-3.5 sm:p-4 text-center text-xs font-medium text-white/70">
                     Belum ada buku yang ditandai sebagai target aktif
                 </div>
             </div>

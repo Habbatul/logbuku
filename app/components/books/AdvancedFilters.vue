@@ -1,21 +1,20 @@
 <template>
     <div v-if="show" class="surface-card2 rounded-2xl border border-white/14 p-5 mt-4 animate-in fade-in slide-in-from-top-2">
-        <div class="mb-5 flex flex-wrap items-center gap-3">
+       <div class="mb-5 flex flex-wrap items-center gap-3">
             <label for="pinOrder"
                 class="group inline-flex w-fit cursor-pointer items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-semibold select-none transition-all duration-200 hover:-translate-y-0.5 active:scale-95"
                 :class="respectPinned
-                        ? 'bg-sky-500/20 text-sky-300 border border-sky-500/30 shadow-[0_0_12px_rgba(56,189,248,0.2)]'
-                        : 'bg-white/15 text-white border border-white/20 hover:bg-white/25'
+                    ? 'bg-amber-500/25 text-amber-200 border border-amber-400/50 shadow-[0_0_12px_rgba(251,191,36,0.25)]'
+                    : 'bg-black/20 text-white/90 border border-white/20 hover:bg-black/30 hover:text-white'
                     ">
                 <span class="relative flex h-4 w-4 shrink-0 items-center justify-center">
                     <input type="checkbox" id="pinOrder" v-model="respectPinned"
                         class="peer absolute inset-0 m-0 cursor-pointer opacity-0" />
 
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                        class="h-4 w-4" :class="respectPinned
-                                ? 'fill-sky-400 text-sky-400'
-                                : 'fill-none text-white'
-                            " stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-4 w-4" :class="respectPinned
+                        ? 'fill-amber-400 text-amber-400'
+                        : 'fill-none text-white'
+                        " stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="m12 17 5 3-1.5-5.7L20 10.5l-5.8-.4L12 5l-2.2 5.1-5.8.4 4.5 3.8L7 20l5-3Z" />
                     </svg>
                 </span>
@@ -25,18 +24,18 @@
             <label for="hideBtns"
                 class="group inline-flex w-fit cursor-pointer items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-semibold select-none transition-all duration-200 hover:-translate-y-0.5 active:scale-95"
                 :class="hideActionButtons
-                        ? 'bg-white/25 text-white border border-white/30 shadow-[0_0_12px_rgba(255,255,255,0.15)]'
-                        : 'bg-white/15 text-white border border-white/20 hover:bg-white/25'
+                    ? 'bg-sky-500/25 text-sky-200 border border-sky-400/50 shadow-[0_0_12px_rgba(56,189,248,0.25)]'
+                    : 'bg-black/20 text-white/90 border border-white/20 hover:bg-black/30 hover:text-white'
                     ">
                 <span class="relative flex h-4 w-4 shrink-0 items-center justify-center">
                     <input type="checkbox" id="hideBtns" v-model="hideActionButtons"
                         class="peer absolute inset-0 m-0 cursor-pointer opacity-0" />
 
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                        class="h-4 w-4" :class="hideActionButtons
-                                ? 'text-sky-400'
-                                : 'text-white'
-                            " fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-4 w-4" :class="hideActionButtons
+                        ? 'text-sky-300'
+                        : 'text-white'
+                        " fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
                         <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
                         <line x1="9" y1="9" x2="15" y2="15" />
                         <line x1="15" y1="9" x2="9" y2="15" />

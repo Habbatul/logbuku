@@ -12,7 +12,7 @@
 
         <div class="flex w-full gap-3 sm:w-auto">
             <button @click="$emit('add-book')" type="button"
-                class="btn-sunset-primary inline-flex min-w-0 flex-1 shrink-0 items-center justify-center gap-2 px-4 py-2.5 text-xs sm:text-sm font-semibold sm:w-auto sm:flex-none">
+                class="btn-sunset-primary border-green-400/80! text-green-100! bg-green-800/20! hover:bg-green-800/40! inline-flex min-w-0 flex-1 shrink-0 items-center justify-center gap-2 px-4 py-2.5 text-xs sm:text-sm font-semibold sm:w-auto sm:flex-none">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="shrink-0">
@@ -23,7 +23,7 @@
             </button>
 
             <NuxtLink to="/tracking"
-                class="btn-sunset-secondary inline-flex min-w-0 flex-1 shrink-0 items-center justify-center gap-2 px-4 py-2.5 text-xs sm:text-sm font-medium sm:w-auto sm:flex-none">
+                class="btn-sunset-primary border-orange-400/80! text-orange-100! bg-orange-800/20! hover:bg-orange-800/40! inline-flex min-w-0 flex-1 shrink-0 items-center justify-center gap-2 px-4 py-2.5 text-xs sm:text-sm font-medium sm:w-auto sm:flex-none">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="10" />

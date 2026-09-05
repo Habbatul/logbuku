@@ -2,19 +2,102 @@
     <div
         class="min-h-screen overflow-x-hidden bg-gradient-to-b from-[#52788c] via-[#3a7f94] to-[#428194] pb-16 text-white relative selection:bg-sky-400/30 selection:text-white">
 
-        <div class="pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden="true">
+
+        <div class="pointer-events-none fixed inset-0 z-0 overflow-hidden opacity-60 brightness-80" aria-hidden="true">
             <div
-                class="absolute -top-[10%] right-[-5%] h-[850px] w-[850px] rounded-full bg-[radial-gradient(circle,rgba(254,215,170,0.45)_0%,rgba(249,115,22,0.25)_45%,transparent_70%)] blur-3xl">
+                class="absolute -top-[6%] right-[2%] h-[clamp(220px,32vw,520px)] w-[clamp(220px,32vw,520px)] rounded-full bg-[radial-gradient(circle_at_35%_35%,rgba(255,237,213,0.95)_0%,rgba(251,146,60,0.65)_25%,rgba(249,115,22,0.22)_55%,transparent_75%)]">
             </div>
 
             <div
-                class="absolute top-[30%] -left-[10%] h-[750px] w-[750px] rounded-full bg-[radial-gradient(circle,rgba(186,230,253,0.30)_0%,rgba(56,189,248,0.15)_40%,transparent_65%)] blur-3xl">
+                class="absolute top-[24%] -left-[8%] h-[clamp(200px,28vw,450px)] w-[clamp(200px,28vw,450px)] rounded-full bg-[radial-gradient(circle_at_40%_35%,rgba(224,242,254,0.9)_0%,rgba(125,211,252,0.6)_25%,rgba(14,165,233,0.2)_55%,transparent_75%)]">
             </div>
 
             <div
-                class="absolute -bottom-[15%] right-[15%] h-[650px] w-[650px] rounded-full bg-[radial-gradient(circle,rgba(253,186,116,0.25)_0%,transparent_65%)] blur-2xl">
+                class="absolute bottom-[-8%] right-[8%] h-[clamp(180px,25vw,400px)] w-[clamp(180px,25vw,400px)] rounded-full bg-[radial-gradient(circle_at_40%_35%,rgba(254,215,170,0.8)_0%,rgba(251,146,60,0.45)_30%,rgba(249,115,22,0.12)_60%,transparent_75%)]">
+            </div>
+
+            <div
+                class="absolute top-[8%] left-[24%] h-[clamp(90px,12vw,190px)] w-[clamp(90px,12vw,190px)] rounded-full bg-[radial-gradient(circle_at_35%_30%,rgba(186,230,253,0.8)_0%,rgba(56,189,248,0.35)_40%,transparent_75%)]">
+            </div>
+
+            <div
+                class="absolute top-[34%] right-[18%] h-[clamp(110px,14vw,220px)] w-[clamp(110px,14vw,220px)] rounded-full bg-[radial-gradient(circle_at_35%_30%,rgba(255,237,213,0.75)_0%,rgba(249,115,22,0.3)_40%,transparent_75%)]">
+            </div>
+
+            <div
+                class="absolute top-[58%] left-[20%] h-[clamp(80px,11vw,170px)] w-[clamp(80px,11vw,170px)] rounded-full bg-[radial-gradient(circle_at_35%_30%,rgba(186,230,253,0.7)_0%,rgba(14,165,233,0.28)_40%,transparent_75%)]">
+            </div>
+
+            <div
+                class="absolute bottom-[18%] right-[38%] h-[clamp(70px,9vw,140px)] w-[clamp(70px,9vw,140px)] rounded-full bg-[radial-gradient(circle_at_35%_30%,rgba(254,215,170,0.7)_0%,rgba(251,146,60,0.28)_40%,transparent_75%)]">
+            </div>
+
+            <div
+                class="absolute top-[15%] right-[38%] h-[clamp(40px,5vw,85px)] w-[clamp(40px,5vw,85px)] rounded-full bg-[radial-gradient(circle_at_35%_30%,rgba(255,255,255,0.8)_0%,rgba(125,211,252,0.4)_40%,transparent_75%)]">
+            </div>
+
+            <div
+                class="absolute top-[42%] left-[43%] h-[clamp(35px,4vw,70px)] w-[clamp(35px,4vw,70px)] rounded-full bg-[radial-gradient(circle_at_35%_30%,rgba(255,237,213,0.8)_0%,rgba(251,146,60,0.35)_40%,transparent_75%)]">
+            </div>
+
+            <div
+                class="absolute top-[68%] right-[10%] h-[clamp(45px,5vw,90px)] w-[clamp(45px,5vw,90px)] rounded-full bg-[radial-gradient(circle_at_35%_30%,rgba(224,242,254,0.75)_0%,rgba(56,189,248,0.3)_40%,transparent_75%)]">
+            </div>
+
+            <div
+                class="absolute bottom-[28%] left-[8%] h-[clamp(30px,4vw,65px)] w-[clamp(30px,4vw,65px)] rounded-full bg-[radial-gradient(circle_at_35%_30%,rgba(186,230,253,0.7)_0%,rgba(14,165,233,0.25)_45%,transparent_75%)]">
+            </div>
+
+            <div
+                class="absolute bottom-[8%] left-[42%] h-[clamp(25px,3vw,55px)] w-[clamp(25px,3vw,55px)] rounded-full bg-[radial-gradient(circle_at_35%_30%,rgba(255,255,255,0.75)_0%,rgba(251,146,60,0.3)_45%,transparent_75%)]">
+            </div>
+
+            <div
+                class="absolute top-[27%] right-[6%] h-[clamp(25px,3vw,50px)] w-[clamp(25px,3vw,50px)] rounded-full bg-[radial-gradient(circle_at_35%_30%,rgba(255,255,255,0.7)_0%,rgba(125,211,252,0.3)_45%,transparent_75%)]">
+            </div>
+
+            <div
+                class="absolute top-[12%] left-[68%] h-2.5 w-2.5 rounded-full bg-white/80 shadow-[0_0_14px_rgba(255,255,255,0.8)]">
+            </div>
+
+            <div
+                class="absolute top-[20%] left-[12%] h-2 w-2 rounded-full bg-sky-200/80 shadow-[0_0_12px_rgba(125,211,252,0.7)]">
+            </div>
+
+            <div class="absolute top-[37%] left-[72%] h-1.5 w-1.5 rounded-full bg-white/80"></div>
+
+            <div
+                class="absolute top-[48%] left-[28%] h-2 w-2 rounded-full bg-orange-200/70 shadow-[0_0_12px_rgba(251,146,60,0.7)]">
+            </div>
+
+            <div class="absolute top-[53%] right-[42%] h-1.5 w-1.5 rounded-full bg-sky-100/80"></div>
+
+            <div
+                class="absolute top-[64%] left-[55%] h-2 w-2 rounded-full bg-white/70 shadow-[0_0_10px_rgba(255,255,255,0.6)]">
+            </div>
+
+            <div
+                class="absolute top-[75%] right-[28%] h-2 w-2 rounded-full bg-orange-200/70 shadow-[0_0_12px_rgba(251,146,60,0.7)]">
+            </div>
+
+            <div class="absolute bottom-[18%] left-[30%] h-1.5 w-1.5 rounded-full bg-white/70"></div>
+
+            <div
+                class="absolute bottom-[8%] right-[48%] h-2 w-2 rounded-full bg-sky-100/70 shadow-[0_0_10px_rgba(125,211,252,0.6)]">
+            </div>
+
+            <div class="absolute top-[86%] left-[68%] h-1.5 w-1.5 rounded-full bg-white/70"></div>
+
+            <div
+                class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(3,20,30,0.18)_100%)]">
             </div>
         </div>
+
+
+
+
+
+
 
         <nav class="liquid-glass-nav sticky top-0 relative">
             <div class="mx-auto w-full max-w-6xl px-3.5 sm:px-6 lg:px-8">

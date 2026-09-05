@@ -4,14 +4,33 @@
             <h2 class="text-lg sm:text-xl font-bold tracking-tight text-white leading-snug">
                 Overview Koleksi
             </h2>
-            <p class="mt-0.5 text-xs sm:text-sm leading-relaxed text-white">
+            <p class="mt-0.5 text-xs sm:text-sm leading-relaxed text-white/80">
                 Ringkasan inventaris buku fisik dan aktivitas membaca arsip.
             </p>
         </div>
 
         <div class="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4">
-            <div @click="$emit('openCategoryModal')"
-                class="surface-stat group relative flex flex-col justify-between p-4 sm:p-5 cursor-pointer select-none rounded-2xl border border-white/14 transition-all duration-200 hover:border-white/30 hover:bg-white/10">
+            <LiquidGlassCard
+                as="div"
+                mode="webgl"
+                :blur="10"
+                blur-type="gaussian"
+                :refraction="19"
+                :bezel="56"
+                :dispersion="20"
+                :radius="20"
+                tint-color="#0c2d48"
+                :tint-opacity="0.2"
+                prism-color="#38bdf8"
+                :glow="0.15"
+                :caustics="0"
+                :specular="0.15"
+                :shadow-size="20"
+                :shadow-opacity="0.3"
+                interactive
+                @click="$emit('openCategoryModal')"
+                custom-class="group flex flex-col justify-between p-4 sm:p-5 select-none"
+            >
                 <div class="flex items-start justify-between gap-2">
                     <span class="text-xs font-bold uppercase tracking-wider text-sky-300">
                         Total Koleksi
@@ -35,9 +54,27 @@
                         </span>
                     </div>
                 </div>
-            </div>
+            </LiquidGlassCard>
 
-            <div class="surface-stat relative flex flex-col justify-between p-4 sm:p-5 rounded-2xl border border-white/14 select-none">
+            <LiquidGlassCard
+                as="div"
+                mode="webgl"
+                :blur="10"
+                blur-type="gaussian"
+                :refraction="19"
+                :bezel="56"
+                :dispersion="20"
+                :radius="20"
+                tint-color="#3a2007"
+                :tint-opacity="0.2"
+                prism-color="#fbbf24"
+                :glow="0.15"
+                :caustics="0"
+                :specular="0.15"
+                :shadow-size="20"
+                :shadow-opacity="0.3"
+                custom-class="flex flex-col justify-between p-4 sm:p-5 select-none"
+            >
                 <div class="flex items-start justify-between gap-2">
                     <span class="text-xs font-bold uppercase tracking-wider text-amber-300">
                         Sedang Dibaca
@@ -58,9 +95,27 @@
                         buku
                     </span>
                 </div>
-            </div>
+            </LiquidGlassCard>
 
-            <div class="surface-stat relative flex flex-col justify-between p-4 sm:p-5 rounded-2xl border border-white/14 select-none">
+            <LiquidGlassCard
+                as="div"
+                mode="webgl"
+                :blur="10"
+                blur-type="gaussian"
+                :refraction="19"
+                :bezel="56"
+                :dispersion="20"
+                :radius="20"
+                tint-color="#3d0c1c"
+                :tint-opacity="0.2"
+                prism-color="#fb7185"
+                :glow="0.15"
+                :caustics="0"
+                :specular="0.15"
+                :shadow-size="20"
+                :shadow-opacity="0.3"
+                custom-class="flex flex-col justify-between p-4 sm:p-5 select-none"
+            >
                 <div class="flex items-start justify-between gap-2">
                     <span class="text-xs font-bold uppercase tracking-wider text-rose-300">
                         Belum Dibaca
@@ -80,9 +135,27 @@
                         buku
                     </span>
                 </div>
-            </div>
+            </LiquidGlassCard>
 
-            <div class="surface-stat relative flex flex-col justify-between p-4 sm:p-5 rounded-2xl border border-white/14 select-none">
+            <LiquidGlassCard
+                as="div"
+                mode="webgl"
+                :blur="10"
+                blur-type="gaussian"
+                :refraction="19"
+                :bezel="56"
+                :dispersion="20"
+                :radius="20"
+                tint-color="#062e24"
+                :tint-opacity="0.2"
+                prism-color="#34d399"
+                :glow="0.15"
+                :caustics="0"
+                :specular="0.15"
+                :shadow-size="20"
+                :shadow-opacity="0.3"
+                custom-class="flex flex-col justify-between p-4 sm:p-5 select-none"
+            >
                 <div class="flex items-start justify-between gap-2">
                     <span class="text-xs font-bold uppercase tracking-wider text-emerald-300">
                         Rata-Rata 7 Hari
@@ -103,7 +176,7 @@
                         hal/hari
                     </span>
                 </div>
-            </div>
+            </LiquidGlassCard>
         </div>
     </section>
 </template>

@@ -378,21 +378,40 @@
                 </div>
             </div>
 
-            <div class="space-y-4 pt-4">
-                <div class="flex items-center gap-2 pb-2 overflow-x-auto">
+            <div class="space-y-4 pt-0">
+                <div class="flex flex-wrap items-center gap-3 pt-4 pb-3 overflow-visible">
                     <button type="button" @click="activeTab = 'history'"
-                        class="rounded-xl px-4 py-2 text-xs sm:text-sm font-semibold uppercase cursor-pointer"
+                        class="inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs sm:text-sm font-bold uppercase tracking-wider cursor-pointer select-none transition-all duration-200 hover:-translate-y-0.5 active:scale-95"
                         :class="activeTab === 'history'
-                            ? 'btn-sunset-primary'
-                            : 'btn-sunset-secondary text-white'">
-                        Riwayat Sesi ({{ bookHistorySessions.length }})
+                            ? 'btn-sunset-primary shadow-lg shadow-sky-500/25'
+                            : 'btn-sunset-secondary text-white hover:text-white'">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                            class="shrink-0" :class="activeTab === 'history' ? 'text-white' : 'text-sky-300'">
+                            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                            <path d="M3 3v5h5" />
+                        </svg>
+                        <span>Riwayat Sesi</span>
+                        <span class="rounded-full px-2 py-0.5 text-[11px] font-extrabold tabular-nums transition-colors"
+                            :class="activeTab === 'history'
+                                ? 'bg-white/25 text-white'
+                                : 'bg-white/15 text-sky-200'">
+                            {{ bookHistorySessions.length }}
+                        </span>
                     </button>
                     <button type="button" @click="activeTab = 'stats'"
-                        class="rounded-xl px-4 py-2 text-xs sm:text-sm font-semibold uppercase cursor-pointer"
+                        class="inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs sm:text-sm font-bold uppercase tracking-wider cursor-pointer select-none transition-all duration-200 hover:-translate-y-0.5 active:scale-95"
                         :class="activeTab === 'stats'
-                            ? 'btn-sunset-primary'
-                            : 'btn-sunset-secondary text-white'">
-                        Statistik Global
+                            ? 'btn-sunset-primary shadow-lg shadow-sky-500/25'
+                            : 'btn-sunset-secondary text-white hover:text-white'">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                            class="shrink-0" :class="activeTab === 'stats' ? 'text-white' : 'text-sky-300'">
+                            <line x1="18" y1="20" x2="18" y2="10" />
+                            <line x1="12" y1="20" x2="12" y2="4" />
+                            <line x1="6" y1="20" x2="6" y2="14" />
+                        </svg>
+                        <span>Statistik Global</span>
                     </button>
                 </div>
 
@@ -543,7 +562,7 @@
                         </div>
                     </div>
 
-                    <h3 class="mt-8 mb-5 pt-5 text-sm font-bold text-white tracking-tight">
+                    <h3 class="mt-6 mb-5 pt-5 text-sm font-bold text-white tracking-tight">
                         Daftar Riwayat Sesi <span class="font-normal text-sky-300">({{ bookHistorySessions.length }} sesi tercatat)</span>
                     </h3>
 
@@ -864,8 +883,27 @@
                             </svg>
                         </button>
                     </div>
-                    <div class="p-4 max-h-96 overflow-y-auto space-y-2 custom-scrollbar">
-                        <div v-for="b in books" :key="b.id" @click="selectBook(b)"
+
+                    <div class="px-4 sm:px-5 pb-2">
+                        <div class="relative">
+                            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                <svg class="text-sky-300" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="11" cy="11" r="8" />
+                                    <path d="m21 21-4.3-4.3" />
+                                </svg>
+                            </div>
+                            <input v-model="bookPickerSearchQuery" type="text"
+                                placeholder="Cari judul, pengarang, atau penerbit..."
+                                class="glass-input w-full py-2 pl-9 pr-3 text-xs text-white placeholder:text-white/60" />
+                        </div>
+                    </div>
+
+                    <div class="p-4 sm:p-5 pt-1 max-h-80 overflow-y-auto space-y-2 custom-scrollbar">
+                        <div v-if="filteredPickerBooks.length === 0" class="py-6 text-center text-xs text-white/70">
+                            Tidak ada buku yang cocok dengan "{{ bookPickerSearchQuery }}".
+                        </div>
+                        <div v-for="b in filteredPickerBooks" :key="b.id" @click="selectBook(b)"
                             class="cursor-pointer flex items-center gap-3 p-3 rounded-xl transition-colors"
                             :class="selectedBook?.id === b.id
                                 ? 'bg-sky-500/25'
@@ -1014,7 +1052,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, useRouter } from '#imports'
 import type { Book, ReadSession } from '~/types/book'
 
@@ -1029,6 +1067,7 @@ const timer = useReadingTimer()
 
 const imageLoadError = ref(false)
 const showBookPicker = ref(false)
+const bookPickerSearchQuery = ref('')
 const activeTab = ref<'history' | 'stats'>('history')
 const successNotification = ref<string>('')
 
@@ -1056,6 +1095,23 @@ const selectedBook = computed<Book | null>(() => {
     const reading = books.value.find(b => (b.pagesRead || 0) > 0 && (b.pagesRead || 0) < (b.totalPages || 0))
     if (reading) return reading
     return books.value[0]
+})
+
+const filteredPickerBooks = computed(() => {
+    const q = bookPickerSearchQuery.value.trim().toLowerCase()
+    if (!q) return books.value
+    return books.value.filter(b => {
+        const matchTitle = b.title ? b.title.toLowerCase().includes(q) : false
+        const matchAuthor = b.author ? b.author.toLowerCase().includes(q) : false
+        const matchPublisher = b.publisher ? b.publisher.toLowerCase().includes(q) : false
+        return matchTitle || matchAuthor || matchPublisher
+    })
+})
+
+watch(showBookPicker, (open) => {
+    if (open) {
+        bookPickerSearchQuery.value = ''
+    }
 })
 
 const selectBook = (b: Book) => {
@@ -1865,7 +1921,11 @@ const handleDocumentClick = () => {
 const formatDailyDurationMinutes = (seconds: number | null | undefined): string => {
     if (!seconds || seconds <= 0) return '-'
     const mins = Math.round(seconds / 60)
-    return mins > 0 ? `${mins} mnt` : '<1 mnt'
+    if (mins < 60) {
+        return mins > 0 ? `${mins} mnt` : '<1 mnt'
+    }
+    const hours = (mins / 60).toFixed(1).replace('.', ',')
+    return `${hours}jm`
 }
 
 onMounted(async () => {
