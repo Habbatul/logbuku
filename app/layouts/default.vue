@@ -121,15 +121,15 @@
 
                     <div class="flex shrink-0 items-center gap-1 sm:gap-1.5">
                         <NuxtLink to="/"
-                            class="cursor-pointer rounded-xl px-3 py-1.5 text-xs font-semibold tracking-wide transition-all duration-200 hover:-translate-y-0.5"
-                            active-class="bg-white/25 text-white shadow-sm"
+                            class="cursor-pointer rounded-lg px-3 py-1.5 text-xs font-semibold tracking-wide transition-all duration-200 hover:-translate-y-0.5"
+                            active-class="bg-black/25 text-white shadow-sm"
                             inactive-class="text-white hover:bg-white/15">
                             Dashboard
                         </NuxtLink>
 
                         <NuxtLink to="/books"
-                            class="cursor-pointer rounded-xl px-3 py-1.5 text-xs font-semibold tracking-wide transition-all duration-200 hover:-translate-y-0.5"
-                            active-class="bg-white/25 text-white shadow-sm"
+                            class="cursor-pointer rounded-lg px-3 py-1.5 text-xs font-semibold tracking-wide transition-all duration-200 hover:-translate-y-0.5"
+                            active-class="bg-black/25 text-white shadow-sm"
                             inactive-class="text-white hover:bg-white/15">
                             Koleksi
                         </NuxtLink>

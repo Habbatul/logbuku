@@ -52,7 +52,7 @@
 
             <div class="shrink-0 w-full sm:w-auto">
                 <button @click="$emit('openTargetModal')"
-                    class="btn-sunset-primary inline-flex w-full items-center justify-center px-4 py-2.5 text-xs font-semibold sm:w-auto shadow-md">
+                    class="btn-sunset-primary bg-green-500/10! hover:bg-green-800/20! inline-flex w-full items-center justify-center px-4 py-2.5 text-xs font-semibold sm:w-auto shadow-md">
                     {{ targetBooksCount > 0 ? 'Kelola Target' : 'Tentukan Target' }}
                 </button>
             </div>

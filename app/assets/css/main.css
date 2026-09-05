@@ -167,8 +167,7 @@ a {
 .surface-card,
 .glass-card,
 .liquid-glass {
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
+    @apply backdrop-blur-lg;
     background: rgba(15, 23, 42, 0.28);
     border: 1px solid rgba(255, 255, 255, 0.16);
     box-shadow:
@@ -180,8 +179,7 @@ a {
 }
 
 .surface-card2 {
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
+    @apply backdrop-blur-lg;
     background: rgba(15, 23, 42, 0.28);
     border: 1px solid rgba(255, 255, 255, 0.16);
     box-shadow:
@@ -197,8 +195,7 @@ a {
    ------------------------------------------------ */
 
 .surface-card-interactive {
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
+    @apply backdrop-blur-lg;
     background: rgba(15, 23, 42, 0.28);
     border: 1px solid rgba(255, 255, 255, 0.16);
     box-shadow:
@@ -224,8 +221,7 @@ a {
    ------------------------------------------------ */
 
 .surface-hero {
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
+    @apply backdrop-blur-lg;
     background: rgba(15, 23, 42, 0.28);
     border: 1px solid rgba(255, 255, 255, 0.16);
     box-shadow:
@@ -245,8 +241,7 @@ a {
    ------------------------------------------------ */
 
 .surface-stat {
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
+    @apply backdrop-blur-lg;
     background: rgba(15, 23, 42, 0.28);
     border: 1px solid rgba(255, 255, 255, 0.16);
     box-shadow:
