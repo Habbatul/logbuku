@@ -67,14 +67,14 @@
 
             <div class="surface-stat rounded-2xl p-4 sm:p-5 flex flex-col justify-between space-y-3 col-span-2 sm:col-span-1">
                 <div class="flex items-start justify-between gap-2">
-                    <span class="text-xs font-bold uppercase tracking-wider text-white">Rata-rata Karya</span>
-                    <span class="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-sky-400 shadow-[0_0_10px_rgba(56,189,248,0.8)]"></span>
+                    <span class="text-xs font-bold uppercase tracking-wider text-white">Belum Ada Penulis</span>
+                    <span class="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.8)]"></span>
                 </div>
                 <div class="flex items-baseline gap-1.5">
                     <span class="text-2xl sm:text-3xl font-bold tracking-tight tabular-nums text-white">
-                        {{ avgBooksPerAuthor }}
+                        {{ booksWithoutAuthorCount }}
                     </span>
-                    <span class="text-xs font-medium text-white">buku/penulis</span>
+                    <span class="text-xs font-medium text-white">buku</span>
                 </div>
             </div>
         </div>
@@ -255,7 +255,6 @@
             </div>
         </div>
 
-        <!-- Modal Tambah Penulis -->
         <div v-if="isAddModalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4">
             <div class="absolute inset-0 bg-black/40 backdrop-blur-md" @click="isAddModalOpen = false"></div>
             <div class="liquid-glass-modal relative w-full max-w-sm rounded-2xl p-6 shadow-2xl animate-in zoom-in-95">
@@ -280,7 +279,6 @@
             </div>
         </div>
 
-        <!-- Modal Rename Penulis -->
         <div v-if="isRenameModalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4">
             <div class="absolute inset-0 bg-black/40 backdrop-blur-md" @click="isRenameModalOpen = false"></div>
             <div class="liquid-glass-modal relative w-full max-w-sm rounded-2xl p-6 shadow-2xl animate-in zoom-in-95">
@@ -313,7 +311,6 @@
             @assign="handleBulkAssign"
         />
 
-        <!-- Modal Hapus Penulis -->
         <div v-if="isDeleteAuthorModalOpen && authorToDelete" class="fixed inset-0 z-50 flex items-center justify-center p-4">
             <div class="absolute inset-0 bg-black/40 backdrop-blur-md" @click="isDeleteAuthorModalOpen = false"></div>
             <div class="liquid-glass-modal relative w-full max-w-sm rounded-2xl p-5 sm:p-6 shadow-2xl animate-in zoom-in-95 space-y-4">

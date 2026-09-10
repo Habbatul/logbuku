@@ -408,14 +408,30 @@ export const useDashboard = (books: Ref<any[]>) => {
     const top5Publishers = computed(() => {
         if (books.value.length === 0) return []
         const counts: Record<string, number> = {}
+        let otherCount = 0
+
         books.value.forEach(b => {
-            const pub = b.publisher && b.publisher.trim() ? b.publisher.trim() : 'Penerbit Lainnya'
-            counts[pub] = (counts[pub] || 0) + 1
+            const rawPub = b.publisher ? b.publisher.trim() : ''
+            if (!rawPub || rawPub.toLowerCase() === 'penerbit lainnya') {
+                otherCount++
+            } else {
+                counts[rawPub] = (counts[rawPub] || 0) + 1
+            }
         })
-        return Object.entries(counts)
+
+        const sortedNamed = Object.entries(counts)
             .map(([name, count]) => ({ name, count }))
             .sort((a, b) => b.count - a.count)
-            .slice(0, 5)
+
+        if (sortedNamed.length >= 5) {
+            return sortedNamed.slice(0, 5)
+        }
+
+        const result = [...sortedNamed]
+        if (otherCount > 0) {
+            result.push({ name: 'Penerbit Lainnya', count: otherCount })
+        }
+        return result.slice(0, 5)
     })
     const maxPublisherCount = computed(() => {
         return top5Publishers.value.length ? Math.max(...top5Publishers.value.map(p => p.count)) : 1

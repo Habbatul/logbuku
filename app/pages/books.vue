@@ -39,7 +39,7 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import type { Book, BookFormData, SortOption } from '~/types/book'
 
-const { books, loadBooks, saveBook, deleteBook } = useBooks()
+const { books, loadBooks, saveBook, deleteBook, recalculateBookProgress } = useBooks()
 
 const searchQuery = ref('')
 const selectedTopic = ref('')
@@ -189,49 +189,84 @@ const handleImportJson = async (newBooks: Partial<Book>[]) => {
     isFormModalOpen.value = false
 }
 
-const handleSaveProgress = async ({ book, newPages, date }: { book: Book; newPages: number; date?: string }) => {
+const handleSaveProgress = async ({
+    book,
+    newPages,
+    date,
+    isDateModified
+}: {
+    book: Book
+    newPages: number
+    date?: string
+    isDateModified?: boolean
+}) => {
     const oldPages = book.pagesRead || 0
     const pagesAdded = newPages - oldPages
-    const updatedBook = { ...book, pagesRead: newPages }
-    updatedBook.readHistory = updatedBook.readHistory ? [...updatedBook.readHistory] : []
+    const updatedBook: Book = JSON.parse(JSON.stringify(book))
+    if (!Array.isArray(updatedBook.readHistory)) {
+        updatedBook.readHistory = []
+    }
+
+    const getLocalDateStr = (d: Date = new Date()) => {
+        const y = d.getFullYear()
+        const m = String(d.getMonth() + 1).padStart(2, '0')
+        const day = String(d.getDate()).padStart(2, '0')
+        return `${y}-${m}-${day}`
+    }
+    const todayLocal = getLocalDateStr()
 
     let sessionDate: Date
     if (date) {
-        const todayStr = new Date().toISOString().split('T')[0]
-        if (date === todayStr) {
+        if (date === todayLocal) {
             sessionDate = new Date()
         } else {
             const [y, m, d] = date.split('-').map(Number)
-            sessionDate = new Date(y, m - 1, d, 12, 0, 0)
+            const now = new Date()
+            sessionDate = new Date(y, m - 1, d, now.getHours(), now.getMinutes(), now.getSeconds())
         }
     } else {
         sessionDate = new Date()
     }
 
+    if (updatedBook.readHistory.length === 0 && oldPages > 0) {
+        const baselineDate = book.date ? new Date(book.date).toISOString() : new Date().toISOString()
+        updatedBook.readHistory.push({
+            id: 'sess_' + Date.now() + '_init',
+            date: baselineDate,
+            pagesAdded: oldPages,
+            startPage: 0,
+            endPage: oldPages,
+            duration: null
+        })
+    }
+
     if (pagesAdded > 0) {
         const oneHour = 60 * 60 * 1000
+        const sessionDateStr = getLocalDateStr(sessionDate)
         const lastSessionIndex = updatedBook.readHistory.length - 1
         let isMerged = false
 
         if (lastSessionIndex >= 0) {
             const lastSession = updatedBook.readHistory[lastSessionIndex]
-            const lastSessionTime = new Date(lastSession.date).getTime()
-            const lastSessionDateStr = new Date(lastSession.date).toISOString().split('T')[0]
-            const sessionDateStr = sessionDate.toISOString().split('T')[0]
+            const lastSessionDate = new Date(lastSession.date)
+            const lastSessionDateStr = getLocalDateStr(lastSessionDate)
+            const lastSessionTime = lastSessionDate.getTime()
 
             if (lastSessionDateStr === sessionDateStr && Math.abs(sessionDate.getTime() - lastSessionTime) <= oneHour) {
-                updatedBook.readHistory[lastSessionIndex].date = sessionDate.toISOString()
-                updatedBook.readHistory[lastSessionIndex].pagesAdded += pagesAdded
-                updatedBook.readHistory[lastSessionIndex].endPage = newPages
+                lastSession.date = sessionDate.toISOString()
+                lastSession.pagesAdded += pagesAdded
                 isMerged = true
             }
         }
+
         if (!isMerged) {
             updatedBook.readHistory.push({
+                id: 'sess_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
                 date: sessionDate.toISOString(),
                 pagesAdded: pagesAdded,
                 startPage: oldPages,
-                endPage: newPages
+                endPage: newPages,
+                duration: null
             })
         }
     } else if (pagesAdded < 0) {
@@ -245,28 +280,33 @@ const handleSaveProgress = async ({ book, newPages, date }: { book: Book; newPag
                     updatedBook.readHistory.splice(i, 1)
                 } else {
                     session.pagesAdded -= deficit
-                    session.endPage -= deficit
                     deficit = 0
                 }
             }
         }
     } else {
-        // pagesAdded === 0 (user changed the reading date of the latest session or added initial history)
-        if (date && updatedBook.readHistory.length > 0) {
+        if (isDateModified && updatedBook.readHistory.length > 0) {
             const lastSessionIndex = updatedBook.readHistory.length - 1
             updatedBook.readHistory[lastSessionIndex].date = sessionDate.toISOString()
         } else if (newPages > 0 && updatedBook.readHistory.length === 0) {
             updatedBook.readHistory.push({
+                id: 'sess_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
                 date: sessionDate.toISOString(),
                 pagesAdded: newPages,
                 startPage: 0,
-                endPage: newPages
+                endPage: newPages,
+                duration: null
             })
         }
     }
 
+    updatedBook.readHistory.sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime())
+
+    recalculateBookProgress(updatedBook)
+
     if (updatedBook.pagesRead >= (updatedBook.totalPages || 0) && (updatedBook.totalPages || 0) > 0) {
-        updatedBook.completedAt = sessionDate.toISOString()
+        const lastSession = updatedBook.readHistory.length > 0 ? updatedBook.readHistory[updatedBook.readHistory.length - 1] : null
+        updatedBook.completedAt = (lastSession && lastSession.date) || sessionDate.toISOString()
     } else {
         delete (updatedBook as any).completedAt
     }

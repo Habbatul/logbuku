@@ -290,6 +290,28 @@
                                 <path d="m5 12 4 4L19 6" />
                             </svg>
                         </NuxtLink>
+
+                        <NuxtLink to="/sync" @click="navigationOpen = false"
+                            class="flex cursor-pointer items-center gap-3 rounded-xl px-3.5 py-2.5 text-xs font-semibold tracking-wide"
+                            :class="route.path === '/sync'
+                                    ? 'bg-white/20 text-white shadow-sm'
+                                    : 'text-white hover:bg-white/10'
+                                ">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M12 20h.01" />
+                                <path d="M2 8.82a15 15 0 0 1 20 0" />
+                                <path d="M5 12.859a10 10 0 0 1 14 0" />
+                                <path d="M8.5 16.429a5 5 0 0 1 7 0" />
+                            </svg>
+                            <span>Transfer P2P</span>
+                            <svg v-if="route.path === '/sync'" class="ml-auto text-sky-300" xmlns="http://www.w3.org/2000/svg"
+                                width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m5 12 4 4L19 6" />
+                            </svg>
+                        </NuxtLink>
                     </div>
                 </div>
             </div>

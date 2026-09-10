@@ -26,9 +26,11 @@
                 </div>
             </div>
 
-            <div class="flex w-full shrink-0 flex-col sm:flex-row gap-3 sm:w-auto">
+          <div
+                class="flex w-full shrink-0 flex-col gap-3 md:grid md:grid-cols-[auto_auto] justify-items-center md:w-auto">
+
                 <button @click="exportDatabase"
-                    class=" border border-amber-300/50  rounded-xl text-amber-100 bg-amber-400/10 hover:bg-amber-800/30 transition-colors inline-flex w-full sm:w-auto items-center justify-center gap-2 px-4 py-2.5 text-xs sm:text-sm">
+                    class="border border-amber-300/50 rounded-xl text-amber-100 bg-amber-400/10 hover:bg-amber-800/30 transition-colors inline-flex w-full md:w-auto items-center justify-center gap-2 px-4 py-2.5 text-xs md:text-sm">
                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
@@ -39,7 +41,7 @@
                 </button>
 
                 <button @click="triggerImport"
-                    class=" border border-green-300/50  rounded-xl text-green-100 bg-green-500/10 hover:bg-green-800/30 transition-colors inline-flex w-full sm:w-auto items-center justify-center gap-2 px-4 py-2.5 text-xs sm:text-sm">
+                    class="border border-green-300/50 rounded-xl text-green-100 bg-green-500/10 hover:bg-green-800/30 transition-colors inline-flex w-full md:w-auto items-center justify-center gap-2 px-4 py-2.5 text-xs md:text-sm">
                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
@@ -48,8 +50,22 @@
                     </svg>
                     Impor Data
                 </button>
+
                 <input type="file" ref="fileInput" accept=".json" class="hidden" @change="importDatabase" />
+
+                <NuxtLink to="/sync"
+                    class="md:col-span-2 border border-sky-300/50 rounded-xl text-sky-100 bg-sky-500/15 hover:bg-sky-700/30 transition-colors inline-flex w-full md:w-fit items-center justify-center gap-2 px-4 py-2.5 text-xs md:text-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 20h.01" />
+                        <path d="M2 8.82a15 15 0 0 1 20 0" />
+                        <path d="M5 12.859a10 10 0 0 1 14 0" />
+                        <path d="M8.5 16.429a5 5 0 0 1 7 0" />
+                    </svg>
+                    Transfer Antar-Device
+                </NuxtLink>
             </div>
+
         </div>
     </section>
 </template>

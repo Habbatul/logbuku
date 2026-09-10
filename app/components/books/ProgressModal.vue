@@ -61,6 +61,11 @@
                     Dari total <span class="font-bold tabular-nums text-white">{{ totalPages }}</span> halaman
                 </div>
 
+                <div v-if="lastSessionFormatted" class="text-center text-[11px] text-white/90">
+                    Histori terakhir: <span class="font-bold text-sky-300">{{ lastSessionFormatted }}</span>
+                    <span v-if="lastSession?.pagesAdded" class="text-emerald-300 font-semibold"> (+{{ lastSession.pagesAdded }} hal)</span>
+                </div>
+
                 <div class="pt-2 space-y-2">
                     <button type="button" @click="isDateExpanded = !isDateExpanded"
                         class="flex w-full cursor-pointer items-center justify-between rounded-xl bg-white/10 hover:bg-white/15 px-3.5 py-2.5 text-xs font-semibold text-white transition-colors focus:outline-none">
@@ -89,16 +94,28 @@
 
                     <div v-show="isDateExpanded"
                         class="space-y-2 rounded-xl bg-white/10 backdrop-blur-md p-3 shadow-inner animate-in fade-in zoom-in-95 duration-150">
-                        <label class="block text-[11px] font-bold tracking-wider text-white">
-                            Pilih Tanggal Sesi:
-                        </label>
+                        <div class="flex items-center justify-between">
+                            <label class="block text-[11px] font-bold tracking-wider text-white">
+                                Pilih Tanggal Sesi:
+                            </label>
+                            <span v-if="lastSessionFormatted" class="text-[10px] text-sky-200">
+                                Sesi lalu: {{ lastSessionFormatted }}
+                            </span>
+                        </div>
                         <div class="flex items-center gap-2">
                             <input v-model="selectedDate" type="date" :max="todayDateString"
+                                @change="userChangedDate = true"
                                 class="w-full glass-input rounded-lg px-3 py-1.5 text-xs font-semibold text-white" />
-                            <button v-if="selectedDate !== todayDateString" type="button" @click="selectedDate = todayDateString"
+                            <button v-if="selectedDate !== todayDateString" type="button" @click="selectedDate = todayDateString; userChangedDate = true"
                                 title="Reset ke hari ini"
                                 class="btn-sunset-secondary shrink-0 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-white">
                                 Hari Ini
+                            </button>
+                            <button v-if="lastSessionDateString && selectedDate !== lastSessionDateString" type="button"
+                                @click="selectedDate = lastSessionDateString; userChangedDate = true"
+                                title="Samakan dengan tanggal sesi terakhir"
+                                class="btn-sunset-secondary shrink-0 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-sky-300">
+                                Sesi Lalu
                             </button>
                         </div>
                         <p class="text-[11px] text-white">
@@ -143,12 +160,49 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     (e: 'close'): void
-    (e: 'save', payload: { book: Book; newPages: number; date?: string }): void
+    (e: 'save', payload: { book: Book; newPages: number; date?: string; isDateModified?: boolean }): void
 }>()
 
 const pagesRead = ref(0)
 const totalPages = ref(0)
 const isDateExpanded = ref(false)
+const userChangedDate = ref(false)
+
+const lastSession = computed(() => {
+    if (props.book?.readHistory && props.book.readHistory.length > 0) {
+        return props.book.readHistory[props.book.readHistory.length - 1]
+    }
+    return null
+})
+
+const lastSessionFormatted = computed(() => {
+    if (!lastSession.value?.date) return null
+    try {
+        const d = new Date(lastSession.value.date)
+        if (isNaN(d.getTime())) return null
+        return d.toLocaleDateString('id-ID', {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric'
+        })
+    } catch {
+        return null
+    }
+})
+
+const lastSessionDateString = computed(() => {
+    if (!lastSession.value?.date) return null
+    try {
+        const d = new Date(lastSession.value.date)
+        if (isNaN(d.getTime())) return null
+        const y = d.getFullYear()
+        const m = String(d.getMonth() + 1).padStart(2, '0')
+        const day = String(d.getDate()).padStart(2, '0')
+        return `${y}-${m}-${day}`
+    } catch {
+        return null
+    }
+})
 
 const getTodayDateString = () => {
     const d = new Date()
@@ -181,6 +235,7 @@ watch(
             pagesRead.value = b.pagesRead || 0
             totalPages.value = b.totalPages || 0
             isDateExpanded.value = false
+            userChangedDate.value = false
             selectedDate.value = getTodayDateString()
         }
     },
@@ -218,7 +273,8 @@ const handleSave = () => {
     emit('save', {
         book: props.book,
         newPages: pagesRead.value,
-        date: selectedDate.value
+        date: selectedDate.value,
+        isDateModified: userChangedDate.value
     })
 }
 </script>
