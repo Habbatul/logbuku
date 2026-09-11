@@ -72,6 +72,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { normalizeLegacyReadSessions } from '~/utils/readingProgress'
 
 const fileInput = ref<HTMLInputElement | null>(null)
 const statusMessage = ref<{ type: 'success' | 'error', text: string } | null>(null)
@@ -116,7 +117,12 @@ const importDatabase = (event: any) => {
                 const db = ev.target.result
                 const tx = db.transaction('books', 'readwrite')
                 const store = tx.objectStore('books')
-                data.forEach((book: any) => store.put(book))
+                data.forEach((book: any) => {
+                    if (Array.isArray(book.readHistory)) {
+                        normalizeLegacyReadSessions(book.readHistory, Number(book.totalPages) || 0)
+                    }
+                    store.put(book)
+                })
                 tx.oncomplete = () => window.location.reload()
             }
         } catch (error) {

@@ -74,7 +74,7 @@
                                 class="rounded-full bg-emerald-500/25 px-2.5 py-0.5 text-[11px] font-bold text-emerald-300 shadow-sm">
                                 ✓ Selesai Dibaca
                             </span>
-                            <span v-else-if="selectedBook.pagesRead > 0"
+                            <span v-else-if="selectedBookPagesRead > 0"
                                 class="rounded-full bg-sky-500/25 px-2.5 py-0.5 text-[11px] font-bold text-sky-200 shadow-sm">
                                 ● Sedang Dibaca
                             </span>
@@ -92,7 +92,7 @@
                         <div class="pt-2 space-y-2">
                             <div class="flex items-center justify-between text-xs">
                                 <span class="text-white">
-                                    Progres: <strong class="tabular-nums text-white font-bold">{{ selectedBook.pagesRead || 0 }}</strong> / <span class="text-white font-semibold">{{ selectedBook.totalPages || 0 }}</span> halaman
+                                    Progres: <strong class="tabular-nums text-white font-bold">{{ selectedBookPagesRead }}</strong> / <span v-if="trackingTotalPrefaceCount > 0" class="text-white font-semibold">({{ selectedBook.totalPages || 0 }} + {{ trackingTotalPrefaceCount }})</span><span v-else class="text-white font-semibold">{{ selectedBook.totalPages || 0 }}</span> halaman
                                 </span>
                                 <span class="font-extrabold tabular-nums"
                                     :class="isBookCompleted ? 'text-emerald-300' : 'text-sky-300'">
@@ -103,7 +103,7 @@
                             <div class="h-2.5 w-full overflow-hidden rounded-full bg-white/20 shadow-inner">
                                 <div class="h-full rounded-full transition-all duration-500 ease-out shadow-sm"
                                     :class="isBookCompleted ? 'bg-gradient-to-r from-emerald-500 to-teal-400' : 'bg-gradient-to-r from-sky-400 to-cyan-400 shadow-[0_0_12px_rgba(56,189,248,0.4)]'"
-                                    :style="{ width: `${Math.min(bookPercentage, 100)}%` }"></div>
+                                    :style="{ width: `${trackingProgressWidth}%` }"></div>
                             </div>
                         </div>
                     </div>
@@ -271,6 +271,17 @@
                                     ? 'Silakan membaca buku Anda. Setelah selesai (minimal 1 menit), tekan tombol Stop Tracking di sebelah kiri untuk memasukkan jumlah halaman yang telah dibaca.'
                                     : 'Mulai timer di sebelah kiri saat Anda siap membaca. Form input halaman akan terbuka otomatis setelah Anda menekan Stop.' }}
                             </p>
+                            <div v-if="trackingState === 'idle'" class="pt-2">
+                                <NuxtLink to="/books"
+                                    class="btn-sunset-secondary inline-flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-semibold text-white/80 hover:text-white transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z" />
+                                        <path d="M6 6h10" />
+                                        <path d="M6 10h10" />
+                                    </svg>
+                                    <span>Input manual hanya tersedia di Koleksi</span>
+                                </NuxtLink>
+                            </div>
                         </div>
                     </div>
 
@@ -293,11 +304,15 @@
                                     <circle cx="12" cy="12" r="10" />
                                     <polyline points="12 6 12 12 16 14" />
                                 </svg>
-                                <span class="font-semibold text-emerald-200">DURASI TERCATAT:</span>
+                                <span class="font-semibold text-emerald-200">
+                                    DURASI TERCATAT:
+                                </span>
                             </div>
-                            <span class="text-sm font-bold text-emerald-200 tabular-nums">
-                                {{ timer.formatDuration(lockedDurationSeconds) }}
-                            </span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm font-bold text-emerald-200 tabular-nums">
+                                    {{ timer.formatDuration(lockedDurationSeconds) }}
+                                </span>
+                            </div>
                         </div>
 
                         <div class="space-y-2.5">
@@ -307,7 +322,8 @@
 
                             <div class="flex items-center gap-3">
                                 <button type="button" @click="decrementPages"
-                                    class="btn-sunset-secondary w-11 h-11 rounded-xl flex items-center justify-center font-bold text-xl text-white focus:outline-none"
+                                    :disabled="isTrackingRangeSpecified"
+                                    class="btn-sunset-secondary w-11 h-11 rounded-xl flex items-center justify-center font-bold text-xl text-white focus:outline-none disabled:opacity-30 disabled:cursor-not-allowed"
                                     aria-label="Kurangi satu halaman">
                                     -
                                 </button>
@@ -315,12 +331,14 @@
                                 <div class="relative flex-1">
                                     <input v-model.number="sessionPagesAdded" type="number" min="1"
                                         placeholder="0"
-                                        class="w-full h-11 text-center glass-input rounded-xl text-lg font-bold tabular-nums text-white" />
+                                        :disabled="isTrackingRangeSpecified"
+                                        class="w-full h-11 text-center glass-input rounded-xl text-lg font-bold tabular-nums text-white disabled:opacity-40 disabled:cursor-not-allowed" />
                                     <span class="absolute right-3 top-3 text-xs font-bold text-sky-300">HAL</span>
                                 </div>
 
                                 <button type="button" @click="incrementPages"
-                                    class="btn-sunset-secondary w-11 h-11 rounded-xl flex items-center justify-center font-bold text-xl text-white focus:outline-none"
+                                    :disabled="isTrackingRangeSpecified"
+                                    class="btn-sunset-secondary w-11 h-11 rounded-xl flex items-center justify-center font-bold text-xl text-white focus:outline-none disabled:opacity-30 disabled:cursor-not-allowed"
                                     aria-label="Tambah satu halaman">
                                     +
                                 </button>
@@ -328,28 +346,160 @@
 
                             <div class="flex flex-wrap items-center gap-2 pt-1">
                                 <button type="button" @click="addQuickPages(5)"
-                                    class="btn-sunset-secondary rounded-lg px-2.5 py-1 text-xs font-semibold text-white">
+                                    :disabled="isTrackingRangeSpecified"
+                                    class="btn-sunset-secondary rounded-lg px-2.5 py-1 text-xs font-semibold text-white disabled:opacity-30 disabled:cursor-not-allowed">
                                     +5 HAL
                                 </button>
                                 <button type="button" @click="addQuickPages(10)"
-                                    class="btn-sunset-secondary rounded-lg px-2.5 py-1 text-xs font-semibold text-white">
+                                    :disabled="isTrackingRangeSpecified"
+                                    class="btn-sunset-secondary rounded-lg px-2.5 py-1 text-xs font-semibold text-white disabled:opacity-30 disabled:cursor-not-allowed">
                                     +10 HAL
                                 </button>
                                 <button type="button" @click="addQuickPages(25)"
-                                    class="btn-sunset-secondary rounded-lg px-2.5 py-1 text-xs font-semibold text-white">
+                                    :disabled="isTrackingRangeSpecified"
+                                    class="btn-sunset-secondary rounded-lg px-2.5 py-1 text-xs font-semibold text-white disabled:opacity-30 disabled:cursor-not-allowed">
                                     +25 HAL
                                 </button>
                                 <button v-if="remainingPages > 0" type="button" @click="fillRemainingPages"
-                                    class="rounded-lg bg-emerald-500/20 px-2.5 py-1 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/30 transition-colors">
+                                    :disabled="isTrackingRangeSpecified"
+                                    class="rounded-lg bg-emerald-500/20 px-2.5 py-1 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/30 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
                                     Tamatkan ({{ remainingPages }} HAL)
                                 </button>
                             </div>
 
-                            <div class="rounded-xl bg-white/10 px-3.5 py-2.5 text-xs flex items-center justify-between">
+                            <div v-if="isTrackingRangeSpecified" class="text-center text-[10px] text-sky-200 font-medium">
+                                *Input diabaikan karena jumlah halaman dihitung otomatis dari rentang Mulai & Sampai
+                            </div>
+
+                            <div class="rounded-xl bg-white/10 px-3.5 py-2.5 text-xs flex flex-wrap items-center justify-between gap-1">
                                 <span class="text-white font-medium">Hasil Progres Buku:</span>
                                 <span class="text-white">
-                                    {{ selectedBook.pagesRead || 0 }} hal → <strong class="text-sky-300 font-bold">{{ projectedPagesRead }}</strong> / {{ selectedBook.totalPages || 0 }} hal
+                                    <span class="tabular-nums font-medium">{{ currentAccumulatedPages }}</span> → <strong class="text-sky-300 font-bold tabular-nums">{{ projectedAccumulatedPages }}</strong> / <template v-if="trackingTotalPrefaceCount > 0">({{ selectedBook.totalPages || 0 }} + {{ trackingTotalPrefaceCount }})</template><template v-else>{{ selectedBook.totalPages || 0 }}</template> hal
                                 </span>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <button type="button" @click="isSessionRangeExpanded = !isSessionRangeExpanded"
+                                class="flex w-full cursor-pointer items-center justify-between rounded-xl bg-white/10 hover:bg-white/15 px-3.5 py-2.5 text-xs font-semibold text-white transition-colors focus:outline-none">
+                                <div class="flex items-center gap-2 min-w-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 text-sky-300">
+                                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                                    </svg>
+                                    <span class="truncate">
+                                        Rentang: <span class="text-sky-300 font-bold tabular-nums">{{ formattedTrackingRangeDisplay }}</span>
+                                    </span>
+                                </div>
+                                <div class="flex items-center gap-1.5 shrink-0">
+                                    <span class="text-xs text-white font-semibold" v-if="!isSessionRangeExpanded">Atur</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                        class="transition-transform duration-200 text-white"
+                                        :class="isSessionRangeExpanded ? 'rotate-180' : ''">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </div>
+                            </button>
+
+                            <div v-show="isSessionRangeExpanded"
+                                class="space-y-2.5 rounded-xl bg-white/10 backdrop-blur-md p-3 shadow-inner animate-in fade-in zoom-in-95 duration-150">
+                                <div class="flex items-center justify-between">
+                                    <label class="block text-[11px] font-bold tracking-wider text-white">
+                                        Halaman Awal & Akhir:
+                                    </label>
+                                    <button v-if="sessionStartPageInput || sessionEndPageInput" type="button" @click="resetTrackingRangeToAuto"
+                                        class="text-[10px] font-bold text-sky-300 hover:text-white underline cursor-pointer">
+                                        Reset ke Otomatis
+                                    </button>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div>
+                                        <label class="block text-[10px] text-white/90 font-medium mb-1">Mulai (Start):</label>
+                                        <input v-model="sessionStartPageInput" type="text"
+                                            :placeholder="`Otomatis (${computedTrackingRange?.startPageRaw || (trackingLastEndPage + 1)})`"
+                                            class="w-full glass-input rounded-lg px-2.5 py-1.5 text-xs font-semibold text-white" />
+                                    </div>
+                                    <div>
+                                        <label class="block text-[10px] text-white/90 font-medium mb-1">Sampai (End):</label>
+                                        <input v-model="sessionEndPageInput" type="text"
+                                            :placeholder="`Otomatis (${computedTrackingRange?.endPageRaw || computedTrackingRange?.endPage || 0})`"
+                                            class="w-full glass-input rounded-lg px-2.5 py-1.5 text-xs font-semibold text-white" />
+                                    </div>
+                                </div>
+
+                                <div v-if="!computedTrackingProgress.isValid && !computedTrackingProgress.errorMessage?.includes('halaman pembuka')"
+                                    class="rounded-lg bg-red-500/20 border border-red-500/30 p-2 text-[11px] text-red-200 font-semibold leading-tight flex items-center gap-1.5 animate-in fade-in duration-150">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 text-red-300">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <line x1="12" y1="8" x2="12" y2="12" />
+                                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                                    </svg>
+                                    <span>{{ computedTrackingProgress.errorMessage }}</span>
+                                </div>
+
+                                <p v-else class="text-[11px] text-white/90 leading-tight">
+                                    *Mendukung angka normal (1, 15) atau Romawi (iv, ix). Kosongkan untuk otomatis mengikuti halaman terakhir (Hal {{ projectedPagesRead || 0 }}).
+                                </p>
+
+                                <div class="pt-2 border-t border-white/10 space-y-2">
+                                    <label class="flex items-start gap-2 select-none text-white cursor-not-allowed opacity-80">
+                                        <input type="checkbox" :checked="isTrackingPrefaceCheckboxActive" disabled
+                                            class="mt-0.5 rounded border-white/30 text-sky-500 focus:ring-0 focus:ring-offset-0 shrink-0 cursor-not-allowed" />
+                                        <span class="text-[11px] font-medium leading-snug">
+                                            Tambah jumlah halaman dengan preface
+                                        </span>
+                                    </label>
+                                    <p class="text-[10px] text-white/60 pl-5">
+                                        <span v-if="isTrackingRomanDetected">
+                                            *Otomatis aktif karena input halaman berupa Romawi.
+                                        </span>
+                                        <span v-else-if="isTrackingArabicRangeDetected">
+                                            *Otomatis nonaktif (terkunci) untuk rentang penomoran Arab murni.
+                                        </span>
+                                        <span v-else>
+                                            *Otomatis nonaktif (terkunci). Masukkan angka Romawi pada rentang halaman untuk mengaktifkan.
+                                        </span>
+                                    </p>
+
+                                    <div v-if="isTrackingPrefaceCheckboxActive || (trackingHistoricalTotalPreface > 0 && isSessionRangeExpanded)" class="pt-1 space-y-1 animate-in fade-in duration-150">
+                                        <label class="block text-[10px] font-bold"
+                                            :class="isTrackingPrefaceCheckboxActive ? 'text-sky-200' : 'text-white/40'">
+                                            Total Halaman Pembuka (Buku):
+                                        </label>
+                                        <input v-model="sessionTotalPrefacePagesInput" type="text" placeholder="Contoh: 5 atau v"
+                                            :disabled="!isTrackingPrefaceCheckboxActive"
+                                            class="w-full glass-input rounded-lg px-2.5 py-1.5 text-xs font-semibold text-white disabled:opacity-40 disabled:cursor-not-allowed" />
+                                        
+                                        <p v-if="!isTrackingPrefaceCheckboxActive" class="text-[10px] text-white/50 leading-relaxed pl-0.5">
+                                            *Masukkan angka Romawi pada rentang halaman untuk mengisi atau mengubah.
+                                        </p>
+                                        <div v-else-if="isTrackingPrefaceReduced || (computedTrackingProgress.errorMessage && computedTrackingProgress.errorMessage.includes('halaman pembuka'))" class="rounded-lg bg-red-500/20 border border-red-500/30 p-2 text-[10px] text-red-200 font-semibold leading-tight flex items-start gap-1.5 animate-in fade-in duration-150">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 text-red-300 mt-0.5">
+                                                <circle cx="12" cy="12" r="10" />
+                                                <line x1="12" y1="8" x2="12" y2="12" />
+                                                <line x1="12" y1="16" x2="12.01" y2="16" />
+                                            </svg>
+                                            <span>{{ computedTrackingProgress.errorMessage || `Total halaman pembuka (${parsedTrackingTotalPrefacePages}) tidak boleh lebih sedikit dari angka Romawi tertinggi di histori (${trackingHistoricalTotalPreface} hal).` }}</span>
+                                        </div>
+                                        <div v-else-if="isTrackingPrefaceIncreased" class="rounded-lg bg-amber-500/20 border border-amber-500/30 p-2 text-[10px] text-amber-200 font-medium leading-tight flex items-start gap-1.5 animate-in fade-in duration-150">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 text-amber-300 mt-0.5">
+                                                <circle cx="12" cy="12" r="10" />
+                                                <line x1="12" y1="8" x2="12" y2="12" />
+                                                <line x1="12" y1="16" x2="12.01" y2="16" />
+                                            </svg>
+                                            <span>Total halaman pembuka bertambah dari {{ trackingHistoricalTotalPreface }} menjadi {{ parsedTrackingTotalPrefacePages }} hal. Anda akan diminta konfirmasi sebelum menyimpan.</span>
+                                        </div>
+                                        <p v-else class="text-[10px] text-white/80 leading-relaxed">
+                                            *Wajib diisi jika menggunakan penomoran Romawi. 
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -362,7 +512,7 @@
                         </div>
 
                         <div class="pt-2">
-                            <button type="submit" :disabled="!sessionPagesAdded || Number(sessionPagesAdded) <= 0"
+                            <button type="submit" :disabled="!isTrackingSubmitValid"
                                 class="btn-sunset-primary w-full py-3.5 rounded-xl text-sm font-bold uppercase disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -557,7 +707,7 @@
                             </div>
                             <p class="text-xs text-white">
                                 <span v-if="isBookCompleted" class="text-emerald-300 font-semibold">✓ Buku telah selesai dibaca</span>
-                                <span v-else>Sisa <strong class="text-white tabular-nums font-bold">{{ remainingPages }}</strong> dari {{ selectedBook?.totalPages || 0 }} hal</span>
+                                <span v-else>Sisa <strong class="text-white tabular-nums font-bold">{{ remainingPages }}</strong> dari {{ trackingEffectiveTotalPages }} hal</span>
                             </p>
                         </div>
                     </div>
@@ -582,9 +732,9 @@
                                     <span class="rounded-lg bg-emerald-500/20 px-2 py-0.5 font-bold text-emerald-300">
                                         +{{ session.pagesAdded }} HAL
                                     </span>
-                                    <span v-if="session.endPage !== undefined && session.startPage !== undefined"
+                                    <span v-if="(session.endPage !== undefined && session.startPage !== undefined) || (session.startPageRaw && session.endPageRaw)"
                                         class="text-white font-medium">
-                                        (Hal {{ session.startPage }} - {{ session.endPage }})
+                                        ({{ formatSessionRange(session) }})
                                     </span>
                                 </div>
                                 <div class="flex flex-wrap items-center gap-2 text-xs text-white mt-2">
@@ -914,7 +1064,7 @@
                             <div class="min-w-0 flex-1">
                                 <h4 class="text-xs font-semibold text-white truncate">{{ b.title }}</h4>
                                 <p class="text-[11px] text-white tabular-nums">
-                                    {{ b.pagesRead || 0 }} / {{ b.totalPages || 0 }} HAL ({{ Math.round(((b.pagesRead || 0) / (b.totalPages || 1)) * 100) }}%)
+                                    {{ getBookPagesRead(b) }} / {{ getEffectiveTotalPages(b) }} HAL ({{ calculateProgressPercentage(getBookPagesRead(b), getEffectiveTotalPages(b)) }}%)
                                 </p>
                             </div>
                             <span v-if="selectedBook?.id === b.id" class="rounded-lg bg-sky-500/30 px-2 py-0.5 text-xs font-bold text-sky-200">
@@ -949,8 +1099,15 @@
 
                         <div class="space-y-1.5">
                             <label class="block text-xs font-semibold text-white">Jumlah Halaman Dibaca:</label>
-                            <input v-model.number="editSessionPages" type="number" min="1"
-                                class="w-full glass-input rounded-xl px-3 py-2 text-xs font-semibold tabular-nums text-white" />
+                            <div class="flex items-center justify-between rounded-xl bg-white/10 px-3.5 py-2.5 text-xs text-white">
+                                <span class="text-white font-medium truncate pr-2">
+                                    {{ (editingSession.displayRange || (editingSession.startPageRaw && editingSession.endPageRaw)) ? `Rentang: ${editingSession.displayRange || `${editingSession.startPageRaw}–${editingSession.endPageRaw}`}` : 'Halaman Tercatat' }}
+                                </span>
+                                <span class="font-bold text-emerald-300 tabular-nums shrink-0">+{{ editingSession.pagesAdded }} HAL</span>
+                            </div>
+                            <p class="text-[10px] text-white/60 leading-tight">
+                                *Jumlah halaman tidak dapat diubah di sini. Jika ada kesalahan input halaman, silakan hapus sesi ini dan catat sesi baru.
+                            </p>
                         </div>
 
                         <div class="space-y-1.5">
@@ -976,7 +1133,7 @@
                             <div v-if="historicalPaceSecondsPerPage > 0" class="pt-1">
                                 <button type="button" @click="applyEditEstimateDuration"
                                     class="cursor-pointer text-left text-[11px] text-sky-300 hover:underline">
-                                    ⚡ Gunakan Estimasi: ~{{ Math.max(1, Math.round(((Number(editSessionPages) || 1) * historicalPaceSecondsPerPage) / 60)) }} mnt
+                                    ⚡ Gunakan Estimasi: ~{{ Math.max(1, Math.round(((Number(editingSession.pagesAdded) || 1) * historicalPaceSecondsPerPage) / 60)) }} mnt
                                 </button>
                             </div>
                         </div>
@@ -1047,6 +1204,34 @@
                     </div>
                 </div>
             </div>
+
+            <div v-if="showTrackingPrefaceConfirmModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+                <div class="absolute inset-0 bg-black/50 backdrop-blur-md" @click="showTrackingPrefaceConfirmModal = false"></div>
+                <div class="relative liquid-glass-modal rounded-2xl w-full max-w-sm overflow-hidden p-5 space-y-4 animate-in zoom-in-95 duration-150 text-white">
+                    <div class="flex items-center gap-2 text-amber-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+                            <line x1="12" y1="9" x2="12" y2="13" />
+                            <line x1="12" y1="17" x2="12.01" y2="17" />
+                        </svg>
+                        <h3 class="font-bold text-sm">Konfirmasi Perubahan</h3>
+                    </div>
+                    <p class="text-xs leading-relaxed text-white/90">
+                        Anda mengubah total halaman pembuka (dari {{ trackingHistoricalTotalPreface }} menjadi {{ parsedTrackingTotalPrefacePages }} halaman). Apakah Anda yakin mengubah total halaman pembuka?
+                    </p>
+                    <div class="flex gap-2.5 pt-2">
+                        <button type="button" @click="showTrackingPrefaceConfirmModal = false"
+                            class="btn-sunset-secondary flex-1 py-2 rounded-xl text-xs font-semibold text-white">
+                            Batal
+                        </button>
+                        <button type="button" @click="confirmAndExecuteTrackingSubmit"
+                            class="btn-sunset-primary flex-1 py-2 rounded-xl text-xs font-bold text-white">
+                            Ya, Yakin
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -1055,6 +1240,23 @@
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, useRouter } from '#imports'
 import type { Book, ReadSession } from '~/types/book'
+import {
+    getLastEndPage,
+    calculateReadingProgress,
+    computeReadingRange,
+    parsePageInput,
+    romanToInt,
+    isRomanNumeral,
+    formatSessionRange,
+    calculateUniquePages,
+    getBookTotalPrefacePages,
+    getBookIncludePreface,
+    getEffectiveTotalPages,
+    calculateProgressPercentage,
+    bookHasRomanHistory,
+    getHistoricalTotalPrefacePages,
+    getReadAbsolutePages
+} from '~/utils/readingProgress'
 
 useHead({
     title: 'Tracking Bacaan'
@@ -1073,6 +1275,11 @@ const successNotification = ref<string>('')
 
 const sessionPagesAdded = ref<number | ''>('')
 const lockedDurationSeconds = ref<number>(0)
+const isSessionRangeExpanded = ref(false)
+const sessionStartPageInput = ref('')
+const sessionEndPageInput = ref('')
+const sessionTotalPrefacePagesInput = ref('')
+const showTrackingPrefaceConfirmModal = ref(false)
 
 const getTodayDateString = () => {
     const d = new Date()
@@ -1114,34 +1321,241 @@ watch(showBookPicker, (open) => {
     }
 })
 
+const initPrefaceFromBook = (b: Book | null) => {
+    if (!b) return
+    const tp = getHistoricalTotalPrefacePages(b)
+    sessionTotalPrefacePagesInput.value = tp > 0 ? String(tp) : ''
+    showTrackingPrefaceConfirmModal.value = false
+}
+
+watch(
+    () => selectedBook.value?.id,
+    () => {
+        if (selectedBook.value) {
+            initPrefaceFromBook(selectedBook.value)
+        }
+    },
+    { immediate: true }
+)
+
+const resetTrackingRangeToAuto = () => {
+    sessionStartPageInput.value = ''
+    sessionEndPageInput.value = ''
+    if (selectedBook.value) {
+        initPrefaceFromBook(selectedBook.value)
+    } else {
+        sessionTotalPrefacePagesInput.value = ''
+    }
+}
+
 const selectBook = (b: Book) => {
     showBookPicker.value = false
     lockedDurationSeconds.value = 0
     sessionPagesAdded.value = ''
     successNotification.value = ''
+    resetTrackingRangeToAuto()
+    isSessionRangeExpanded.value = false
     router.replace({ query: { ...route.query, id: b.id } })
 }
 
+const trackingLastEndPage = computed(() => {
+    return getLastEndPage(selectedBook.value)
+})
+
+const isTrackingRomanDetected = computed(() => {
+    const pStart = parsePageInput(sessionStartPageInput.value)
+    const pEnd = parsePageInput(sessionEndPageInput.value)
+    return Boolean(pStart?.isRoman || pEnd?.isRoman)
+})
+
+const isTrackingArabicRangeDetected = computed(() => {
+    const pStart = parsePageInput(sessionStartPageInput.value)
+    const pEnd = parsePageInput(sessionEndPageInput.value)
+    return Boolean(pStart && pEnd && !pStart.isRoman && !pEnd.isRoman)
+})
+
+const trackingBookHasRoman = computed(() => {
+    return bookHasRomanHistory(selectedBook.value)
+})
+
+const isTrackingRangeSpecified = computed(() => {
+    return Boolean(sessionStartPageInput.value.trim() || sessionEndPageInput.value.trim())
+})
+
+const trackingHistoricalTotalPreface = computed(() => {
+    return getHistoricalTotalPrefacePages(selectedBook.value)
+})
+
+const isTrackingCheckboxLocked = computed(() => true)
+
+const isTrackingPrefaceCheckboxActive = computed<boolean>(() => {
+    return isTrackingRomanDetected.value
+})
+
+const sessionIncludePrefacePages = computed(() => {
+    return isTrackingPrefaceCheckboxActive.value
+})
+
+const parsedTrackingTotalPrefacePages = computed(() => {
+    if (!isTrackingPrefaceCheckboxActive.value) {
+        return 0
+    }
+    const str = (sessionTotalPrefacePagesInput.value || '').trim()
+    if (!str) {
+        return 0
+    }
+    if (isRomanNumeral(str)) {
+        return romanToInt(str)
+    }
+    const num = parseInt(str, 10)
+    return isNaN(num) ? 0 : num
+})
+
+const isTrackingPrefaceReduced = computed(() => {
+    if (!isTrackingPrefaceCheckboxActive.value) return false
+    if (trackingHistoricalTotalPreface.value <= 0) return false
+    if (!sessionTotalPrefacePagesInput.value.trim()) return true
+    return parsedTrackingTotalPrefacePages.value < trackingHistoricalTotalPreface.value
+})
+
+const isTrackingPrefaceIncreased = computed(() => {
+    if (!isTrackingPrefaceCheckboxActive.value) return false
+    const base = trackingHistoricalTotalPreface.value > 0 ? trackingHistoricalTotalPreface.value : (selectedBook.value?.totalPrefacePages ? Number(selectedBook.value.totalPrefacePages) : 0)
+    if (base <= 0) return false
+    return parsedTrackingTotalPrefacePages.value > base
+})
+
+const trackingTotalPrefaceCount = computed(() => {
+    if (parsedTrackingTotalPrefacePages.value > 0) {
+        return parsedTrackingTotalPrefacePages.value
+    }
+    if (selectedBook.value?.totalPrefacePages && Number(selectedBook.value.totalPrefacePages) > 0) {
+        return Number(selectedBook.value.totalPrefacePages)
+    }
+    return trackingHistoricalTotalPreface.value || 0
+})
+
+const trackingEffectiveTotalPages = computed(() => {
+    const base = Number(selectedBook.value?.totalPages) || 0
+    const tp = trackingTotalPrefaceCount.value
+    if (tp > 0) {
+        return base + tp
+    }
+    return base
+})
+
+const computedTrackingProgress = computed(() => {
+    const pgs = Number(sessionPagesAdded.value) || 0
+    const tp = parsedTrackingTotalPrefacePages.value > 0 ? parsedTrackingTotalPrefacePages.value : trackingTotalPrefaceCount.value
+    return calculateReadingProgress({
+        book: selectedBook.value,
+        startInput: sessionStartPageInput.value,
+        endInput: sessionEndPageInput.value,
+        pagesDelta: pgs > 0 ? pgs : 1,
+        includePrefacePages: sessionIncludePrefacePages.value || (tp > 0),
+        totalPrefaceInput: tp
+    })
+})
+
+const computedTrackingRange = computed(() => computedTrackingProgress.value)
+
+const formattedTrackingRangeDisplay = computed(() => {
+    if (!isTrackingRangeSpecified.value && (!sessionPagesAdded.value || Number(sessionPagesAdded.value) <= 0)) {
+        return '-'
+    }
+    const range = computedTrackingProgress.value
+    if (!range.isValid) {
+        // return range.errorMessage || 'Rentang tidak valid'
+        return 'Rentang tidak valid'
+    }
+    return range.displayRange
+})
+
+const isTrackingSubmitValid = computed(() => {
+    if (!selectedBook.value) return false
+    if (lockedDurationSeconds.value < 60) return false
+    if (isTrackingPrefaceReduced.value) return false
+    return computedTrackingProgress.value.isValid && computedTrackingProgress.value.pagesAdded > 0
+})
+
+watch([sessionStartPageInput, sessionEndPageInput, sessionIncludePrefacePages, sessionTotalPrefacePagesInput], () => {
+    if (isTrackingRangeSpecified.value) {
+        const range = computedTrackingProgress.value
+        if (range.isValid && range.pagesAdded > 0) {
+            sessionPagesAdded.value = range.pagesAdded
+        }
+    }
+})
+
+const getBookPagesRead = (b: Book | null | undefined) => {
+    if (!b) return 0
+    if (Array.isArray(b.readHistory) && b.readHistory.length > 0) {
+        const tp = getBookTotalPrefacePages(b)
+        const inc = getBookIncludePreface(b)
+        const readSet = getReadAbsolutePages(b.readHistory, tp, inc)
+        const eff = getEffectiveTotalPages(b)
+        return eff > 0 ? Math.min(readSet.size, eff) : readSet.size
+    }
+    const eff = getEffectiveTotalPages(b)
+    const val = Number(b.pagesRead) || 0
+    return eff > 0 ? Math.min(val, eff) : val
+}
+
+const selectedBookPagesRead = computed(() => {
+    if (!selectedBook.value) return 0
+    if (Array.isArray(selectedBook.value.readHistory) && selectedBook.value.readHistory.length > 0) {
+        const tp = trackingTotalPrefaceCount.value
+        const readSet = getReadAbsolutePages(selectedBook.value.readHistory, tp, tp > 0)
+        const total = trackingEffectiveTotalPages.value
+        return total > 0 ? Math.min(readSet.size, total) : readSet.size
+    }
+    const total = trackingEffectiveTotalPages.value
+    const val = Number(selectedBook.value.pagesRead) || 0
+    return total > 0 ? Math.min(val, total) : val
+})
+
+const currentAccumulatedPages = computed(() => {
+    if (!selectedBook.value) return 0
+    const total = trackingEffectiveTotalPages.value
+    return total > 0 ? Math.min(selectedBookPagesRead.value, total) : selectedBookPagesRead.value
+})
+
+const projectedAccumulatedPages = computed(() => {
+    if (!selectedBook.value) return 0
+    const total = trackingEffectiveTotalPages.value
+    if (!isTrackingRangeSpecified.value && (!sessionPagesAdded.value || Number(sessionPagesAdded.value) <= 0)) {
+        return currentAccumulatedPages.value
+    }
+    const proj = computedTrackingProgress.value.projectedPagesRead
+    return total > 0 ? Math.min(proj, total) : proj
+})
+
 const bookPercentage = computed(() => {
-    if (!selectedBook.value || !selectedBook.value.totalPages) return 0
-    return Math.round(((selectedBook.value.pagesRead || 0) / selectedBook.value.totalPages) * 100) || 0
+    if (!selectedBook.value || trackingEffectiveTotalPages.value <= 0) return 0
+    return calculateProgressPercentage(selectedBookPagesRead.value, trackingEffectiveTotalPages.value)
+})
+
+const trackingProgressWidth = computed(() => {
+    if (!selectedBook.value || trackingEffectiveTotalPages.value <= 0) return 0
+    if (selectedBookPagesRead.value >= trackingEffectiveTotalPages.value) return 100
+    return Math.min(99, (selectedBookPagesRead.value / trackingEffectiveTotalPages.value) * 100)
 })
 
 const isBookCompleted = computed(() => {
-    if (!selectedBook.value || !selectedBook.value.totalPages) return false
-    return (selectedBook.value.pagesRead || 0) >= selectedBook.value.totalPages
+    if (!selectedBook.value || trackingEffectiveTotalPages.value <= 0) return false
+    return selectedBookPagesRead.value >= trackingEffectiveTotalPages.value
 })
 
 const remainingPages = computed(() => {
-    if (!selectedBook.value) return 0
-    const total = selectedBook.value.totalPages || 0
-    const read = selectedBook.value.pagesRead || 0
+    if (!selectedBook.value || trackingEffectiveTotalPages.value <= 0) return 0
+    const total = trackingEffectiveTotalPages.value
+    const read = selectedBookPagesRead.value
     return Math.max(0, total - read)
 })
 
 const projectedPagesRead = computed(() => {
     if (!selectedBook.value) return 0
-    return (selectedBook.value.pagesRead || 0) + (Number(sessionPagesAdded.value) || 0)
+    return computedTrackingProgress.value.projectedPagesRead
 })
 
 const currentBookTimer = computed(() => {
@@ -1206,14 +1620,18 @@ const handleReset = () => {
     lockedDurationSeconds.value = 0
     sessionPagesAdded.value = ''
     sessionDateString.value = getTodayDateString()
+    resetTrackingRangeToAuto()
+    isSessionRangeExpanded.value = false
 }
 
 const incrementPages = () => {
+    if (isTrackingRangeSpecified.value) return
     const current = Number(sessionPagesAdded.value) || 0
     sessionPagesAdded.value = current + 1
 }
 
 const decrementPages = () => {
+    if (isTrackingRangeSpecified.value) return
     const current = Number(sessionPagesAdded.value) || 0
     if (current > 1) {
         sessionPagesAdded.value = current - 1
@@ -1223,11 +1641,13 @@ const decrementPages = () => {
 }
 
 const addQuickPages = (amount: number) => {
+    if (isTrackingRangeSpecified.value) return
     const current = Number(sessionPagesAdded.value) || 0
     sessionPagesAdded.value = current + amount
 }
 
 const fillRemainingPages = () => {
+    if (isTrackingRangeSpecified.value) return
     if (remainingPages.value > 0) {
         sessionPagesAdded.value = remainingPages.value
     }
@@ -1260,8 +1680,24 @@ const historicalPaceSecondsPerPage = computed(() => {
 })
 
 const handleSubmitSession = async () => {
-    const pagesToAdd = Number(sessionPagesAdded.value) || 0
-    if (!selectedBook.value || pagesToAdd <= 0) return
+    if (!selectedBook.value || !isTrackingSubmitValid.value || lockedDurationSeconds.value < 60) return
+    if (isTrackingPrefaceIncreased.value) {
+        showTrackingPrefaceConfirmModal.value = true
+        return
+    }
+    await executeTrackingSubmit()
+}
+
+const confirmAndExecuteTrackingSubmit = async () => {
+    showTrackingPrefaceConfirmModal.value = false
+    await executeTrackingSubmit()
+}
+
+const executeTrackingSubmit = async () => {
+    if (!selectedBook.value || !isTrackingSubmitValid.value || lockedDurationSeconds.value < 60) return
+    const range = computedTrackingRange.value
+    const pagesToAdd = range.pagesAdded
+    if (pagesToAdd <= 0) return
 
     const duration = lockedDurationSeconds.value > 0 ? lockedDurationSeconds.value : null
 
@@ -1283,24 +1719,46 @@ const handleSubmitSession = async () => {
         updatedBook.readHistory = []
     }
 
-    const startPage = updatedBook.pagesRead || 0
-    const endPage = startPage + pagesToAdd
+    const oldPages = selectedBook.value?.pagesRead || 0
+    if (updatedBook.readHistory.length === 0 && oldPages > 0) {
+        const baselineDate = selectedBook.value?.date ? new Date(selectedBook.value.date).toISOString() : new Date().toISOString()
+        updatedBook.readHistory.push({
+            id: 'sess_' + Date.now() + '_init',
+            date: baselineDate,
+            pagesAdded: oldPages,
+            startPage: 1,
+            endPage: oldPages,
+            duration: null
+        })
+    }
 
     const newSession: ReadSession = {
         id: 'sess_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
         date: sessionDate.toISOString(),
         pagesAdded: pagesToAdd,
         duration: duration,
-        startPage,
-        endPage
+        startPage: range.startPage,
+        endPage: range.endPage,
+        startPageRaw: range.startPageRaw,
+        endPageRaw: range.endPageRaw,
+        displayRange: range.displayRange,
+        isRoman: range.isRoman,
+        includePrefacePages: range.includePrefacePages,
+        totalPrefacePages: range.totalPrefacePages > 0 ? range.totalPrefacePages : undefined
     }
 
     updatedBook.readHistory.push(newSession)
+    if (range.totalPrefacePages > 0) {
+        updatedBook.totalPrefacePages = range.totalPrefacePages
+    }
+    if (range.includePrefacePages !== undefined) {
+        updatedBook.includePrefacePages = range.includePrefacePages
+    }
     recalculateBookProgress(updatedBook)
 
     await saveBook(updatedBook)
 
-    successNotification.value = `Sesi tracking berhasil disimpan: +${pagesToAdd} halaman (${timer.formatDuration(duration)})!`
+    successNotification.value = `Sesi tracking berhasil disimpan: ${range.displayRange} (+${pagesToAdd} hal${duration ? `, ${timer.formatDuration(duration)}` : ''})!`
     setTimeout(() => {
         if (successNotification.value) successNotification.value = ''
     }, 4000)
@@ -1311,6 +1769,8 @@ const handleSubmitSession = async () => {
     lockedDurationSeconds.value = 0
     sessionPagesAdded.value = ''
     sessionDateString.value = getTodayDateString()
+    resetTrackingRangeToAuto()
+    isSessionRangeExpanded.value = false
 }
 
 const activeHistoryTooltip = ref<'pace' | 'estimate' | null>(null)
@@ -1414,7 +1874,6 @@ const formatSessionDate = (dateStr: string) => {
 const isEditSessionModalOpen = ref(false)
 const editingSession = ref<ReadSession | null>(null)
 const editSessionDate = ref('')
-const editSessionPages = ref<number | ''>('')
 const editSessionMinutes = ref<number | ''>('')
 const editSessionSeconds = ref<number | ''>('')
 
@@ -1429,7 +1888,6 @@ const openEditSessionModal = (session: ReadSession) => {
     } catch {
         editSessionDate.value = getTodayDateString()
     }
-    editSessionPages.value = session.pagesAdded || ''
 
     if (session.duration !== null && session.duration !== undefined && session.duration > 0) {
         editSessionMinutes.value = Math.floor(session.duration / 60) || ''
@@ -1448,7 +1906,7 @@ const clearEditDuration = () => {
 }
 
 const applyEditEstimateDuration = () => {
-    const pgs = Number(editSessionPages.value) || 1
+    const pgs = Number(editingSession.value?.pagesAdded) || 1
     const totalSecs = Math.round(pgs * historicalPaceSecondsPerPage.value)
     editSessionMinutes.value = Math.floor(totalSecs / 60) || ''
     editSessionSeconds.value = (totalSecs % 60) || ''
@@ -1473,7 +1931,6 @@ const saveEditedSession = async () => {
 
     await updateReadSession(selectedBook.value.id!, editingSession.value.id || 0, {
         date: sessionIso,
-        pagesAdded: Number(editSessionPages.value) || 0,
         duration: dur
     })
 

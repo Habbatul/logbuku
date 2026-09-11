@@ -30,6 +30,8 @@
                 <option class="bg-[#245466] text-white" value="terlama">Terlama (Tgl Beli)</option>
                 <option class="bg-[#245466] text-white" value="harga_tinggi">Harga Tertinggi</option>
                 <option class="bg-[#245466] text-white" value="harga_rendah">Harga Terendah</option>
+                <option class="bg-[#245466] text-white" value="progress_tinggi">Progress Tertinggi</option>
+                <option class="bg-[#245466] text-white" value="progress_rendah">Progress Terendah</option>
             </select>
 
             <button @click="showFilters = !showFilters" type="button"

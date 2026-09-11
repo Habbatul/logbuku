@@ -4,6 +4,12 @@ export interface ReadSession {
   pagesAdded: number
   startPage?: number
   endPage?: number
+  startPageRaw?: string
+  endPageRaw?: string
+  displayRange?: string
+  isRoman?: boolean
+  includePrefacePages?: boolean
+  totalPrefacePages?: number
   duration?: number | null
 }
 
@@ -20,6 +26,8 @@ export interface Book {
   topic: string[]
   totalPages: number
   pagesRead: number
+  totalPrefacePages?: number
+  includePrefacePages?: boolean
   price: number
   imageUrl?: string
   isPinned?: boolean
@@ -39,4 +47,4 @@ export interface BookFormData {
   imageUrl: string
 }
 
-export type SortOption = 'default' | 'terbaru' | 'terlama' | 'harga_tinggi' | 'harga_rendah'
+export type SortOption = 'default' | 'terbaru' | 'terlama' | 'harga_tinggi' | 'harga_rendah' | 'progress_tinggi' | 'progress_rendah'

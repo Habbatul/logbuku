@@ -58,10 +58,10 @@
                     </span>
                 </template>
 
-                <span v-if="percentage >= 100" class="rounded-full bg-emerald-500/20 border border-emerald-500/30 px-2 py-0.5 text-[10px] font-bold text-emerald-300">
+                <span v-if="displayTotalPages > 0 && actualPagesRead >= displayTotalPages" class="rounded-full bg-emerald-500/20 border border-emerald-500/30 px-2 py-0.5 text-[10px] font-bold text-emerald-300">
                     ✓ Selesai
                 </span>
-                <span v-else-if="book.pagesRead > 0" class="rounded-full bg-amber-500/20 border border-amber-500/30 px-2 py-0.5 text-[10px] font-bold text-amber-300">
+                <span v-else-if="actualPagesRead > 0" class="rounded-full bg-amber-500/20 border border-amber-500/30 px-2 py-0.5 text-[10px] font-bold text-amber-300">
                     ● Baca
                 </span>
             </div>
@@ -86,11 +86,11 @@
                             <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
                         </svg>
                         <span class="truncate font-semibold">
-                            <span class="tabular-nums font-bold text-white">{{ book.pagesRead }}</span> / <span class="tabular-nums font-bold text-white">{{ book.totalPages }}</span> hal
+                            <span class="tabular-nums font-bold text-white">{{ actualPagesRead }}</span> / <span class="tabular-nums font-bold text-white">{{ displayTotalPages }}</span> hal
                         </span>
                     </div>
                     <span class="shrink-0 text-xs font-extrabold tabular-nums"
-                        :class="book.pagesRead >= book.totalPages ? 'text-emerald-300' : 'text-amber-300'">
+                        :class="displayTotalPages > 0 && actualPagesRead >= displayTotalPages ? 'text-emerald-300' : 'text-amber-300'">
                         {{ percentage }}%
                     </span>
                 </div>
@@ -107,6 +107,13 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import type { Book } from '~/types/book'
+import {
+    getEffectiveTotalPages,
+    calculateProgressPercentage,
+    getBookTotalPrefacePages,
+    getBookIncludePreface,
+    getReadAbsolutePages
+} from '~/utils/readingProgress'
 
 const props = defineProps<{
     book: Book
@@ -125,20 +132,36 @@ const handleImageError = () => {
     imageLoadError.value = true
 }
 
+const displayTotalPages = computed(() => {
+    return getEffectiveTotalPages(props.book)
+})
+
+const actualPagesRead = computed(() => {
+    if (Array.isArray(props.book.readHistory) && props.book.readHistory.length > 0) {
+        const tp = getBookTotalPrefacePages(props.book)
+        const inc = getBookIncludePreface(props.book)
+        const readSet = getReadAbsolutePages(props.book.readHistory, tp, inc)
+        const eff = displayTotalPages.value
+        return eff > 0 ? Math.min(readSet.size, eff) : readSet.size
+    }
+    const eff = displayTotalPages.value
+    const val = Number(props.book.pagesRead) || 0
+    return eff > 0 ? Math.min(val, eff) : val
+})
+
 const percentage = computed(() => {
-    if (!props.book.totalPages) return 0
-    return Math.round((props.book.pagesRead / props.book.totalPages) * 100) || 0
+    return calculateProgressPercentage(actualPagesRead.value, displayTotalPages.value)
 })
 
 const progressWidth = computed(() => {
-    if (!props.book.totalPages) return 0
-    return Math.min((props.book.pagesRead / props.book.totalPages) * 100, 100)
+    if (displayTotalPages.value <= 0) return 0
+    if (actualPagesRead.value >= displayTotalPages.value) return 100
+    return Math.min(99, (actualPagesRead.value / displayTotalPages.value) * 100)
 })
 
 const progressColor = computed(() => {
-    const pct = percentage.value
-    if (pct >= 100) return 'bg-emerald-400'
-    if (pct > 0) return 'bg-gradient-to-r from-amber-500 via-orange-400 to-amber-300'
+    if (displayTotalPages.value > 0 && actualPagesRead.value >= displayTotalPages.value) return 'bg-emerald-400'
+    if (actualPagesRead.value > 0) return 'bg-gradient-to-r from-amber-500 via-orange-400 to-amber-300'
     return 'bg-transparent'
 })
 

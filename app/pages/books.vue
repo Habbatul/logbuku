@@ -193,15 +193,33 @@ const handleSaveProgress = async ({
     book,
     newPages,
     date,
-    isDateModified
+    isDateModified,
+    startPage,
+    endPage,
+    startPageRaw,
+    endPageRaw,
+    displayRange,
+    isRoman,
+    includePrefacePages,
+    totalPrefacePages,
+    pagesAdded: explicitPagesAdded
 }: {
     book: Book
     newPages: number
     date?: string
     isDateModified?: boolean
+    startPage?: number
+    endPage?: number
+    startPageRaw?: string
+    endPageRaw?: string
+    displayRange?: string
+    isRoman?: boolean
+    includePrefacePages?: boolean
+    totalPrefacePages?: number
+    pagesAdded?: number
 }) => {
     const oldPages = book.pagesRead || 0
-    const pagesAdded = newPages - oldPages
+    const pagesAdded = explicitPagesAdded !== undefined ? explicitPagesAdded : (newPages - oldPages)
     const updatedBook: Book = JSON.parse(JSON.stringify(book))
     if (!Array.isArray(updatedBook.readHistory)) {
         updatedBook.readHistory = []
@@ -234,41 +252,30 @@ const handleSaveProgress = async ({
             id: 'sess_' + Date.now() + '_init',
             date: baselineDate,
             pagesAdded: oldPages,
-            startPage: 0,
+            startPage: 1,
             endPage: oldPages,
             duration: null
         })
     }
 
     if (pagesAdded > 0) {
-        const oneHour = 60 * 60 * 1000
-        const sessionDateStr = getLocalDateStr(sessionDate)
-        const lastSessionIndex = updatedBook.readHistory.length - 1
-        let isMerged = false
+        const effStartPage = startPage !== undefined ? startPage : oldPages + 1
+        const effEndPage = endPage !== undefined ? endPage : effStartPage + pagesAdded - 1
 
-        if (lastSessionIndex >= 0) {
-            const lastSession = updatedBook.readHistory[lastSessionIndex]
-            const lastSessionDate = new Date(lastSession.date)
-            const lastSessionDateStr = getLocalDateStr(lastSessionDate)
-            const lastSessionTime = lastSessionDate.getTime()
-
-            if (lastSessionDateStr === sessionDateStr && Math.abs(sessionDate.getTime() - lastSessionTime) <= oneHour) {
-                lastSession.date = sessionDate.toISOString()
-                lastSession.pagesAdded += pagesAdded
-                isMerged = true
-            }
-        }
-
-        if (!isMerged) {
-            updatedBook.readHistory.push({
-                id: 'sess_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
-                date: sessionDate.toISOString(),
-                pagesAdded: pagesAdded,
-                startPage: oldPages,
-                endPage: newPages,
-                duration: null
-            })
-        }
+        updatedBook.readHistory.push({
+            id: 'sess_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+            date: sessionDate.toISOString(),
+            pagesAdded: pagesAdded,
+            startPage: effStartPage,
+            endPage: effEndPage,
+            startPageRaw: startPageRaw,
+            endPageRaw: endPageRaw,
+            displayRange: displayRange,
+            isRoman: Boolean(isRoman),
+            includePrefacePages: Boolean(includePrefacePages),
+            totalPrefacePages: totalPrefacePages ? Number(totalPrefacePages) : undefined,
+            duration: null
+        })
     } else if (pagesAdded < 0) {
         let deficit = Math.abs(pagesAdded)
         if (updatedBook.readHistory.length > 0) {
@@ -293,7 +300,7 @@ const handleSaveProgress = async ({
                 id: 'sess_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
                 date: sessionDate.toISOString(),
                 pagesAdded: newPages,
-                startPage: 0,
+                startPage: 1,
                 endPage: newPages,
                 duration: null
             })
@@ -302,9 +309,19 @@ const handleSaveProgress = async ({
 
     updatedBook.readHistory.sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime())
 
+    if (totalPrefacePages) {
+        updatedBook.totalPrefacePages = Number(totalPrefacePages)
+    }
+    if (includePrefacePages !== undefined) {
+        updatedBook.includePrefacePages = Boolean(includePrefacePages)
+    }
+
     recalculateBookProgress(updatedBook)
 
-    if (updatedBook.pagesRead >= (updatedBook.totalPages || 0) && (updatedBook.totalPages || 0) > 0) {
+    const effTotal = (updatedBook.includePrefacePages && updatedBook.totalPrefacePages)
+        ? (updatedBook.totalPages || 0) + updatedBook.totalPrefacePages
+        : (updatedBook.totalPages || 0)
+    if (effTotal > 0 && updatedBook.pagesRead >= effTotal) {
         const lastSession = updatedBook.readHistory.length > 0 ? updatedBook.readHistory[updatedBook.readHistory.length - 1] : null
         updatedBook.completedAt = (lastSession && lastSession.date) || sessionDate.toISOString()
     } else {
@@ -401,6 +418,18 @@ const filteredBooks = computed(() => {
         }
         if (sortBy.value === 'harga_rendah') {
             return (a.price || 0) - (b.price || 0)
+        }
+        if (sortBy.value === 'progress_tinggi') {
+            const pctA = (a.totalPages || 0) > 0 ? (a.pagesRead || 0) / a.totalPages : 0
+            const pctB = (b.totalPages || 0) > 0 ? (b.pagesRead || 0) / b.totalPages : 0
+            if (pctB !== pctA) return pctB - pctA
+            return (b.pagesRead || 0) - (a.pagesRead || 0)
+        }
+        if (sortBy.value === 'progress_rendah') {
+            const pctA = (a.totalPages || 0) > 0 ? (a.pagesRead || 0) / a.totalPages : 0
+            const pctB = (b.totalPages || 0) > 0 ? (b.pagesRead || 0) / b.totalPages : 0
+            if (pctA !== pctB) return pctA - pctB
+            return (a.pagesRead || 0) - (b.pagesRead || 0)
         }
 
         return 0

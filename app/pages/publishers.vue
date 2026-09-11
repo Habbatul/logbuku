@@ -46,7 +46,7 @@
                 </div>
                 <div class="flex items-baseline gap-1.5">
                     <span class="text-2xl sm:text-3xl font-bold tracking-tight tabular-nums text-white">
-                        {{ allPublishersList.length }}
+                        {{ isLoaded ? allPublishersList.length : '...' }}
                     </span>
                     <span class="text-xs font-medium text-white">penerbit</span>
                 </div>
@@ -59,7 +59,7 @@
                 </div>
                 <div class="flex items-baseline gap-1.5">
                     <span class="text-2xl sm:text-3xl font-bold tracking-tight tabular-nums text-white">
-                        {{ booksWithPublisherCount }}
+                        {{ isLoaded ? booksWithPublisherCount : '...' }}
                     </span>
                     <span class="text-xs font-medium text-white">buku</span>
                 </div>
@@ -72,7 +72,7 @@
                 </div>
                 <div class="flex items-baseline gap-1.5">
                     <span class="text-2xl sm:text-3xl font-bold tracking-tight tabular-nums text-white">
-                        {{ booksWithoutPublisherCount }}
+                        {{ isLoaded ? booksWithoutPublisherCount : '...' }}
                     </span>
                     <span class="text-xs font-medium text-white">buku</span>
                 </div>
@@ -80,32 +80,47 @@
         </div>
 
         <div class="space-y-2">
-            <div class="relative">
-                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-sky-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8" />
-                        <path d="m21 21-4.3-4.3" />
-                    </svg>
+            <div class="flex flex-col gap-2.5 sm:flex-row">
+                <div class="relative min-w-0 flex-1">
+                    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-sky-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8" />
+                            <path d="m21 21-4.3-4.3" />
+                        </svg>
+                    </div>
+                    <input v-model="searchQuery" type="text" placeholder="Cari nama penerbit..."
+                        class="glass-input w-full py-2.5 pl-10 pr-4 text-xs sm:text-sm font-medium text-white placeholder:text-white/75 rounded-xl" />
                 </div>
-                <input v-model="searchQuery" type="text" placeholder="Cari nama penerbit..."
-                    class="glass-input w-full py-2.5 pl-10 pr-4 text-xs sm:text-sm font-medium text-white placeholder:text-white/75 rounded-xl" />
+
+                <select v-model="sortBy"
+                    class="glass-input w-full cursor-pointer px-3 py-2.5 text-xs sm:text-sm font-semibold text-white rounded-xl sm:w-60 shrink-0">
+                    <option class="bg-[#245466] text-white" value="default">Default (Terakhir Ditambahkan)</option>
+                    <option class="bg-[#245466] text-white" value="buku_terbanyak">Jumlah Buku Terbanyak</option>
+                    <option class="bg-[#245466] text-white" value="buku_tersedikit">Jumlah Buku Tersedikit</option>
+                    <option class="bg-[#245466] text-white" value="nama_asc">Nama (A - Z)</option>
+                    <option class="bg-[#245466] text-white" value="nama_desc">Nama (Z - A)</option>
+                </select>
             </div>
 
-            <div v-if="searchQuery" class="flex items-center justify-between px-1">
-                <span class="text-xs font-medium text-white">
-                    Menampilkan <strong class="text-sky-300 tabular-nums">{{ filteredPublishers.length }}</strong> dari <strong class="text-sky-300 tabular-nums">{{ allPublishersList.length }}</strong> penerbit
-                </span>
-                <button type="button" @click="searchQuery = ''"
+          <div v-if="searchQuery || sortBy !== 'default'" class="text-right px-1">
+                <button type="button" @click="searchQuery = ''; sortBy = 'default'"
                     class="text-xs font-bold text-sky-300 hover:text-sky-200 hover:underline">
-                    Reset Pencarian
+                    Reset Filter
                 </button>
             </div>
         </div>
 
-        <div v-if="filteredPublishers.length === 0"
-            class="surface-card rounded-2xl p-10 sm:p-12 text-center space-y-4">
+        <ClientOnly>
+            <div v-if="!isLoaded"
+                class="surface-card rounded-2xl p-10 sm:p-12 text-center flex flex-col items-center justify-center space-y-3">
+                <div class="h-7 w-7 animate-spin rounded-full border-2 border-white/20 border-t-sky-300"></div>
+                <p class="text-xs font-medium text-white/80">Memuat data penerbit...</p>
+            </div>
+
+            <div v-else-if="filteredPublishers.length === 0"
+                class="surface-card rounded-2xl p-10 sm:p-12 text-center space-y-4">
             <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -255,7 +270,14 @@
             </div>
         </div>
 
-        <!-- Modal Tambah Penerbit -->
+        <template #fallback>
+                <div class="surface-card rounded-2xl p-10 sm:p-12 text-center flex flex-col items-center justify-center space-y-3">
+                    <div class="h-7 w-7 animate-spin rounded-full border-2 border-white/20 border-t-sky-300"></div>
+                    <p class="text-xs font-medium text-white/80">Memuat data penerbit...</p>
+                </div>
+            </template>
+        </ClientOnly>
+
         <div v-if="isAddModalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4">
             <div class="absolute inset-0 bg-black/40 backdrop-blur-md" @click="isAddModalOpen = false"></div>
             <div class="liquid-glass-modal relative w-full max-w-sm rounded-2xl p-6 shadow-2xl animate-in zoom-in-95">
@@ -280,7 +302,6 @@
             </div>
         </div>
 
-        <!-- Modal Rename Penerbit -->
         <div v-if="isRenameModalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4">
             <div class="absolute inset-0 bg-black/40 backdrop-blur-md" @click="isRenameModalOpen = false"></div>
             <div class="liquid-glass-modal relative w-full max-w-sm rounded-2xl p-6 shadow-2xl animate-in zoom-in-95">
@@ -313,7 +334,6 @@
             @assign="handleBulkAssign"
         />
 
-        <!-- Modal Hapus Penerbit -->
         <div v-if="isDeletePublisherModalOpen && publisherToDelete" class="fixed inset-0 z-50 flex items-center justify-center p-4">
             <div class="absolute inset-0 bg-black/40 backdrop-blur-md" @click="isDeletePublisherModalOpen = false"></div>
             <div class="liquid-glass-modal relative w-full max-w-sm rounded-2xl p-5 sm:p-6 shadow-2xl animate-in zoom-in-95 space-y-4">
@@ -343,7 +363,7 @@
 import { ref, computed, onMounted } from 'vue'
 import type { Book } from '~/types/book'
 
-const { books, loadBooks, saveBook, saveBooks } = useBooks()
+const { books, isLoaded, loadBooks, saveBook, saveBooks } = useBooks()
 
 const searchQuery = ref('')
 const expandedPublishers = ref<string[]>([])
@@ -397,22 +417,84 @@ const booksWithoutPublisherCount = computed(() => {
     return books.value.filter((b: Book) => !b.publisher || !b.publisher.trim()).length
 })
 
+const sortBy = ref<'default' | 'buku_terbanyak' | 'buku_tersedikit' | 'nama_asc' | 'nama_desc'>('default')
+
 const publishersWithBooks = computed(() => {
     return allPublishersList.value.map(name => {
         const matchingBooks = books.value.filter(
             (b: Book) => b.publisher && b.publisher.trim().toLowerCase() === name.toLowerCase()
         )
+
+        let latestTimestamp = 0
+        let maxBookId = 0
+
+        matchingBooks.forEach((b: Book) => {
+            const timeCandidate = b.createdAt || b.updatedAt || b.date
+            if (timeCandidate) {
+                const t = new Date(timeCandidate).getTime()
+                if (!isNaN(t) && t > latestTimestamp) {
+                    latestTimestamp = t
+                }
+            }
+            const numId = Number(b.id)
+            if (!isNaN(numId) && numId > maxBookId) {
+                maxBookId = numId
+            }
+        })
+
+        const customIdx = customPublishers.value.findIndex(
+            p => p && p.trim().toLowerCase() === name.toLowerCase()
+        )
+
         return {
             name,
-            books: matchingBooks
+            books: matchingBooks,
+            latestTimestamp,
+            maxBookId,
+            customIndex: customIdx >= 0 ? customIdx : -1
         }
     })
 })
 
+const compareLatestPublishers = (a: any, b: any) => {
+    if (b.latestTimestamp !== a.latestTimestamp) {
+        return b.latestTimestamp - a.latestTimestamp
+    }
+    if (b.maxBookId !== a.maxBookId) {
+        return b.maxBookId - a.maxBookId
+    }
+    if (b.customIndex !== a.customIndex) {
+        return b.customIndex - a.customIndex
+    }
+    return a.name.localeCompare(b.name)
+}
+
 const filteredPublishers = computed(() => {
     const q = searchQuery.value.toLowerCase().trim()
-    if (!q) return publishersWithBooks.value
-    return publishersWithBooks.value.filter(p => p.name.toLowerCase().includes(q))
+    let list = publishersWithBooks.value
+    if (q) {
+        list = list.filter(p => p.name.toLowerCase().includes(q))
+    }
+
+    return [...list].sort((a, b) => {
+        if (sortBy.value === 'buku_terbanyak') {
+            const diff = b.books.length - a.books.length
+            if (diff !== 0) return diff
+            return compareLatestPublishers(a, b)
+        }
+        if (sortBy.value === 'buku_tersedikit') {
+            const diff = a.books.length - b.books.length
+            if (diff !== 0) return diff
+            return compareLatestPublishers(a, b)
+        }
+        if (sortBy.value === 'nama_asc') {
+            return a.name.localeCompare(b.name)
+        }
+        if (sortBy.value === 'nama_desc') {
+            return b.name.localeCompare(a.name)
+        }
+        return compareLatestPublishers(a, b)
+    })
 })
 
 const toggleAccordion = (name: string) => {

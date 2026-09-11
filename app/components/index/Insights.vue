@@ -39,7 +39,9 @@
                                                 aria-label="Tutup">✕</button>
                                         </div>
                                         <p class="text-xs text-white leading-relaxed">
-                                            Sesi pencatatan manual dihitung per rentang 1 jam, sedangkan sesi fitur Tracking dihitung per tiap sesi waktu membaca saat timer dihentikan.
+                                           Pencatatan manual tidak menggunakan timer, setiap kali progress disimpan
+                                            dihitung sebagai satu sesi. Tracking menggunakan timer untuk menghitung durasi
+                                            setiap sesi membaca. Menghapus riwayat sesi akan mengubah total aktivitas di sini.
                                         </p>
                                     </div>
                                 </div>

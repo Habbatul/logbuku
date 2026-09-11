@@ -1,4 +1,13 @@
 import type { P2PDataPayload } from '~/types/sync'
+import {
+  calculateUniquePages,
+  calculateBookProgressFromHistory,
+  getBookTotalPrefacePages,
+  getBookIncludePreface,
+  getEffectiveTotalPages,
+  bookHasRomanHistory,
+  normalizeLegacyReadSessions
+} from '~/utils/readingProgress'
 
 export interface PackedSdpResult {
   type: 'offer' | 'answer'
@@ -160,8 +169,11 @@ export function sanitizeBook(b: any): any {
     title: String(b.title || '').trim(),
     author: String(b.author || '').trim(),
     publisher: String(b.publisher || '').trim(),
+    date: b.date ? String(b.date).trim() : (b.createdAt ? String(b.createdAt).split('T')[0] : ''),
+    price: Number(b.price) >= 0 ? Number(b.price) : 0,
     totalPages: Math.max(0, Number(b.totalPages) || 0),
     pagesRead: Math.max(0, Number(b.pagesRead) || 0),
+    imageUrl: String(b.imageUrl || b.coverImage || '').trim(),
     isPinned: Boolean(b.isPinned),
     isTarget: Boolean(b.isTarget),
     createdAt: b.createdAt || new Date().toISOString(),
@@ -180,8 +192,11 @@ export function sanitizeBook(b: any): any {
     clean.topic = []
   }
 
-  if (b.coverImage && typeof b.coverImage === 'string') {
+  if (clean.imageUrl) {
+    clean.coverImage = clean.imageUrl
+  } else if (b.coverImage && typeof b.coverImage === 'string') {
     clean.coverImage = b.coverImage
+    clean.imageUrl = b.coverImage
   }
 
   if (b.notes && typeof b.notes === 'string') {
@@ -192,29 +207,69 @@ export function sanitizeBook(b: any): any {
     clean.completedAt = String(b.completedAt)
   }
 
-  if (Array.isArray(b.readHistory)) {
-    let runningPages = 0
-    clean.readHistory = b.readHistory.map((s: any, idx: number) => {
-      const pagesAdded = Math.max(0, Number(s.pagesAdded) || 0)
-      const startPage = runningPages
-      const endPage = runningPages + pagesAdded
-      runningPages += pagesAdded
+  if (b.totalPrefacePages !== undefined && Number(b.totalPrefacePages) > 0) {
+    clean.totalPrefacePages = Number(b.totalPrefacePages)
+  }
+  if (b.includePrefacePages !== undefined) {
+    clean.includePrefacePages = Boolean(b.includePrefacePages)
+  }
 
-      return {
-        id: s.id || ('sess_' + (Date.now() + idx) + '_' + Math.random().toString(36).slice(2, 6)),
-        date: s.date || new Date().toISOString(),
-        pagesAdded,
-        duration: s.duration !== undefined && s.duration !== null ? Number(s.duration) : null,
-        startPage,
-        endPage
-      }
-    })
-    clean.pagesRead = runningPages
+  if (Array.isArray(b.readHistory)) {
+    clean.readHistory = b.readHistory.map((s: any, idx: number) => ({
+      id: s.id || ('sess_' + (Date.now() + idx) + '_' + Math.random().toString(36).slice(2, 6)),
+      date: s.date || new Date().toISOString(),
+      pagesAdded: Math.max(0, Number(s.pagesAdded) || 0),
+      duration: s.duration !== undefined && s.duration !== null ? Number(s.duration) : null,
+      startPage: s.startPage !== undefined && s.startPage !== null ? Number(s.startPage) : undefined,
+      endPage: s.endPage !== undefined && s.endPage !== null ? Number(s.endPage) : undefined,
+      startPageRaw: s.startPageRaw,
+      endPageRaw: s.endPageRaw,
+      displayRange: s.displayRange,
+      isRoman: Boolean(s.isRoman),
+      includePrefacePages: Boolean(s.includePrefacePages),
+      totalPrefacePages: s.totalPrefacePages ? Number(s.totalPrefacePages) : undefined
+    }))
+
+    normalizeLegacyReadSessions(clean.readHistory, Number(clean.totalPages) || 0)
+
+    const totalPreface = getBookTotalPrefacePages(clean) || getBookTotalPrefacePages(b)
+    const hasRoman = bookHasRomanHistory(clean)
+    const includePreface = getBookIncludePreface(clean, b.includePrefacePages)
+
+    if (totalPreface > 0 && (includePreface || hasRoman)) {
+      clean.totalPrefacePages = totalPreface
+      clean.includePrefacePages = true
+    } else if (!hasRoman && (!b.totalPrefacePages || Number(b.totalPrefacePages) <= 0)) {
+      delete clean.totalPrefacePages
+      clean.includePrefacePages = false
+    }
+
+    const { pagesRead } = calculateBookProgressFromHistory(
+      clean.readHistory,
+      clean.totalPages,
+      clean.totalPrefacePages || 0,
+      clean.includePrefacePages || false
+    )
+    clean.pagesRead = pagesRead
   } else {
     clean.readHistory = []
   }
 
-  if (clean.totalPages > 0 && clean.pagesRead >= clean.totalPages) {
+  // Preserve progress for legacy books that have pagesRead but no sessions
+  if (clean.pagesRead > 0 && clean.readHistory.length === 0) {
+    clean.readHistory.push({
+      id: 'sess_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+      date: clean.updatedAt || clean.createdAt || new Date().toISOString(),
+      pagesAdded: clean.pagesRead,
+      startPage: 1,
+      endPage: clean.pagesRead,
+      duration: null
+    })
+  }
+
+  const effectiveTotal = getEffectiveTotalPages(clean, clean.totalPrefacePages, clean.includePrefacePages)
+
+  if (effectiveTotal > 0 && clean.pagesRead >= effectiveTotal) {
     if (!clean.completedAt) {
       const lastSessionDate = clean.readHistory.length > 0 
         ? clean.readHistory[clean.readHistory.length - 1].date 
@@ -266,7 +321,8 @@ export function validateBooksData(rawBooks: any): {
 
     totalReadSessions += clean.readHistory?.length || 0
     totalPagesRead += clean.pagesRead || 0
-    if (clean.completedAt || (clean.totalPages > 0 && clean.pagesRead >= clean.totalPages)) {
+    const effTotal = getEffectiveTotalPages(clean, clean.totalPrefacePages, clean.includePrefacePages)
+    if (clean.completedAt || (effTotal > 0 && clean.pagesRead >= effTotal)) {
       totalCompletedBooks++
     }
   }
