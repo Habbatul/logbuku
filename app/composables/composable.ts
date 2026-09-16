@@ -19,8 +19,23 @@ const books = ref<any[]>([])
 const isLoaded = ref(false)
 const isLoading = ref(false)
 
+let isPersistChecked = false
+
+const requestPersistentStorage = () => {
+  if (isPersistChecked) return
+  if (typeof window !== 'undefined' && typeof navigator !== 'undefined' && navigator.storage?.persist) {
+    isPersistChecked = true
+    navigator.storage.persisted().then((isPersisted) => {
+      if (!isPersisted) {
+        navigator.storage.persist()
+      }
+    }).catch(() => {})
+  }
+}
+
 export const useBooks = () => {
   const initDB = (): Promise<IDBDatabase> => {
+    requestPersistentStorage()
     return new Promise((resolve, reject) => {
       const request = indexedDB.open(DB_NAME, DB_VERSION)
       
@@ -424,6 +439,7 @@ export const useBooks = () => {
     recalculateBookProgress,
     addReadSession,
     updateReadSession,
-    deleteReadSession
+    deleteReadSession,
+    requestPersistentStorage
   }
 }

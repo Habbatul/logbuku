@@ -123,6 +123,14 @@ const dismissInstall = () => {
 }
 
 onMounted(() => {
+  if (typeof navigator !== 'undefined' && navigator.storage?.persist) {
+    navigator.storage.persisted().then((isPersisted) => {
+      if (!isPersisted) {
+        navigator.storage.persist()
+      }
+    }).catch(() => {})
+  }
+
   console.log('[PWA] mounted')
 
   window.addEventListener(
