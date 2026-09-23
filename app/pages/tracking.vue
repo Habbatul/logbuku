@@ -1452,7 +1452,7 @@ const computedTrackingProgress = computed(() => {
         startInput: sessionStartPageInput.value,
         endInput: sessionEndPageInput.value,
         pagesDelta: pgs > 0 ? pgs : 1,
-        includePrefacePages: sessionIncludePrefacePages.value || (tp > 0),
+        includePrefacePages: isTrackingRangeSpecified.value ? isTrackingRomanDetected.value : (sessionIncludePrefacePages.value || (tp > 0)),
         totalPrefaceInput: tp
     })
 })
@@ -1752,7 +1752,11 @@ const executeTrackingSubmit = async () => {
         updatedBook.totalPrefacePages = range.totalPrefacePages
     }
     if (range.includePrefacePages !== undefined) {
-        updatedBook.includePrefacePages = range.includePrefacePages
+        if (range.isRoman || updatedBook.totalPrefacePages || range.totalPrefacePages > 0) {
+            updatedBook.includePrefacePages = true
+        } else {
+            updatedBook.includePrefacePages = range.includePrefacePages
+        }
     }
     recalculateBookProgress(updatedBook)
 

@@ -563,7 +563,7 @@ const progressResult = computed(() => {
         startInput: startPageInput.value,
         endInput: endPageInput.value,
         pagesDelta: pagesDelta.value,
-        includePrefacePages: includePrefacePages.value || modalTotalPrefaceCount.value > 0,
+        includePrefacePages: isRangeSpecified.value ? isRomanDetected.value : (includePrefacePages.value || modalTotalPrefaceCount.value > 0),
         totalPrefaceInput: parsedTotalPrefacePages.value > 0 ? parsedTotalPrefacePages.value : modalTotalPrefaceCount.value
     })
 })
@@ -706,7 +706,7 @@ const executeSave = () => {
         displayRange: result.displayRange,
         isRoman: result.isRoman,
         includePrefacePages: result.includePrefacePages,
-        totalPrefacePages: result.totalPrefacePages > 0 ? result.totalPrefacePages : undefined,
+        totalPrefacePages: (result.totalPrefacePages > 0 ? result.totalPrefacePages : (modalTotalPrefaceCount.value > 0 ? modalTotalPrefaceCount.value : undefined)),
         pagesAdded: result.pagesAdded
     })
 }

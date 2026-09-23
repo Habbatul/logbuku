@@ -313,7 +313,11 @@ const handleSaveProgress = async ({
         updatedBook.totalPrefacePages = Number(totalPrefacePages)
     }
     if (includePrefacePages !== undefined) {
-        updatedBook.includePrefacePages = Boolean(includePrefacePages)
+        if (isRoman || updatedBook.totalPrefacePages || totalPrefacePages) {
+            updatedBook.includePrefacePages = true
+        } else {
+            updatedBook.includePrefacePages = Boolean(includePrefacePages)
+        }
     }
 
     recalculateBookProgress(updatedBook)

@@ -935,11 +935,6 @@ export function calculateReadingProgress(input: ReadingProgressInput): ReadingPr
       const totalBookPages = Number(book?.totalPages) || 0
 
       if (isRoman) {
-        if (input.includePrefacePages === false) {
-          isValid = false
-          errorMessage = 'Checkbox halaman pembuka wajib aktif untuk penomoran Romawi'
-        }
-
         if (!totalPrefacePages || totalPrefacePages <= 0) {
           isValid = false
           errorMessage = 'Total halaman pembuka wajib'
@@ -968,11 +963,6 @@ export function calculateReadingProgress(input: ReadingProgressInput): ReadingPr
           }
         }
       } else {
-        if (input.includePrefacePages === true) {
-          isValid = false
-          errorMessage = 'Checkbox halaman pembuka harus nonaktif untuk penomoran Arab'
-        }
-
         if (pStart.num > pEnd.num) {
           isValid = false
           errorMessage = 'Halaman awal tidak boleh lebih besar dari halaman akhir'
@@ -1121,8 +1111,8 @@ export function calculateReadingProgress(input: ReadingProgressInput): ReadingPr
     isStartRoman: Boolean(pStart?.isRoman) || (includePreface && Boolean(startPageRaw && isRomanNumeral(startPageRaw))),
     isEndRoman: Boolean(pEnd?.isRoman) || (includePreface && Boolean(endPageRaw && isRomanNumeral(endPageRaw))),
     isCrossRange,
-    includePrefacePages: Boolean(includePreface),
-    totalPrefacePages,
+    includePrefacePages: Boolean(includePreface || (activePreface > 0 && !isRangeSpecified)),
+    totalPrefacePages: activePreface > 0 ? activePreface : totalPrefacePages,
     currentPagesRead,
     projectedPagesRead,
     effectiveTotalPages: resolvedEffectiveTotal,
