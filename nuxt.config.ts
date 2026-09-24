@@ -19,6 +19,22 @@ export default defineNuxtConfig({
         './app/assets/css/main.css'
     ],
 
+    app: {
+        head: {
+            title: 'LogBuku',
+            meta: [
+                { name: 'theme-color', content: '#52788c' },
+                { name: 'theme-color', media: '(prefers-color-scheme: dark)', content: '#52788c' },
+                { name: 'theme-color', media: '(prefers-color-scheme: light)', content: '#52788c' },
+                { name: 'viewport', content: 'width=device-width, initial-scale=1, viewport-fit=cover' },
+                { name: 'mobile-web-app-capable', content: 'yes' },
+                { name: 'apple-mobile-web-app-capable', content: 'yes' },
+                { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
+                { name: 'apple-mobile-web-app-title', content: 'LogBuku' }
+            ]
+        }
+    },
+
     vite: {
         plugins: [
             tailwindcss()
@@ -46,8 +62,8 @@ export default defineNuxtConfig({
             start_url: '/',
             scope: '/',
             display: 'standalone',
-            theme_color: '#ffffff',
-            background_color: '#ffffff',
+            theme_color: '#52788c',
+            background_color: '#52788c',
 
             icons: [
                 {

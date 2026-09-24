@@ -1331,7 +1331,7 @@ export function getReadingProgressColor(percentage: number, isCompleted = false)
   if (percentage > 0) {
     return {
       barClass: 'bg-gradient-to-r from-rose-500 to-red-400',
-      textClass: 'text-rose-300'
+      textClass: 'text-red-300'
     }
   }
   return {

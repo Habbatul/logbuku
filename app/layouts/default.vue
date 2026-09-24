@@ -1,6 +1,6 @@
 <template>
     <div
-        class="min-h-screen overflow-x-hidden bg-gradient-to-b from-[#52788c] via-[#3a7f94] to-[#428194] pb-16 text-white relative selection:bg-sky-400/30 selection:text-white">
+        class="min-h-screen min-h-[100dvh] overflow-x-hidden bg-gradient-to-b from-[#52788c] via-[#3a7f94] to-[#428194] pb-[calc(4rem+env(safe-area-inset-bottom,0px))] text-white relative selection:bg-sky-400/30 selection:text-white">
 
 
         <div class="pointer-events-none fixed inset-0 z-0 overflow-hidden opacity-60 brightness-80" aria-hidden="true">
@@ -99,7 +99,7 @@
 
 
 
-        <nav class="liquid-glass-nav sticky top-0 relative">
+        <nav class="liquid-glass-nav sticky top-0 relative z-40 pt-[env(safe-area-inset-top,0px)]">
             <div class="mx-auto w-full max-w-6xl px-3.5 sm:px-6 lg:px-8">
                 <div class="flex h-16 min-w-0 items-center justify-between gap-3">
                     <NuxtLink to="/" class="flex min-w-0 shrink items-center gap-2.5">
