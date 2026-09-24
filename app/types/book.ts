@@ -47,4 +47,4 @@ export interface BookFormData {
   imageUrl: string
 }
 
-export type SortOption = 'default' | 'terbaru' | 'terlama' | 'harga_tinggi' | 'harga_rendah' | 'progress_tinggi' | 'progress_rendah'
+export type SortOption = 'default' | 'terbaru' | 'terlama' | 'halaman_terbanyak' | 'halaman_tersedikit' | 'harga_tinggi' | 'harga_rendah' | 'progress_tinggi' | 'progress_rendah'

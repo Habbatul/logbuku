@@ -25,9 +25,11 @@
 
             <select v-model="sortBy"
                 class="glass-input w-full cursor-pointer px-3 py-2.5 text-xs sm:text-sm font-semibold text-white sm:w-48">
-                <option class="bg-[#245466] text-white" value="default">Urutkan: Default</option>
-                <option class="bg-[#245466] text-white" value="terbaru">Terbaru (Tgl Beli)</option>
-                <option class="bg-[#245466] text-white" value="terlama">Terlama (Tgl Beli)</option>
+                <option class="bg-[#245466] text-white" value="default">Urutan: Default</option>
+                <option class="bg-[#245466] text-white" value="terbaru">Terbaru</option>
+                <option class="bg-[#245466] text-white" value="terlama">Terlama</option>
+                <option class="bg-[#245466] text-white" value="halaman_terbanyak">Progress (Hal.) Tertinggi</option>
+                <option class="bg-[#245466] text-white" value="halaman_tersedikit">Progress (Hal.) Terendah</option>
                 <option class="bg-[#245466] text-white" value="harga_tinggi">Harga Tertinggi</option>
                 <option class="bg-[#245466] text-white" value="harga_rendah">Harga Terendah</option>
                 <option class="bg-[#245466] text-white" value="progress_tinggi">Progress Tertinggi</option>

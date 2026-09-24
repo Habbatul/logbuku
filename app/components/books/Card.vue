@@ -58,7 +58,7 @@
                     </span>
                 </template>
 
-                <span v-if="displayTotalPages > 0 && actualPagesRead >= displayTotalPages" class="rounded-full bg-emerald-500/20 border border-emerald-500/30 px-2 py-0.5 text-[10px] font-bold text-emerald-300">
+                <span v-if="isCompleted" class="rounded-full bg-emerald-500/20 border border-emerald-500/30 px-2 py-0.5 text-[10px] font-bold text-emerald-300">
                     ✓ Selesai
                 </span>
                 <span v-else-if="actualPagesRead > 0" class="rounded-full bg-amber-500/20 border border-amber-500/30 px-2 py-0.5 text-[10px] font-bold text-amber-300">
@@ -90,13 +90,13 @@
                         </span>
                     </div>
                     <span class="shrink-0 text-xs font-extrabold tabular-nums"
-                        :class="displayTotalPages > 0 && actualPagesRead >= displayTotalPages ? 'text-emerald-300' : 'text-amber-300'">
+                        :class="progressTextClass">
                         {{ percentage }}%
                     </span>
                 </div>
 
                 <div class="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-black/40 border border-white/[0.06]">
-                    <div class="h-full rounded-full transition-all duration-300 ease-out" :class="progressColor"
+                    <div class="h-full rounded-full transition-all duration-300 ease-out" :class="progressColorClass"
                         :style="{ width: `${progressWidth}%` }"></div>
                 </div>
             </div>
@@ -112,7 +112,8 @@ import {
     calculateProgressPercentage,
     getBookTotalPrefacePages,
     getBookIncludePreface,
-    getReadAbsolutePages
+    getReadAbsolutePages,
+    getReadingProgressColor
 } from '~/utils/readingProgress'
 
 const props = defineProps<{
@@ -153,17 +154,22 @@ const percentage = computed(() => {
     return calculateProgressPercentage(actualPagesRead.value, displayTotalPages.value)
 })
 
+const isCompleted = computed(() => {
+    return displayTotalPages.value > 0 && actualPagesRead.value >= displayTotalPages.value
+})
+
 const progressWidth = computed(() => {
     if (displayTotalPages.value <= 0) return 0
-    if (actualPagesRead.value >= displayTotalPages.value) return 100
+    if (isCompleted.value) return 100
     return Math.min(99, (actualPagesRead.value / displayTotalPages.value) * 100)
 })
 
-const progressColor = computed(() => {
-    if (displayTotalPages.value > 0 && actualPagesRead.value >= displayTotalPages.value) return 'bg-emerald-400'
-    if (actualPagesRead.value > 0) return 'bg-gradient-to-r from-amber-500 via-orange-400 to-amber-300'
-    return 'bg-transparent'
+const progressColorConfig = computed(() => {
+    return getReadingProgressColor(percentage.value, isCompleted.value)
 })
+
+const progressColorClass = computed(() => progressColorConfig.value.barClass)
+const progressTextClass = computed(() => progressColorConfig.value.textClass)
 
 const getTopicBadgeClass = (topic: string) => {
     const t = (topic || '').toLowerCase()

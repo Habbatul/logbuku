@@ -17,12 +17,48 @@
         <BooksEmptyState v-if="filteredBooks.length === 0" />
 
         <div v-else>
-            <div class="mb-4 flex items-center justify-between text-xs font-semibold text-white">
+            <div class="mb-4 flex flex-wrap items-center justify-between gap-2.5 text-xs font-semibold text-white">
                 <span>Menampilkan <strong class="text-sky-300 tabular-nums">{{ filteredBooks.length }}</strong> dari <strong class="text-sky-300 tabular-nums">{{ books.length }}</strong> arsip buku</span>
+
+                <div class="inline-flex items-center rounded-xl bg-black/25 p-0.5 border border-white/10 backdrop-blur-md shadow-xs">
+                    <button type="button" @click="viewMode = 'grid'"
+                        :class="viewMode === 'grid' ? 'bg-white/20 text-white shadow-xs font-bold' : 'text-white/60 hover:text-white font-medium'"
+                        class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs transition-all cursor-pointer focus:outline-none"
+                        aria-label="Tampilan Grid" title="Tampilan Grid">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="7" height="7" x="3" y="3" rx="1" />
+                            <rect width="7" height="7" x="14" y="3" rx="1" />
+                            <rect width="7" height="7" x="14" y="14" rx="1" />
+                            <rect width="7" height="7" x="3" y="14" rx="1" />
+                        </svg>
+                        <span class="hidden xs:inline sm:inline">Grid</span>
+                    </button>
+                    <button type="button" @click="viewMode = 'list'"
+                        :class="viewMode === 'list' ? 'bg-white/20 text-white shadow-xs font-bold' : 'text-white/60 hover:text-white font-medium'"
+                        class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs transition-all cursor-pointer focus:outline-none"
+                        aria-label="Tampilan List Kecil" title="Tampilan List Kecil">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="8" x2="21" y1="6" y2="6" />
+                            <line x1="8" x2="21" y1="12" y2="12" />
+                            <line x1="8" x2="21" y1="18" y2="18" />
+                            <line x1="3" x2="3.01" y1="6" y2="6" />
+                            <line x1="3" x2="3.01" y1="12" y2="12" />
+                            <line x1="3" x2="3.01" y1="18" y2="18" />
+                        </svg>
+                        <span class="hidden xs:inline sm:inline">List Kecil</span>
+                    </button>
+                </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+            <div v-if="viewMode === 'grid'" class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 animate-in fade-in duration-200">
                 <BooksCard v-for="book in filteredBooks" :key="book.id" :book="book" :hide-action-buttons="hideActionButtons"
+                    @toggle-pin="handleTogglePin" @edit="openEditModal" @open-progress="openProgressModal" />
+            </div>
+
+            <div v-else class="space-y-2 animate-in fade-in duration-200">
+                <BooksListItem v-for="book in filteredBooks" :key="book.id" :book="book" :hide-action-buttons="hideActionButtons"
                     @toggle-pin="handleTogglePin" @edit="openEditModal" @open-progress="openProgressModal" />
             </div>
         </div>
@@ -38,6 +74,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
 import type { Book, BookFormData, SortOption } from '~/types/book'
+import { getEffectiveTotalPages } from '~/utils/readingProgress'
 
 const { books, loadBooks, saveBook, deleteBook, recalculateBookProgress } = useBooks()
 
@@ -49,6 +86,7 @@ const sortBy = ref<SortOption>('default')
 const showFilters = ref(false)
 const respectPinned = ref(true)
 const hideActionButtons = ref(false)
+const viewMode = ref<'grid' | 'list'>('grid')
 
 const filterStartDate = ref('')
 const filterEndDate = ref('')
@@ -62,11 +100,21 @@ if (typeof window !== 'undefined') {
     if (savedHideState !== null) {
         hideActionButtons.value = savedHideState === 'true'
     }
+    const savedViewMode = localStorage.getItem('booktracker_view_mode')
+    if (savedViewMode === 'grid' || savedViewMode === 'list') {
+        viewMode.value = savedViewMode
+    }
 }
 
 watch(hideActionButtons, (newVal) => {
     if (typeof window !== 'undefined') {
         localStorage.setItem('booktracker_hide_buttons', String(newVal))
+    }
+})
+
+watch(viewMode, (newVal) => {
+    if (typeof window !== 'undefined') {
+        localStorage.setItem('booktracker_view_mode', newVal)
     }
 })
 
@@ -416,6 +464,22 @@ const filteredBooks = computed(() => {
         }
         if (sortBy.value === 'terlama') {
             return new Date(a.date || a.createdAt || '').getTime() - new Date(b.date || b.createdAt || '').getTime()
+        }
+        if (sortBy.value === 'halaman_terbanyak') {
+            const readA = Number(a.pagesRead) || 0
+            const readB = Number(b.pagesRead) || 0
+            if (readB !== readA) return readB - readA
+            const pA = getEffectiveTotalPages(a)
+            const pB = getEffectiveTotalPages(b)
+            return pB - pA
+        }
+        if (sortBy.value === 'halaman_tersedikit') {
+            const readA = Number(a.pagesRead) || 0
+            const readB = Number(b.pagesRead) || 0
+            if (readA !== readB) return readA - readB
+            const pA = getEffectiveTotalPages(a)
+            const pB = getEffectiveTotalPages(b)
+            return pA - pB
         }
         if (sortBy.value === 'harga_tinggi') {
             return (b.price || 0) - (a.price || 0)

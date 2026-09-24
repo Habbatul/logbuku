@@ -1274,3 +1274,69 @@ export function normalizeLegacyReadSessions(readHistory: any[], baseTotalPages =
   return hasChanged
 }
 
+export interface ReadingProgressColor {
+  barClass: string
+  textClass: string
+}
+
+/**
+ * Returns progress bar gradient/color and corresponding text color based on completion percentage.
+ * Brackets:
+ * - 100% (or completed): Emerald
+ * - 90% - 99%: Mint / Teal-Emerald
+ * - 80% - 89%: Teal
+ * - 70% - 79%: Sky / Cyan
+ * - 50% - 69%: Yellow / Amber
+ * - 25% - 49%: Orange
+ * - < 25%: Rose / Red
+ * - <= 0%: Muted / Transparent
+ */
+export function getReadingProgressColor(percentage: number, isCompleted = false): ReadingProgressColor {
+  if (isCompleted || percentage >= 100) {
+    return {
+      barClass: 'bg-emerald-400',
+      textClass: 'text-emerald-300'
+    }
+  }
+  if (percentage >= 90) {
+    return {
+      barClass: 'bg-gradient-to-r from-teal-400 to-emerald-400',
+      textClass: 'text-emerald-300'
+    }
+  }
+  if (percentage >= 80) {
+    return {
+      barClass: 'bg-gradient-to-r from-cyan-400 to-teal-400',
+      textClass: 'text-teal-300'
+    }
+  }
+  if (percentage >= 70) {
+    return {
+      barClass: 'bg-gradient-to-r from-sky-500 to-cyan-400',
+      textClass: 'text-sky-300'
+    }
+  }
+  if (percentage >= 50) {
+    return {
+      barClass: 'bg-gradient-to-r from-amber-400 to-yellow-400',
+      textClass: 'text-yellow-300'
+    }
+  }
+  if (percentage >= 25) {
+    return {
+      barClass: 'bg-gradient-to-r from-orange-500 to-amber-400',
+      textClass: 'text-amber-300'
+    }
+  }
+  if (percentage > 0) {
+    return {
+      barClass: 'bg-gradient-to-r from-rose-500 to-red-400',
+      textClass: 'text-rose-300'
+    }
+  }
+  return {
+    barClass: 'bg-transparent',
+    textClass: 'text-white/60'
+  }
+}
+
